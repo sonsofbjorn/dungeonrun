@@ -1,4 +1,4 @@
-import player
+from dungeonrun import player
 
 
 def startlocation():
