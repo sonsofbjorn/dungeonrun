@@ -1,4 +1,6 @@
-DEFAULT_HP=100
+import random
+DEFAULT_HP = 100
+
 
 class Player:
     def __init__(self, name, hero_class, start_pos, hp=DEFAULT_HP):
@@ -28,3 +30,7 @@ class Player:
         else:
             raise Exception("No such class")
 
+    def generate_attack(self):
+        attack_value = 0
+        for x in range(0, self.attack):
+            attack_value += random.randrange(0, self.attack)
