@@ -1,6 +1,6 @@
 import random
 DEFAULT_HP = 100
-
+from game import *
 
 class Player:
     def __init__(self, name, hero_class, start_pos, hp=DEFAULT_HP):
@@ -34,3 +34,8 @@ class Player:
         attack_value = 0
         for x in range(0, self.attack):
             attack_value += random.randrange(0, self.attack)
+
+    def show_movement(self, room):
+        print("My space:", self.position)
+
+
