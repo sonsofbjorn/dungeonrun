@@ -20,7 +20,7 @@ class Player:
             self.hp = 4
             self.attack = 9
             self.dexterity = 5
-            
+
         elif hero_class.lower() == "thief":
             self.initiative = 7
             self.hp = 5
