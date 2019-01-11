@@ -70,7 +70,7 @@ def chooserole():
 
 def saveNewPlayer(uname, role, score, highscore):
     with open("players.txt", "a+") as f:
-        f.write(uname+","+role+","+str(score)+","+str(highscore)+"\n")
+        f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
 
 
 def playerExists(uname):
@@ -96,7 +96,7 @@ class Menu:
             while True:
                 print("Please enter you Username")
                 uname = input(">>")
-                if not playerExists(uname):
+                if not playerExists(uname.capitalize()):
                     uclass = chooserole()
                     mapsize = selectmapsize()
                     startlc = startlocation()
