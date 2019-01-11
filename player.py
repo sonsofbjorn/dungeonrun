@@ -3,7 +3,7 @@ DEFAULT_HP=100
 class Player:
     def __init__(self, name, hero_class, start_pos, hp=DEFAULT_HP):
         self.name = name.capitalize()
-        self.hp = current_hp
+        self.hp = hp
         self.hero_class = hero_class
         self.position = start_pos
 
