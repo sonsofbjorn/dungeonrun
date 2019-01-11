@@ -27,6 +27,7 @@ class Menu:
                 print("Incorrect input")
             if uclass.lower() == "wizard" or "knight" or "thief":
                 user = player.Player(uname, uclass, "nw")
+                # skicka vidare till en funktion
 
         elif menuchoice == "2":
             print("")
