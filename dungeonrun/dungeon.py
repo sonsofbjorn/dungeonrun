@@ -5,14 +5,19 @@ class Map:
         self.size = size
         self.matrix = tuple(tuple(Room(col, row) for col in range(size)) for row in range(size))
 
-        corner = {'NW': self.matrix[0][0], 'NE': self.matrix[0][size-1], 'SW': self.matrix[size-1][0], 'SE': self.matrix[size-1][size-1]}
+        corner = {
+            'NW': self.matrix[0][0],
+            'NE': self.matrix[0][size-1],
+            'SW': self.matrix[size-1][0],
+            'SE': self.matrix[size-1][size-1]
+            }
 
     def enterDoor(self, currentRoom, door):
         newRoom = currentRoom
         x = currentRoom.position[0]
         y = currentRoom.position[1]
         if door.lower() == "west":
-            newRoom= self.matrix[x-1][y]
+            newRoom = self.matrix[x-1][y]
         elif door.lower() == "north":
             newRoom = self.matrix[x][y-1]
         elif door.lower() == "east":
@@ -23,16 +28,11 @@ class Map:
             raise Exception("How did you enter else?")
         return newRoom
 
-        corner = {
-                'NW': self.matrix[0][0],
-                'NE': self.matrix[0][size-1],
-                'SW': self.matrix[size-1][0],
-                'SE': self.matrix[size-1][size-1]
-                }
-
     def generateRooms(self):
         for room in self.matrix[3]:
             room.doors[0] = False
+
+
 class Room:
 
     def __init__(self, col, row, isDark=True, hasExit=False,

@@ -1,5 +1,5 @@
-from dungeonrun import player
-from dungeonrun import dungeon
+import player
+from dungeon import Map
 
 
 def main():
