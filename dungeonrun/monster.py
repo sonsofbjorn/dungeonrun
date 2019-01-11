@@ -38,3 +38,4 @@ class Monster:
         attack_value = 0
         for x in range(0, self.attack):
             attack_value += random.randrange(0, self.attack)
+        return attack_value

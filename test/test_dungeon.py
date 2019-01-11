@@ -4,6 +4,8 @@ from dungeonrun import dungeon
 
 class mapSizeTest(unittest.TestCase):
 
+    def setUp(self):
+        self.map = dungeon.Map(4)
+
     def runTest(self):
-        map = dungeon.Map(4)
-        self.assertEqual(map.size, 4)
+        self.assertEqual(self.map.size, 4)
