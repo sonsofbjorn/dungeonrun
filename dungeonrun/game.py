@@ -4,7 +4,7 @@ class Map:
         self.size = size
         self.room = tuple(tuple(Room() for col in range(size)) for row in range(size))
 
-        my_corner = { 'NW': self.room[0][0], 'NE': self.room[0][size-1], 'SW': self.room[size-1][0], 'SE': self.room[size-1][size-1] }
+        corner = { 'NW': self.room[0][0], 'NE': self.room[0][size-1], 'SW': self.room[size-1][0], 'SE': self.room[size-1][size-1] }
 
 
 class Room:
