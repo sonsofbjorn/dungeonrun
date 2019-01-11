@@ -9,6 +9,11 @@ class playerTest(unittest.TestCase):
         self.wizard = player.Player("wizSeb",    "wizard",   start_pos)
         self.thief = player.Player("thiefSeb",   "thief",    start_pos)
 
+        self.dungeon = dungeon.Map(4)
+
+        self.move_character = player.Player("Bob", "knight",
+                                            dungeon.matrix[0][0])
+
     def testKnightProperties(self):
         self.assertEqual(self.knight.initiative, 5)
         self.assertEqual(self.knight.hp,         9)
@@ -26,3 +31,18 @@ class playerTest(unittest.TestCase):
         self.assertEqual(self.thief.hp,         5)
         self.assertEqual(self.thief.attack,     5)
         self.assertEqual(self.thief.dexterity,  7)
+
+    def testMovement(self):
+
+
+
+
+dungeon = dungeon.Map(4)
+
+dude = player.Player("Bob", "knight", dungeon.matrix[0][0])
+
+dude.show_location()
+
+newRoom = dungeon.enterDoor(dude.position, "north")
+
+dude.move_character(newRoom)
