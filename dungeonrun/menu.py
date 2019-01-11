@@ -1,4 +1,4 @@
-import player
+from dungeonrun import player
 
 
 def startlocation():
@@ -68,25 +68,57 @@ def chooserole():
     return uclass
 
 
+def saveNewPlayer(uname, role, score, highscore):
+    with open("players.txt", "a+") as f:
+        f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
+
+
+def playerExists(uname):
+    with open("players.txt", "r") as f:
+        file = f.readlines()
+        for line in file:
+            (username, role, score, highscore) = line.split(sep=",")
+            if username == uname:
+                return True
+    return False
+
+
 class Menu:
     while True:
         print("Välkommen till dungeonrun!\n"
               "[1] New Character\n"
               "[2] Load Character\n"
-              "[3] Quit")
+              "[3] Highscore\n"
+              "[4] Quit")
 
         menuchoice = input(">>")
         if menuchoice == "1":
-            print("Please enter you Username")
-            uname = input(">>")
-            # function to check if name exists.
-            uclass = chooserole()
-            mapsize = selectmapsize()
-            startlc = startlocation()
-            user = player.Player(uname, uclass.lower(), startlc)
+            while True:
+                print("Please enter you Username")
+                uname = input(">>")
+                if not playerExists(uname.capitalize()):
+                    uclass = chooserole()
+                    mapsize = selectmapsize()
+                    startlc = startlocation()
+                    saveNewPlayer(uname, uclass, 0, 0)
+                    user = player.Player(uname, uclass.lower(), startlc)
+                    break
+                else:
+                    print("Username already exists!")
             # skicka vidare till en funktion
 
         elif menuchoice == "2":
             print("")
+
+        elif menuchoice == "3":
+            print("Highscore")
+            print("Press [ENTER] to continue")
+            input(">>")
+
+        elif menuchoice == "4":
+            print("See you next time!")
+            break
+        else:
+            print("Incorrect input!")
 
 
