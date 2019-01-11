@@ -88,23 +88,37 @@ class Menu:
         print("Välkommen till dungeonrun!\n"
               "[1] New Character\n"
               "[2] Load Character\n"
-              "[3] Quit")
+              "[3] Highscore\n"
+              "[4] Quit")
 
         menuchoice = input(">>")
         if menuchoice == "1":
-            print("Please enter you Username")
-            uname = input(">>")
-            if not playerExists(uname):
-                uclass = chooserole()
-                mapsize = selectmapsize()
-                startlc = startlocation()
-                saveNewPlayer(uname, uclass, 0, 0)
-                user = player.Player(uname, uclass.lower(), startlc)
-            else:
-                print("asdahssshshshs")
+            while True:
+                print("Please enter you Username")
+                uname = input(">>")
+                if not playerExists(uname):
+                    uclass = chooserole()
+                    mapsize = selectmapsize()
+                    startlc = startlocation()
+                    saveNewPlayer(uname, uclass, 0, 0)
+                    user = player.Player(uname, uclass.lower(), startlc)
+                    break
+                else:
+                    print("Username already exists!")
             # skicka vidare till en funktion
 
         elif menuchoice == "2":
             print("")
+
+        elif menuchoice == "3":
+            print("Highscore")
+            print("Press [ENTER] to continue")
+            input(">>")
+
+        elif menuchoice == "4":
+            print("See you next time!")
+            break
+        else:
+            print("Incorrect input!")
 
 
