@@ -1,14 +1,9 @@
 import unittest
 
-import dungeonrun
-from dungeonrun import game
-
+from dungeonrun import dungeon
 
 class mapSizeTest(unittest.TestCase):
 
     def runTest(self):
-        map = dungeonrun.game.Map(4)
+        map = dungeon.Map(4)
         self.assertEqual(map.size, 4)
-
-
-
