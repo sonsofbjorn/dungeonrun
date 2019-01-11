@@ -9,8 +9,8 @@ class Map:
 
 class Room:
 
-    def __init__(self, isDark=True, hasExit=False,
-            monsters=[], treasures=[], doors=[], col, row):
+    def __init__(self, col, row, isDark=True, hasExit=False,
+            monsters=[], treasures=[], doors=[]):
         self.dark, self.hasExit = isDark, hasExit
         self.monsters, self.treasures = monsters, treasures
         self.doors = doors
