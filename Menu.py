@@ -68,6 +68,21 @@ def chooserole():
     return uclass
 
 
+def saveNewPlayer(uname, role, score, highscore):
+    with open("players.txt", "a+") as f:
+        f.write(uname+","+role+","+str(score)+","+str(highscore)+"\n")
+
+
+def playerExists(uname):
+    with open("players.txt", "r") as f:
+        file = f.readlines()
+        for line in file:
+            (username, role, score, highscore) = line.split(sep=",")
+            if username == uname:
+                return True
+    return False
+
+
 class Menu:
     while True:
         print("Välkommen till dungeonrun!\n"
@@ -79,11 +94,14 @@ class Menu:
         if menuchoice == "1":
             print("Please enter you Username")
             uname = input(">>")
-            # function to check if name exists.
-            uclass = chooserole()
-            mapsize = selectmapsize()
-            startlc = startlocation()
-            user = player.Player(uname, uclass.lower(), startlc)
+            if not playerExists(uname):
+                uclass = chooserole()
+                mapsize = selectmapsize()
+                startlc = startlocation()
+                saveNewPlayer(uname, uclass, 0, 0)
+                user = player.Player(uname, uclass.lower(), startlc)
+            else:
+                print("asdahssshshshs")
             # skicka vidare till en funktion
 
         elif menuchoice == "2":
