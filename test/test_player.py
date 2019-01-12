@@ -1,18 +1,20 @@
 import unittest
 
 from dungeonrun import player
+from dungeonrun import dungeon
 
-class playerTest(unittest.TestCase):
+
+class testPlayer(unittest.TestCase):
     def setUp(self):
-        start_pos = (1,2)
-        self.knight = player.Player("Knightsebbe",     "knight",   start_pos)
-        self.wizard = player.Player("wizSeb",    "wizard",   start_pos)
-        self.thief = player.Player("thiefSeb",   "thief",    start_pos)
+        start_pos = (1, 2)
+        self.knight = player.Player("Knightsebbe", "knight",   start_pos)
+        self.wizard = player.Player("wizSeb",      "wizard",   start_pos)
+        self.thief = player.Player("thiefSeb",    "thief",    start_pos)
 
         self.dungeon = dungeon.Map(4)
 
-        self.move_character = player.Player("Bob", "knight",
-                                            dungeon.matrix[0][0])
+        self.char = player.Player("Bob", "knight", self.dungeon.room(1, 1))
+        self.char2 = player.Player("Bob", "knight", self.dungeon.room(0, 1))
 
     def testKnightProperties(self):
         self.assertEqual(self.knight.initiative, 5)
@@ -32,17 +34,28 @@ class playerTest(unittest.TestCase):
         self.assertEqual(self.thief.attack,     5)
         self.assertEqual(self.thief.dexterity,  7)
 
-    def testMovement(self):
+    def testPosition(self):
+        self.assertEqual(self.char.show_location, (1, 1))
 
+    def testPosition2(self):
+        self.assertEqual(self.char2.show_location, (0, 1))
 
+    def testMovementNorth(self):
+        newRoom = self.dungeon.enter_door(self.char.current_room, "north")
+        self.char.move_character(newRoom)
+        self.assertEqual(self.char.show_location, (1, 0))
 
+    def testMovementEast(self):
+        newRoom = self.dungeon.enter_door(self.char.current_room, "east")
+        self.char.move_character(newRoom)
+        self.assertEqual(self.char.show_location, (2, 1))
 
-dungeon = dungeon.Map(4)
+    def testMovementSouth(self):
+        newRoom = self.dungeon.enter_door(self.char.current_room, "south")
+        self.char.move_character(newRoom)
+        self.assertEqual(self.char.show_location, (1, 2))
 
-dude = player.Player("Bob", "knight", dungeon.matrix[0][0])
-
-dude.show_location()
-
-newRoom = dungeon.enterDoor(dude.position, "north")
-
-dude.move_character(newRoom)
+    def testMovementWest(self):
+        newRoom = self.dungeon.enter_door(self.char.current_room, "west")
+        self.char.move_character(newRoom)
+        self.assertEqual(self.char.show_location, (0, 1))
