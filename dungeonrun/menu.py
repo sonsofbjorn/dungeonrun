@@ -78,9 +78,23 @@ def playerExists(uname):
         file = f.readlines()
         for line in file:
             (username, role, score, highscore) = line.split(sep=",")
-            if username == uname:
+            if username == uname.capitalize():
                 return True
     return False
+
+
+def loadPlayer(uname):
+    with open("players.txt", "r") as f:
+        file = f.readlines()
+        for line in file:
+            (username, role, score, highscore) = line.split(sep=",")
+            if username == uname.capitalize():
+                print("Welcome back "+username
+                      +"\nYour current role is "+role
+                      +"\nYour highest score is "+str(score)
+                      +"\nOverall highest score is "+str(highscore))
+                return
+    return print("Username does not exits, Please create a new username")
 
 
 class Menu:
@@ -94,7 +108,7 @@ class Menu:
         menuchoice = input(">>")
         if menuchoice == "1":
             while True:
-                print("Please enter you Username")
+                print("Please create Username")
                 uname = input(">>")
                 if not playerExists(uname.capitalize()):
                     uclass = chooserole()
@@ -108,7 +122,9 @@ class Menu:
             # skicka vidare till en funktion
 
         elif menuchoice == "2":
-            print("")
+            print("Please enter Username")
+            uname = input(">>")
+            loadPlayer(uname)
 
         elif menuchoice == "3":
             print("Highscore")
