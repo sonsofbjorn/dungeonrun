@@ -20,7 +20,7 @@ class testDungeon(unittest.TestCase):
         self.assertTrue(isinstance(self.dungeon, Iterable))
 
     def testMonsterList(self):
-        print(self.monsterlist)
+        print("pringint monster list:")
 
     def testRoomDoorsNW(self):
         self.assertFalse(self.dungeon.corner["NW"].doors["N"])

@@ -83,7 +83,7 @@ class Map:
         return new_room
 
     def generate_monsters(self, monsters=["giant spider", "skeleton",
-                                         "orc", "troll"]):
+                                          "orc", "troll"]):
         """ This function puts monsters in all rooms if they are common enough.
         At most one of each monster in monsterlist gets created.
         """
@@ -92,9 +92,9 @@ class Map:
                 monsterlist = monsters
                 while (monsterlist):
                     monstr = monster.Monster(monsterlist.pop(), room.position)
-                    if (monster.rarity >= random.randint(0, 100)):
+                    if (monstr.rarity >= random.randint(0, 100)):
                         room.monsters.append(monstr)
-                        yield room.position  # debug
+                        print(room.position)  # debug
 
 
 class Room:
