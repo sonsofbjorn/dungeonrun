@@ -23,8 +23,8 @@ class Map:
 
         self.corner = {
             'NW': self.get_room(0, 0),
-            'NE': self.get_room(0, size-1),
-            'SW': self.get_room(size-1, 0),
+            'NE': self.get_room(size-1, 0),
+            'SW': self.get_room(0, size-1),
             'SE': self.get_room(size-1, size-1)
             }
 
