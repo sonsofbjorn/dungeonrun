@@ -85,6 +85,3 @@ class Room:
         # Position X,Y tuple
         self.position = (x, y)
 
-    def getCoords(self):
-        print(self.position)
-

@@ -90,11 +90,18 @@ def loadPlayer(uname):
             (username, role, score, highscore) = line.split(sep=",")
             if username == uname.capitalize():
                 print("Welcome back "+username
-                      +"\nYour current role is "+role
+                      +"\nYour current role is a "+role
                       +"\nYour highest score is "+str(score)
                       +"\nOverall highest score is "+str(highscore))
-                return
-    return print("Username does not exits, Please create a new username")
+                return True
+    return False
+
+
+def startGame():
+    player = Player()
+    show_location
+
+
 
 
 class Menu:
@@ -124,7 +131,10 @@ class Menu:
         elif menuchoice == "2":
             print("Please enter Username")
             uname = input(">>")
-            loadPlayer(uname)
+            if loadPlayer(uname):
+                print("Alright")
+            else:
+                print("Username does not exits, Please create a new username")
 
         elif menuchoice == "3":
             print("Highscore")
