@@ -7,7 +7,7 @@ class Monster:
         self.position = position
 
         if self.name.lower() == "giant spider":
-            self.initiative =7
+            self.initiative = 7
             self.hp = 1
             self.attack = 2
             self.dexterity = 3
