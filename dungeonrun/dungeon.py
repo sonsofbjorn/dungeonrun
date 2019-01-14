@@ -1,3 +1,4 @@
+from collections import Iterable
 '''
 X = COL
 Y = ROW
@@ -47,7 +48,8 @@ class Map:
             room.doors["W"] = False
 
     def __iter__(self):
-        return self.matrix
+        for rooms in self.matrix:
+            yield rooms
 
     # This is here becose in matrix row is first instead of col
     def get_room(self, x, y):
