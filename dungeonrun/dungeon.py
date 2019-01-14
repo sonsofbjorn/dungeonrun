@@ -1,4 +1,3 @@
-from collections import Iterable
 '''
 X = COL
 Y = ROW
@@ -30,28 +29,28 @@ class Map:
         # NW -> NE
         for x in range(size):
             room = self.get_room(x, 0)
-            room.doors["N"] = False
+            room.doors["n"] = False
 
         # NE -> SE
         for y in range(size):
             room = self.get_room(size-1, y)
-            room.doors["E"] = False
+            room.doors["e"] = False
 
         # SE -> SW
         for x in range(size):
             room = self.get_room(x, size-1)
-            room.doors["S"] = False
+            room.doors["s"] = False
 
         # SW -> NE
         for y in range(size):
             room = self.get_room(0, y)
-            room.doors["W"] = False
+            room.doors["w"] = False
 
     def __iter__(self):
         for rooms in self.matrix:
             yield rooms
 
-    # This is here becose in matrix row is first instead of col
+    # This is here because in matrix row is first instead of col
     def get_room(self, x, y):
         return self.matrix[y][x]
 
@@ -59,13 +58,21 @@ class Map:
         new_room = current_room
         x = current_room.position[0]
         y = current_room.position[1]
-        if door.lower() == "west":
+
+        direction = door.lower()[:1]
+
+        if new_room.doors.get(direction) is False:
+            print("There is no door in that direction")
+        else:
+            print("That door exists and can be entered")
+
+        if direction == "w":
             new_room = self.get_room(x-1, y)
-        elif door.lower() == "north":
+        elif direction == "n":
             new_room = self.get_room(x, y-1)
-        elif door.lower() == "east":
+        elif direction == "e":
             new_room = self.get_room(x+1, y)
-        elif door.lower() == "south":
+        elif direction == "s":
             new_room = self.get_room(x, y+1)
         else:
             raise Exception("How did you enter else?")
@@ -82,7 +89,7 @@ class Room:
         # DOORS N E S W
         self.doors = {"N": True, "E": True, "S": True, "W": True}
 
-        #self.doors = [True, True, True, True]
+        # self.doors = [True, True, True, True]
 
         # Position X,Y tuple
         self.position = (x, y)
