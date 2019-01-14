@@ -8,6 +8,7 @@ class testDungeon(unittest.TestCase):
 
     def setUp(self):
         self.dungeon = dungeon.Map(4)
+        self.monsterlist = self.dungeon.generatemonsters()
 
     def testMapSize(self):
         self.assertEqual(self.dungeon.size, 4)
@@ -18,6 +19,10 @@ class testDungeon(unittest.TestCase):
     def testIterableMap(self):
         self.assertTrue(isinstance(self.dungeon, Iterable))
 
+    def testMonsterList(self):
+        print(self.monsterlist)
+        
+        
     def testRoomDoorsNW(self):
         self.assertFalse(self.dungeon.get_room(0, 0).doors["N"])
         self.assertFalse(self.dungeon.get_room(0, 0).doors["W"])
@@ -33,5 +38,3 @@ class testDungeon(unittest.TestCase):
         self.assertTrue(self.dungeon.get_room(2, 2).doors["W"])
         self.assertTrue(self.dungeon.get_room(2, 2).doors["N"])
         self.assertTrue(self.dungeon.get_room(2, 2).doors["S"])
-
-
