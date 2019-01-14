@@ -3,6 +3,7 @@ X = COL
 Y = ROW
 
 MAP EXAMPLE: SMALL 4x4
+(0, 0)(1, 0)(2, 0)(3, 0)
 (0, 1)(1, 1)(2, 1)(3, 1)
 (0, 2)(1, 2)(2, 2)(3, 2)
 (0, 3)(1, 3)(2, 3)(3, 3)
@@ -19,10 +20,10 @@ class Map:
                             for y in range(size))
 
         corner = {
-            'NW': self.matrix[0][0],
-            'NE': self.matrix[0][size-1],
-            'SW': self.matrix[size-1][0],
-            'SE': self.matrix[size-1][size-1]
+            'NW': self.get_room(0, 0),
+            'NE': self.get_room(0, size-1),
+            'SW': self.get_room(size-1, 0),
+            'SE': self.get_room(size-1, size-1)
             }
 
         # North ->
@@ -44,8 +45,11 @@ class Map:
             room = self.room(0, y)
             room.doors["W"] = False
 
+    def __iter__(self):
+        return self.matrix
+
     # This is here becose in matrix row is first instead of col
-    def room(self, x, y):
+    def get_room(self, x, y):
         return self.matrix[y][x]
 
     def enter_door(self, current_room, door):
