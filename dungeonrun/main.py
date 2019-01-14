@@ -1,14 +1,9 @@
-from dungeon import Map
+from dungeonrun import view
 
 
 def main():
-    dungeon = Map(4)
 
-    print("=== MAIN ===")
-    for rooms in dungeon:
-        for room in rooms:
-            print(room.doors, end="")
-        print()
+    v = view.View()
 
 
 if __name__ == "__main__":
