@@ -1,3 +1,4 @@
+from collections import Iterable
 '''
 X = COL
 Y = ROW
@@ -26,27 +27,29 @@ class Map:
             'SE': self.get_room(size-1, size-1)
             }
 
-        # North ->
+        # NW -> NE
         for x in range(size):
-            room = self.room(x, 0)
+            room = self.get_room(x, 0)
             room.doors["N"] = False
 
-        # Down East
+        # NE -> SE
         for y in range(size):
-            room = self.room(size-1, y)
+            room = self.get_room(size-1, y)
             room.doors["E"] = False
 
-        # South ->
+        # SE -> SW
         for x in range(size):
-            room = self.room(x, size-1)
+            room = self.get_room(x, size-1)
             room.doors["S"] = False
 
+        # SW -> NE
         for y in range(size):
-            room = self.room(0, y)
+            room = self.get_room(0, y)
             room.doors["W"] = False
 
     def __iter__(self):
-        return self.matrix
+        for rooms in self.matrix:
+            yield rooms
 
     # This is here becose in matrix row is first instead of col
     def get_room(self, x, y):
@@ -57,13 +60,13 @@ class Map:
         x = current_room.position[0]
         y = current_room.position[1]
         if door.lower() == "west":
-            new_room = self.room(x-1, y)
+            new_room = self.get_room(x-1, y)
         elif door.lower() == "north":
-            new_room = self.room(x, y-1)
+            new_room = self.get_room(x, y-1)
         elif door.lower() == "east":
-            new_room = self.room(x+1, y)
+            new_room = self.get_room(x+1, y)
         elif door.lower() == "south":
-            new_room = self.room(x, y+1)
+            new_room = self.get_room(x, y+1)
         else:
             raise Exception("How did you enter else?")
         return new_room
@@ -83,5 +86,4 @@ class Room:
 
         # Position X,Y tuple
         self.position = (x, y)
-
 
