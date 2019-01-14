@@ -8,6 +8,7 @@ class mapSizeTest(unittest.TestCase):
 
     def setUp(self):
         self.dungeon = dungeon.Map(4)
+        self.monsterlist = self.dungeon.generatemonsters()
 
     def testMapSize(self):
         self.assertEqual(self.dungeon.size, 4)
@@ -17,3 +18,6 @@ class mapSizeTest(unittest.TestCase):
 
     def testIterableMap(self):
         self.assertTrue(isinstance(self.dungeon, Iterable))
+
+    def testMonsterList(self):
+        print(self.monsterlist)
