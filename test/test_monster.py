@@ -2,7 +2,8 @@ import unittest
 
 from dungeonrun import monster
 
-class mapSizeTest(unittest.TestCase):
+
+class testMap(unittest.TestCase):
 
     def setUp(self):
         self.spider = monster.Monster("giant spider", (1, 2))

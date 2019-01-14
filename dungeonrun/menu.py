@@ -7,7 +7,7 @@ def createDungeon(size):
     return instance
 
 
-def startlocation():
+def startlocation(dungeon):
     while True:
         print("Choose your starting location:\n"
               "[1] North-West\n"
@@ -16,16 +16,20 @@ def startlocation():
               "[4] South-East\n")
         startcorner = input(">>")
         if startcorner == "1":
-            startcorner = "nw"
+            startcorner = dungeon.get_room(0, 0)
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
             break
         elif startcorner == "2":
-            startcorner = "ne"
+            startcorner = dungeon.get_room(dungeon.size-1, 0)
+            dungeon.get_room(dungeon.size-1, 0).hasExit = True
             break
         elif startcorner == "3":
-            startcorner = "sw"
+            startcorner = dungeon.get_room(0, dungeon.size-1)
+            dungeon.get_room(0, dungeon.size-1).hasExit = True
             break
         elif startcorner == "4":
-            startcorner = "se"
+            startcorner = dungeon.get_room(dungeon.size-1, dungeon.size-1)
+            dungeon.get_room(0, 0).hasExit = True
             break
         else:
             print("Incorrect input!")
@@ -105,55 +109,74 @@ def loadPlayer(uname):
 
 def startGame(username, role, score, start_room, dungeon):
 
+    dude = player.Player(username, role, start_room, score)
+    dude.current_room.dark = False
+    # monster + treasure generation
+    mapLoop(dude, dungeon)
+
+
+def mapLoop(char, dungeon):
+
+    while True:
+        print(char.name + ", you are in", char.show_location)
+        print(char.name + ", where do you want to go? West, North, East, or South?")
+        inp = input(">>")
+        new_room = dungeon.enter_door(char.current_room, inp)
+        if new_room is not False:
+            char.move_character(new_room)
+            print(char.show_location)
+            break
 
 
 
 
 
 class Menu:
-    while True:
-        print("Välkommen till dungeonrun!\n"
-              "[1] New Character\n"
-              "[2] Load Character\n"
-              "[3] Highscore\n"
-              "[4] Quit")
 
-        menuchoice = input(">>")
-        if menuchoice == "1":
-            while True:
-                print("Please create Username")
+    def main_menu(self):
+        while True:
+            print("Welcome to... DUNGEON RUN!\n"
+                  "[1] New Character\n"
+                  "[2] Load Character\n"
+                  "[3] Highscore\n"
+                  "[4] Quit")
+
+            menuchoice = input(">>")
+            if menuchoice == "1":
+                while True:
+                    print("Please create Username")
+                    uname = input(">>")
+                    if not playerExists(uname.capitalize()):
+                        uclass = chooserole()
+                        dungeon = createDungeon(selectmapsize())
+                        startlc = startlocation(dungeon)
+                        saveNewPlayer(uname, uclass, 0, 0)
+                        startGame(*loadPlayer(uname), startlc, dungeon)
+                        break
+                    else:
+                        print("Username already exists!")
+                # skicka vidare till en funktion
+
+            elif menuchoice == "2":
+                print("Please enter Username")
                 uname = input(">>")
-                if not playerExists(uname.capitalize()):
-                    uclass = chooserole()
+                if playerExists(uname):
+                    temp = loadPlayer(uname)
                     dungeon = createDungeon(selectmapsize())
-                    startlc = startlocation()
-                    saveNewPlayer(uname, uclass, 0, 0)
-                    startGame(*loadPlayer(uname), startlc, dungeon)
-                    break
+                    startlc = startlocation(dungeon)
+                    startGame(*temp, startlc, dungeon)
                 else:
-                    print("Username already exists!")
-            # skicka vidare till en funktion
+                    print("Username does not exits, Please create a new username")
 
-        elif menuchoice == "2":
-            print("Please enter Username")
-            uname = input(">>")
-            if playerExists(uname):
-                temp = loadPlayer(uname)
-                dungeon = createDungeon(selectmapsize())
-                startlc = startlocation()
-                startGame(*temp, startlc, dungeon)
+            elif menuchoice == "3":
+                print("Highscore")
+                print("Press [ENTER] to continue")
+                input(">>")
+
+            elif menuchoice == "4":
+                print("See you next time!")
+                break
             else:
-                print("Username does not exits, Please create a new username")
-
-        elif menuchoice == "3":
-            print("Highscore")
-            print("Press [ENTER] to continue")
-            input(">>")
-
-        elif menuchoice == "4":
-            print("See you next time!")
-            break
-        else:
-            print("Incorrect input!")
+                print("Incorrect input!")
 
 

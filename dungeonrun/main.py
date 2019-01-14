@@ -1,9 +1,8 @@
-from dungeonrun import view
-
+from dungeonrun import player
+from dungeonrun import menu
 
 def main():
-
-    v = view.View()
+    menu.Menu.main_menu(0)
 
 
 if __name__ == "__main__":
