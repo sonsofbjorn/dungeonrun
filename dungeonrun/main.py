@@ -1,4 +1,3 @@
-from dungeon import Map
 from dungeonrun import player
 from dungeonrun import menu
 
