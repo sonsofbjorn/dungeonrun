@@ -1,3 +1,4 @@
+import random
 
 
 class Monster:
@@ -33,3 +34,8 @@ class Monster:
             self.dexterity = 2
             self.rarity = 5
 
+    def generate_attack(self):
+        attack_value = 0
+        for x in range(0, self.attack):
+            attack_value += random.randrange(0, self.attack)
+        return attack_value

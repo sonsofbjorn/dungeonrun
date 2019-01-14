@@ -1,11 +1,14 @@
-DEFAULT_HP=100
+import random
+DEFAULT_HP = 100
+
 
 class Player:
-    def __init__(self, name, hero_class, start_pos, hp=DEFAULT_HP):
+    def __init__(self, name, hero_class, start_room, hp=DEFAULT_HP, score=0):
         self.name = name.capitalize()
         self.hp = hp
         self.hero_class = hero_class
-        self.position = start_pos
+        self.current_room = start_room
+        self.score = score
 
         if hero_class.lower() == "knight":
             self.initiative = 5
@@ -18,7 +21,7 @@ class Player:
             self.hp = 4
             self.attack = 9
             self.dexterity = 5
-            
+
         elif hero_class.lower() == "thief":
             self.initiative = 7
             self.hp = 5
@@ -28,3 +31,15 @@ class Player:
         else:
             raise Exception("No such class")
 
+    def generate_attack(self):
+        attack_value = 0
+        for x in range(0, self.attack):
+            attack_value += random.randrange(0, self.attack)
+        return attack_value
+
+    @property
+    def show_location(self):
+        return self.current_room.position
+
+    def move_character(self, room):
+        self.current_room = room
