@@ -59,23 +59,25 @@ class Map:
         x = current_room.position[0]
         y = current_room.position[1]
 
-        direction = door.lower()[:1]
+        direction = door.upper()[:1]
 
-        if new_room.doors.get(direction) is False:
-            print("There is no door in that direction")
-        else:
-            print("That door exists and can be entered")
+        while True:
+            if new_room.doors.get(direction) is False:
+                return False
+            else:
+                break
 
-        if direction == "W":
+        if direction[:1] == "W":
             new_room = self.get_room(x-1, y)
-        elif direction == "N":
+        elif direction[:1] == "N":
             new_room = self.get_room(x, y-1)
-        elif direction == "E":
+        elif direction[:1] == "E":
             new_room = self.get_room(x+1, y)
-        elif direction == "S":
+        elif direction[:1] == "S":
             new_room = self.get_room(x, y+1)
         else:
             raise Exception("How did you enter else?")
+        new_room.dark = False
         return new_room
 
 
