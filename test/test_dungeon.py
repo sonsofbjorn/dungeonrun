@@ -1,6 +1,7 @@
 import unittest
 
 from dungeonrun import dungeon
+from collections import Iterable
 
 
 class mapSizeTest(unittest.TestCase):
@@ -12,4 +13,7 @@ class mapSizeTest(unittest.TestCase):
         self.assertEqual(self.dungeon.size, 4)
 
     def testRoomPosition(self):
-        self.assertEqual(self.dungeon.room(0, 1).position, (0, 1))
+        self.assertEqual(self.dungeon.get_room(0, 1).position, (0, 1))
+
+    def testIterableMap(self):
+        self.assertTrue(isinstance(self.dungeon, Iterable))

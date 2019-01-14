@@ -5,7 +5,7 @@ def main():
     dungeon = Map(4)
 
     print("=== MAIN ===")
-    for rooms in dungeon.matrix:
+    for rooms in dungeon:
         for room in rooms:
             print(room.doors, end="")
         print()

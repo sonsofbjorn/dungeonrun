@@ -3,7 +3,6 @@ X = COL
 Y = ROW
 
 MAP EXAMPLE: SMALL 4x4
-(0, 0)(1, 0)(2, 0)(3, 0)
 (0, 1)(1, 1)(2, 1)(3, 1)
 (0, 2)(1, 2)(2, 2)(3, 2)
 (0, 3)(1, 3)(2, 3)(3, 3)
@@ -20,32 +19,37 @@ class Map:
                             for y in range(size))
 
         corner = {
-            'NW': self.matrix[0][0],
-            'NE': self.matrix[0][size-1],
-            'SW': self.matrix[size-1][0],
-            'SE': self.matrix[size-1][size-1]
+            'NW': self.get_room(0, 0),
+            'NE': self.get_room(0, size-1),
+            'SW': self.get_room(size-1, 0),
+            'SE': self.get_room(size-1, size-1)
             }
 
-        # North ->
+        # NW -> NE
         for x in range(size):
             room = self.get_room(x, 0)
             room.doors["n"] = False
 
-        # Down East
+        # NE -> SE
         for y in range(size):
             room = self.get_room(size-1, y)
             room.doors["e"] = False
 
-        # South ->
+        # SE -> SW
         for x in range(size):
             room = self.get_room(x, size-1)
             room.doors["s"] = False
 
+        # SW -> NE
         for y in range(size):
             room = self.get_room(0, y)
             room.doors["w"] = False
 
-    # This is here becose in matrix row is first instead of col
+    def __iter__(self):
+        for rooms in self.matrix:
+            yield rooms
+
+    # This is here because in matrix row is first instead of col
     def get_room(self, x, y):
         return self.matrix[y][x]
 
@@ -88,8 +92,4 @@ class Room:
 
         # Position X,Y tuple
         self.position = (x, y)
-
-    def getCoords(self):
-        print(self.position)
-
 
