@@ -2,6 +2,11 @@ from dungeonrun import player
 from dungeonrun import dungeon
 
 
+def createDungeon(size):
+    instance = dungeon.Map(size)
+    return instance
+
+
 def startlocation():
     while True:
         print("Choose your starting location:\n"
@@ -98,9 +103,9 @@ def loadPlayer(uname):
     raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
 
-def startGame(username, role, score, start_room):
-    dude = player.Player(username, role, start_room, score)
-    print(dude.show_location)
+def startGame(username, role, score, start_room, dungeon):
+
+
 
 
 
@@ -120,10 +125,10 @@ class Menu:
                 uname = input(">>")
                 if not playerExists(uname.capitalize()):
                     uclass = chooserole()
-                    mapsize = selectmapsize()
+                    dungeon = createDungeon(selectmapsize())
                     startlc = startlocation()
                     saveNewPlayer(uname, uclass, 0, 0)
-                    startGame(*loadPlayer(uname), startlc)
+                    startGame(*loadPlayer(uname), startlc, dungeon)
                     break
                 else:
                     print("Username already exists!")
@@ -134,9 +139,9 @@ class Menu:
             uname = input(">>")
             if playerExists(uname):
                 temp = loadPlayer(uname)
-                mapsize = selectmapsize()
+                dungeon = createDungeon(selectmapsize())
                 startlc = startlocation()
-                startGame(*temp, startlc)
+                startGame(*temp, startlc, dungeon)
             else:
                 print("Username does not exits, Please create a new username")
 
