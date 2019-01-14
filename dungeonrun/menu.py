@@ -1,4 +1,5 @@
 from dungeonrun import player
+from dungeonrun import dungeon
 
 
 def startlocation():
@@ -8,22 +9,22 @@ def startlocation():
               "[2] North-East\n"
               "[3] South-West\n"
               "[4] South-East\n")
-        inp = input(">>")
-        if inp == "1":
-            inp = "nw"
+        startcorner = input(">>")
+        if startcorner == "1":
+            startcorner = "nw"
             break
-        elif inp == "2":
-            inp = "ne"
+        elif startcorner == "2":
+            startcorner = "ne"
             break
-        elif inp == "3":
-            inp = "sw"
+        elif startcorner == "3":
+            startcorner = "sw"
             break
-        elif inp == "4":
-            inp = "se"
+        elif startcorner == "4":
+            startcorner = "se"
             break
         else:
             print("Incorrect input!")
-    return inp
+    return startcorner
 
 
 def selectmapsize():
@@ -93,13 +94,15 @@ def loadPlayer(uname):
                       +"\nYour current role is a "+role
                       +"\nYour highest score is "+str(score)
                       +"\nOverall highest score is "+str(highscore))
-                return True
-    return False
+                return username, role, score
+    raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
 
 def startGame():
     Player = Player()
-    show_location
+def startGame(username, role, score, start_room):
+    dude = player.Player(username, role, start_room, score)
+    print(dude.show_location)
 
 
 
@@ -122,7 +125,7 @@ class Menu:
                     mapsize = selectmapsize()
                     startlc = startlocation()
                     saveNewPlayer(uname, uclass, 0, 0)
-                    user = player.Player(uname, uclass.lower(), startlc)
+                    startGame(*loadPlayer(uname), startlc)
                     break
                 else:
                     print("Username already exists!")
@@ -131,8 +134,11 @@ class Menu:
         elif menuchoice == "2":
             print("Please enter Username")
             uname = input(">>")
-            if loadPlayer(uname):
-                print("Alright")
+            if playerExists(uname):
+                temp = loadPlayer(uname)
+                mapsize = selectmapsize()
+                startlc = startlocation()
+                startGame(*temp, startlc)
             else:
                 print("Username does not exits, Please create a new username")
 
