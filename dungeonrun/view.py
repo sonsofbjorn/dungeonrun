@@ -3,13 +3,18 @@ from dungeonrun import player
 
 class View:
 
-    def __init__(self):
-        m = dungeon.Map(4)
+    def __init__(self, dungeon, player):
+        self.m = dungeon
+        self.p = player
 
-        p = player.Player("bob", "knight", dungeon.Room(0, 1))
-
-        for row in m:
+    def draw_map(self):
+        for row in self.m:
             for room in row:
-                if p == room.position:
+                if room.position == self.p.show_location:
                     print("1", end=" ")
+
+                elif room.dark:
+                    print("D", end=" ")
+                else:
+                    print("x", end=" ")
             print()
