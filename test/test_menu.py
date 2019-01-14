@@ -1,10 +1,10 @@
 import unittest
+import os
 from dungeonrun import menu
 
 
 class testMenu(unittest.TestCase):
     def setUp(self):
-        self.m = menu.Menu()
         menu.saveNewPlayer("bob", "knight", 100, 200)
 
     def testPlayerExists(self):
@@ -15,7 +15,4 @@ class testMenu(unittest.TestCase):
         self.assertTrue(menu.loadPlayer("bob"))
 
     def tearDown(self):
-        with open("..//players.txt", "w") as f:
-            line = f.readlines()
-            line = line[:-1]
-            #f.writelines(line)
+        os.remove("players.txt")
