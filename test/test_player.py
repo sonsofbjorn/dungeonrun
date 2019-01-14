@@ -13,8 +13,8 @@ class testPlayer(unittest.TestCase):
 
         self.dungeon = dungeon.Map(4)
 
-        self.char = player.Player("Bob", "knight", self.dungeon.room(1, 1))
-        self.char2 = player.Player("Bob", "knight", self.dungeon.room(0, 1))
+        self.char = player.Player("Bob", "knight", self.dungeon.get_room(1, 1))
+        self.char2 = player.Player("Bob", "knight", self.dungeon.get_room(0, 1))
 
     def testKnightProperties(self):
         self.assertEqual(self.knight.initiative, 5)
