@@ -11,10 +11,10 @@ class View:
         for row in self.m:
             for room in row:
                 if room.position == self.p.show_location:
-                    print("1", end=" ")
+                    print("o", end="")
 
                 elif room.dark:
-                    print("D", end=" ")
+                    print("▓", end="")
                 else:
-                    print("x", end=" ")
+                    print("░", end="")
             print()

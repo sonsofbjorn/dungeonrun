@@ -12,9 +12,14 @@ class testView(unittest.TestCase):
         self.v = view.View(self.m, self.p)
 
 
-    def testMap(self):
-        self.v.draw_map()
+#    def testMap(self):
+ #       self.v.draw_map()
+  #      print("\n")
 
     def testMovePlayer(self):
-        self.p.move_character(self.m.get_room(0, 2))
+        self.p.move_character(self.m.enter_door(self.p.current_room, "E"))
+        self.p.move_character(self.m.enter_door(self.p.current_room, "W"))
+        self.v.draw_map()
+
+
 
