@@ -29,22 +29,22 @@ class Map:
         # NW -> NE
         for x in range(size):
             room = self.get_room(x, 0)
-            room.doors["n"] = False
+            room.doors["N"] = False
 
         # NE -> SE
         for y in range(size):
             room = self.get_room(size-1, y)
-            room.doors["e"] = False
+            room.doors["E"] = False
 
         # SE -> SW
         for x in range(size):
             room = self.get_room(x, size-1)
-            room.doors["s"] = False
+            room.doors["S"] = False
 
         # SW -> NE
         for y in range(size):
             room = self.get_room(0, y)
-            room.doors["w"] = False
+            room.doors["W"] = False
 
     def __iter__(self):
         for rooms in self.matrix:
@@ -66,13 +66,13 @@ class Map:
         else:
             print("That door exists and can be entered")
 
-        if direction == "w":
+        if direction == "W":
             new_room = self.get_room(x-1, y)
-        elif direction == "n":
+        elif direction == "N":
             new_room = self.get_room(x, y-1)
-        elif direction == "e":
+        elif direction == "E":
             new_room = self.get_room(x+1, y)
-        elif direction == "s":
+        elif direction == "S":
             new_room = self.get_room(x, y+1)
         else:
             raise Exception("How did you enter else?")
