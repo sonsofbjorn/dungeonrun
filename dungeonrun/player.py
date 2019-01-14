@@ -3,7 +3,7 @@ DEFAULT_HP = 100
 
 
 class Player:
-    def __init__(self, name, hero_class, start_room, hp=DEFAULT_HP, score=0):
+    def __init__(self, name, hero_class, start_room, score=0, hp=DEFAULT_HP):
         self.name = name.capitalize()
         self.hp = hp
         self.hero_class = hero_class
