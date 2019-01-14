@@ -17,3 +17,6 @@ class testDungeon(unittest.TestCase):
 
     def testIterableMap(self):
         self.assertTrue(isinstance(self.dungeon, Iterable))
+
+    def testRoomDoorsNW(self):
+        self.assertFalse(self.dungeon.get_room(0, 0).doors["N"])
