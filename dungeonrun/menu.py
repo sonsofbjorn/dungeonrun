@@ -98,7 +98,7 @@ def loadPlayer(uname):
 
 
 def startGame():
-    player = Player()
+    Player = Player()
     show_location
 
 

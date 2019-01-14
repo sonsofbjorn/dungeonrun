@@ -4,7 +4,7 @@ from dungeonrun import dungeon
 from collections import Iterable
 
 
-class mapSizeTest(unittest.TestCase):
+class testDungeon(unittest.TestCase):
 
     def setUp(self):
         self.dungeon = dungeon.Map(4)
