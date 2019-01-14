@@ -1,4 +1,5 @@
 import random
+from dungeonrun import Monster
 '''
 X = COL
 Y = ROW
@@ -20,7 +21,7 @@ class Map:
                             for x in range(size))
                             for y in range(size))
 
-        corner = {
+        self.corner = {
             'NW': self.get_room(0, 0),
             'NE': self.get_room(0, size-1),
             'SW': self.get_room(size-1, 0),
@@ -81,21 +82,22 @@ class Map:
         new_room.dark = False
         return new_room
 
-    def generateMonsters(monsters = ["giant spider","skeleton","orc","troll"]):
+    def generateMonsters(self, monsters=["giant spider", "skeleton",
+                                         "orc", "troll"]):
         """ This function puts monsters in all rooms if they are common enough.
-        At most one of each monster in monsterlist gets created. 
+        At most one of each monster in monsterlist gets created.
         """
-        for row in self: 
+        for row in self:
             for room in row:
                 monsterlist = monsters
-                while (monsterlist): 
-                    monster = Monster(monsterlist.pop(),room.position)
-                    if (monster.rarity >= random.randint(0,100)):
+                while (monsterlist):
+                    monster = Monster(monsterlist.pop(), room.position)
+                    if (monster.rarity >= random.randint(0, 100)):
                         room.monsters.append(monster)
-                        yield room.position # debug
+                        yield room.position  # debug
+
 
 class Room:
-
     def __init__(self, x, y, isDark=True, hasExit=False,
                  monsters=[], treasures=[]):
         self.dark, self.hasExit = isDark, hasExit
@@ -108,4 +110,3 @@ class Room:
 
         # Position X,Y tuple
         self.position = (x, y)
-
