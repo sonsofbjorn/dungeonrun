@@ -3,3 +3,6 @@ Mathias,knight,0,0
 Sebbe,thief,0,0
 Test,knight,0,0
 Vamsi,knight,0,0
+Micke2,thief,0,0
+Micke3,knight,0,0
+Micke0,knight,0,0
