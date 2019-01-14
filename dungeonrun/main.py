@@ -1,14 +1,8 @@
-from dungeon import Map
-
+from dungeonrun import player
+from dungeonrun import menu
 
 def main():
-    dungeon = Map(4)
-
-    print("=== MAIN ===")
-    for rooms in dungeon:
-        for room in rooms:
-            print(room.doors, end="")
-        print()
+    menu.Menu.main_menu(0)
 
 
 if __name__ == "__main__":
