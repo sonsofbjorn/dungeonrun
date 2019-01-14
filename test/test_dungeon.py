@@ -28,9 +28,6 @@ class testDungeon(unittest.TestCase):
         self.assertTrue(self.dungeon.get_room(3, 2).doors["N"])
         self.assertTrue(self.dungeon.get_room(3, 2).doors["S"])
 
-
-
-
     def testRoomDoorsSE(self):
         self.assertTrue(self.dungeon.get_room(2, 2).doors["E"])
         self.assertTrue(self.dungeon.get_room(2, 2).doors["W"])
