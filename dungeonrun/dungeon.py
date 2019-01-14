@@ -66,13 +66,13 @@ class Map:
         else:
             print("That door exists and can be entered")
 
-        if direction == "w":
+        if direction == "W":
             new_room = self.get_room(x-1, y)
-        elif direction == "n":
+        elif direction == "N":
             new_room = self.get_room(x, y-1)
-        elif direction == "e":
+        elif direction == "E":
             new_room = self.get_room(x+1, y)
-        elif direction == "s":
+        elif direction == "S":
             new_room = self.get_room(x, y+1)
         else:
             raise Exception("How did you enter else?")
