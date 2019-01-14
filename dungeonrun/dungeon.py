@@ -1,5 +1,5 @@
 import random
-from dungeonrun import Monster
+from dungeonrun import monster
 '''
 X = COL
 Y = ROW
@@ -82,7 +82,7 @@ class Map:
         new_room.dark = False
         return new_room
 
-    def generateMonsters(self, monsters=["giant spider", "skeleton",
+    def generate_monsters(self, monsters=["giant spider", "skeleton",
                                          "orc", "troll"]):
         """ This function puts monsters in all rooms if they are common enough.
         At most one of each monster in monsterlist gets created.
@@ -91,9 +91,9 @@ class Map:
             for room in row:
                 monsterlist = monsters
                 while (monsterlist):
-                    monster = Monster(monsterlist.pop(), room.position)
+                    monstr = monster.Monster(monsterlist.pop(), room.position)
                     if (monster.rarity >= random.randint(0, 100)):
-                        room.monsters.append(monster)
+                        room.monsters.append(monstr)
                         yield room.position  # debug
 
 
