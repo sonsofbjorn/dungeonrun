@@ -7,7 +7,7 @@ def createDungeon(size):
     return instance
 
 
-def startlocation(dungeon):
+def startlocation(dungeon, startcorner):
     while True:
         print("Choose your starting location:\n"
               "[1] North-West\n"
@@ -119,16 +119,22 @@ def mapLoop(char, dungeon):
 
     while True:
         print(char.name + ", you are in", char.show_location)
-        print(char.name + ", where do you want to go? West, North, East, or South?")
+        print(char.name + ", where do you want to go? West, North, East, or South?") # This should be neatly handled
+        # in the viewer eventually (dynamically displaying depending on doors present)
         inp = input(">>")
         new_room = dungeon.enter_door(char.current_room, inp)
-        if new_room is not False:
+        if new_room is False:
+            print("That is not a valid direction. Try again.")
+        else:
             char.move_character(new_room)
-            print(char.show_location)
-            break
+            print(char.name , "enters", char.show_location)
 
-
-
+        if char.current_room.hasExit is True:
+            print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
+        elif len(char.current_room.monsters) < 0:
+            print("Hello monsters")
+        elif len(char.current_room.treasures) < 0:
+            print("here be treasures")
 
 
 class Menu:

@@ -59,10 +59,10 @@ class Map:
         x = current_room.position[0]
         y = current_room.position[1]
 
-        direction = door.upper()[:1]
+        direction = door.upper()
 
         while True:
-            if new_room.doors.get(direction) is False:
+            if new_room.doors.get(direction[:1]) is False:
                 return False
             else:
                 break
