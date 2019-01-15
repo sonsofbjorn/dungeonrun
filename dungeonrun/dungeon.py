@@ -99,7 +99,8 @@ class Room:
         # Position X,Y tuple
         self.position = (x, y)
 
-class Treasure
+
+class Treasure:
     available_items = {
                 "Loose change": {"value": 2, "rarity": 40},
                 "Money pouch": {"value": 6, "rarity": 20},
