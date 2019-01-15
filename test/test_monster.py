@@ -6,7 +6,8 @@ from dungeonrun.dungeon import Map
 
 class testMap(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         self.dungeon = Map(4)
 
         self.monster_list = [m for m in Monster.available_monsters]

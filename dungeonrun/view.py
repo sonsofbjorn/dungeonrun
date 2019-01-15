@@ -35,7 +35,6 @@ class View:
                     else:
                         row_list.append("░░░░░░")
 
-                tests.append("\n")
                 tests.append("".join(row_list))
         return tests
 

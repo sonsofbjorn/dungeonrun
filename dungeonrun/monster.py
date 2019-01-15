@@ -33,6 +33,8 @@ class Monster:
                               "rarity": 5}}
 
     def __init__(self, unit_type, room):
+        self.hp = self.available_monsters[unit_type["hp"]]
+
         self.room = room
 
         self.unit_type = self.available_monsters[unit_type]

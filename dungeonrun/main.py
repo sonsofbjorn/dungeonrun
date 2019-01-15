@@ -1,4 +1,4 @@
-from dungeonrun.menu import Menu
+from menu import Menu
 
 def main():
     Menu.main_menu(0)

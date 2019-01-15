@@ -63,8 +63,7 @@ class Map:
     def get_room(self, x, y):
         return self.matrix[y][x]
 
-    def generate_monsters(self, foes=("giant spider", "skeleton",
-                                      "orc", "troll")):
+    def generate_monsters(self, foes):
         """ This function puts monsters in all rooms if they are common enough.
         At most one of each monster in foes gets created in the room.
         """
