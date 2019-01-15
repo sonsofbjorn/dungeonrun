@@ -9,6 +9,7 @@ class Player:
         self.hero_class = hero_class
         self.current_room = start_room
         self.score = score
+        self.old_room = start_room
 
         if hero_class.lower() == "knight":
             self.initiative = 5
@@ -90,12 +91,13 @@ class Player:
         else:
             return False
         new_room.dark = False
+        self.old_room = self.current_room
         self.current_room = new_room
         return new_room
 
     def escape_combat(self):
         if self.hero_class == "wizard":
-            escape_chance = 80
+            escape_chance = 20  # 20-100: you gucci
         else:
             escape_chance = self.dexterity*10
         escape = random.randrange(0, 100)
