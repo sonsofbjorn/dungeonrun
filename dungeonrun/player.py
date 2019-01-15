@@ -47,8 +47,31 @@ class Player:
     def show_location(self):
         return self.current_room.position
 
-    def move_character(self, room):
-        self.current_room = room
+    def move_character(self, direction, map):
+        x = self.current_room.position[0]
+        y = self.current_room.position[1]
+
+        direction = direction.upper()[:1]
+
+        while True:
+            if self.current_room.doors.get(direction) is False:
+                return False
+            else:
+                break
+
+        if direction == "W":
+            new_room = map.get_room(x-1, y)
+        elif direction == "N":
+            new_room = map.get_room(x, y-1)
+        elif direction == "E":
+            new_room = map.get_room(x+1, y)
+        elif direction == "S":
+            new_room = map.get_room(x, y+1)
+        else:
+            raise Exception("How did you enter else?")
+        new_room.dark = False
+        self.current_room = new_room
+        return new_room
 
     def escape_combat(self):
         escape_chance = self.dexterity*10

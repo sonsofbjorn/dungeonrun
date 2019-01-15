@@ -60,32 +60,6 @@ class Map:
     def get_room(self, x, y):
         return self.matrix[y][x]
 
-    def enter_door(self, current_room, door):
-        new_room = current_room
-        x = current_room.position[0]
-        y = current_room.position[1]
-
-        direction = door.upper()
-
-        while True:
-            if new_room.doors.get(direction[:1]) is False:
-                return False
-            else:
-                break
-
-        if direction[:1] == "W":
-            new_room = self.get_room(x-1, y)
-        elif direction[:1] == "N":
-            new_room = self.get_room(x, y-1)
-        elif direction[:1] == "E":
-            new_room = self.get_room(x+1, y)
-        elif direction[:1] == "S":
-            new_room = self.get_room(x, y+1)
-        else:
-            raise Exception("How did you enter else?")
-        new_room.dark = False
-        return new_room
-
     def generate_monsters(self, foes=("giant spider", "skeleton",
                                          "orc", "troll")):
         """ This function puts monsters in all rooms if they are common enough.

@@ -100,9 +100,9 @@ def load_player(uname):
             (username, role, score, highscore) = line.split(sep=",")
             if username == uname.capitalize():
                 print("Welcome back "+username
-                      +"\nYour current role is a "+role
-                      +"\nYour highest score is "+str(score)
-                      +"\nOverall highest score is "+str(highscore))
+                      + "\nYour current role is a " + role
+                      + "\nYour highest score is " + str(score)
+                      + "\nOverall highest score is " + str(highscore))
                 return username, role, score
     raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
@@ -118,15 +118,15 @@ def start_game(username, role, score, start_room, dungeon):
 def map_loop(char, dungeon):
     while True:
         print(char.name + ", you are in", char.show_location)
-        print(char.name + ", where do you want to go? West, North, East, or South?") # This should be neatly handled
-        # in the viewer eventually (dynamically displaying depending on doors present)
+        print(char.name + ", where do you want to go? West, North, East, or South?")
         inp = input(">>")
-        new_room = dungeon.enter_door(char.current_room, inp)
+        # This should be neatly handled in the viewer eventually (dynamically displaying depending on doors present)
+
+        new_room = char.move_character(inp, dungeon)
         if new_room is False:
             print("That is not a valid direction. Try again.")
         else:
-            char.move_character(new_room)
-            print(char.name , "enters", char.show_location)
+            print(char.name, "enters", char.show_location)
 
         if char.current_room.hasExit is True:
             print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
@@ -183,5 +183,3 @@ class Menu:
                 break
             else:
                 print("Incorrect input!")
-
-
