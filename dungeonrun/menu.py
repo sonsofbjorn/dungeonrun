@@ -108,6 +108,18 @@ def load_player(uname):
     raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
 
+def deletePlayer(uname):
+    with open("players.txt", "r+") as f:
+        new_f = f.readlines()
+        f.seek(0)
+        for line in new_f:
+            (username, role, score, highscore) = line.split(sep=",")
+            if str(uname.capitalize()) not in line:
+                f.write(line)
+        f.truncate()
+        return
+
+
 def start_game(username, role, score, start_room, dungeon):
 
     dude = player.Player(username, role, start_room, score)
@@ -193,8 +205,9 @@ class Menu:
             print("Welcome to... DUNGEON RUN!\n"
                   "[1] New Character\n"
                   "[2] Load Character\n"
-                  "[3] Highscore\n"
-                  "[4] Quit")
+                  "[3] Remove Character\n"
+                  "[4] Highest score\n"
+                  "[5] Quit")
 
             menuchoice = input(">>")
             if menuchoice == "1":
@@ -224,11 +237,20 @@ class Menu:
                     print("Username does not exits, Please create a new username")
 
             elif menuchoice == "3":
-                print("Highscore")
+                print("Please enter Username")
+                uname = input(">>")
+                if player_exists(uname):
+                    deletePlayer(uname)
+                    print(uname + " is deleted.")
+                else:
+                    print("Username does not exist")
+
+            elif menuchoice == "4":
+                print("Highest score")
                 print("Press [ENTER] to continue")
                 input(">>")
 
-            elif menuchoice == "4":
+            elif menuchoice == "5":
                 print("See you next time!")
                 break
             else:

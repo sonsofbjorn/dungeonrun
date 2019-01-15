@@ -66,7 +66,7 @@ class Player:
     def show_location(self):
         return self.current_room.position
 
-    def move_character(self, direction, map):
+    def move_character(self, direction, dungeon_map):
         x = self.current_room.position[0]
         y = self.current_room.position[1]
 
@@ -79,13 +79,13 @@ class Player:
                 break
 
         if direction == "W":
-            new_room = map.get_room(x-1, y)
+            new_room = dungeon_map.get_room(x-1, y)
         elif direction == "N":
-            new_room = map.get_room(x, y-1)
+            new_room = dungeon_map.get_room(x, y-1)
         elif direction == "E":
-            new_room = map.get_room(x+1, y)
+            new_room = dungeon_map.get_room(x+1, y)
         elif direction == "S":
-            new_room = map.get_room(x, y+1)
+            new_room = dungeon_map.get_room(x, y+1)
         else:
             return False
         new_room.dark = False
