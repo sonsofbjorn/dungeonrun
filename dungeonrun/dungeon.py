@@ -80,7 +80,7 @@ class Map:
     def print_monsters(self):
         """ This is a debug function """
         for monster in self.monsterlist:
-            print(monster.position.position, monster.name)
+            print(monster.room.position, monster.unit_type.uni)
         return ("Map contains {1} monsters in {0} rooms"
                 .format(self.size**2, len(self.monsterlist)))
 
@@ -100,7 +100,8 @@ class Room:
         # Position X,Y tuple
         self.position = (x, y)
 
-class Treasure
+
+class Treasure:
     available_items = {
                 "Loose change": {"value": 2, "rarity": 40},
                 "Money pouch": {"value": 6, "rarity": 20},
