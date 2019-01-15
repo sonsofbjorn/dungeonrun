@@ -108,7 +108,7 @@ def load_player(uname):
     raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
 
-def deletePlayer(uname):
+def delete_player(uname):
     with open("players.txt", "r+") as f:
         new_f = f.readlines()
         f.seek(0)
@@ -129,7 +129,6 @@ def start_game(username, role, score, start_room, dungeon):
 
 
 def map_loop(char, dungeon):
-    dungeon.print_monsters()
     while True:
         if char.hp < 1:
             break
@@ -156,7 +155,7 @@ def map_loop(char, dungeon):
 def combat(char):
     initiative_list = []
     monster = char.current_room.monsters[0]
-    print("You have been attacked by a", monster.name + "!")
+    ##print("You have been attacked by a", monster.unit_type.keys + "!")
     print("Don't die - you'll end up in a loop if you do.")
     char_init = char.roll_dice("initiative")
     monster_init = monster.roll_dice("initiative")
@@ -169,7 +168,7 @@ def combat(char):
     while len(initiative_list) > 1:
         for actor in initiative_list:
             if char.hp < 1:
-                print("You have been slain by", monster.name + "!")
+                print("You have been slain by", monster.unit_type + "!")
                 initiative_list = []
                 char.current_room.monsters.clear()
                 game_over(char)
@@ -177,11 +176,11 @@ def combat(char):
                 break
 
             if monster.hp < 1:
-                print("You have slain the", monster.name + "!")
+                print("You have slain the", monster.unit_type + "!")
                 initiative_list = []
                 char.current_room.monsters.pop(0)
                 break
-            elif actor.name == "Micke":
+            elif isinstance(actor, player.Player):
                 while True:
                     print("Choose your action:\n"
                           "[1] Attack\n"
@@ -198,6 +197,7 @@ def combat(char):
 
 def game_over(char):
     print("Game over.")
+
 
 class Menu:
     def main_menu(self):
@@ -240,7 +240,7 @@ class Menu:
                 print("Please enter Username")
                 uname = input(">>")
                 if player_exists(uname):
-                    deletePlayer(uname)
+                    delete_player(uname)
                     print(uname + " is deleted.")
                 else:
                     print("Username does not exist")
