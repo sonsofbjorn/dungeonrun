@@ -2,37 +2,41 @@ import random
 
 
 class Monster:
-    def __init__(self, name, position):
-        self.name = name
-        self.position = position
+    def __init__(self, unit_type, room):
+        self.room = room
 
-        if self.name.lower() == "giant spider":
-            self.initiative = 7
-            self.hp = 1
-            self.attack = 2
-            self.dexterity = 3
-            self.rarity = 20
+        self.available_monsters = {"giant spider": {
+                                       "initiative": 7,
+                                       "hp": 1,
+                                       "attack": 2,
+                                       "dexterity": 3,
+                                       "rarity": 20},
+                                   "skeleton": {
+                                       "initiative": 4,
+                                       "hp": 2,
+                                       "attack": 2,
+                                       "dexterity": 3,
+                                       "rarity": 15},
+                                   "orc": {
+                                       "initiative": 4,
+                                       "hp": 2,
+                                       "attack": 2,
+                                       "dexterity": 3,
+                                       "rarity": 15},
+                                   "troll": {
+                                       "initiative": 4,
+                                       "hp": 2,
+                                       "attack": 2,
+                                       "dexterity": 3,
+                                       "rarity": 15}}
 
-        if self.name.lower() == "skeleton":
-            self.initiative = 4
-            self.hp = 2
-            self.attack = 3
-            self.dexterity = 3
-            self.rarity = 15
+        self.unit_type = self.available_monsters[unit_type]
 
-        if self.name.lower() == "orc":
-            self.initiative = 6
-            self.hp = 3
-            self.attack = 4
-            self.dexterity = 4
-            self.rarity = 10
+        self.__dict__ = self.unit_type
 
-        if self.name.lower() == "troll":
-            self.initiative = 2
-            self.hp = 4
-            self.attack = 7
-            self.dexterity = 2
-            self.rarity = 5
+        def __iter__():
+            for monsters in self.available_monsters:
+                yield monsters
 
     def generate_attack(self):
         attack_value = 0
