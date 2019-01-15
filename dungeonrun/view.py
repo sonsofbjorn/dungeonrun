@@ -89,7 +89,6 @@ class View:
                   "[5] Quit")
         return optionlist
 
-
     def draw_start_location_options(self):
         self.print_it(self.test_list())
         startcorner = input(">>")
