@@ -9,6 +9,7 @@ class Player:
         self.hero_class = hero_class
         self.current_room = start_room
         self.score = score
+        self.old_room = start_room
 
         if hero_class.lower() == "knight":
             self.initiative = 5
@@ -43,24 +44,25 @@ class Player:
             value += random.randrange(0, dice_type)
         return value
 
-    def attack_function(self, monster):
+    def attack_function(self, enemy):
         attacker_roll = self.roll_dice("attack")
-        monster_roll = monster.roll_dice("dexterity")
+        monster_roll = enemy.roll_dice("dexterity")
         if attacker_roll > monster_roll:
             if self.hero_class == "thief":
                 critical_hit = random.randrange(0, 100)
                 if critical_hit >= 75:
-                    monster.hp -= 2
+                    print("OH YEAH, IT'S A CRITICAL HIT!")
+                    enemy.hp -= 2
                 else:
-                    print("You attack the", monster.name, "and hit!")
-                    monster.hp -= 1
+                    print("You attack the", enemy.unit_type, "and hit!")
+                    enemy.hp -= 1
             else:
-                print("You attack the", monster.name, "and hit!")
-                monster.hp -= 1
-                if monster.hp > 0:
-                    print(monster.name, "current hp is:", monster.hp)
+                print("You attack the", enemy.unit_type, "and hit!")
+                enemy.hp -= 1
+                if enemy.hp > 0:
+                    print(enemy.unit_type, "current hp is:", enemy.hp)
         else:
-            print("You attack", monster.name + ", but you miss!")
+            print("You attack", enemy.unit_type + ", but you miss!")
 
     @property
     def show_location(self):
@@ -89,11 +91,15 @@ class Player:
         else:
             return False
         new_room.dark = False
+        self.old_room = self.current_room
         self.current_room = new_room
         return new_room
 
     def escape_combat(self):
-        escape_chance = self.dexterity*10
+        if self.hero_class == "wizard":
+            escape_chance = 20  # 20-100: you gucci
+        else:
+            escape_chance = self.dexterity*10
         escape = random.randrange(0, 100)
         if escape >= escape_chance:
             escape = True
