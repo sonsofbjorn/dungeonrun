@@ -1,15 +1,20 @@
 import unittest
 
-from dungeonrun import monster
+from dungeonrun.monster import Monster
+from dungeonrun.dungeon import Map
 
 
 class testMap(unittest.TestCase):
 
     def setUp(self):
-        self.spider = monster.Monster("giant spider", (1, 2))
-        self.skeleton = monster.Monster("skeleton",   (1, 2))
-        self.orc = monster.Monster("orc",             (1, 2))
-        self.troll = monster.Monster("troll",         (1, 2))
+        self.dungeon = Map(4)
+
+        self.monster_list = [m for m in Monster.available_monsters]
+
+        self.spider = Monster("giant spider", self.dungeon.get_room(1, 2))
+        self.skeleton = Monster("skeleton", self.dungeon.get_room(0, 3))
+        self.orc = Monster("orc", self.dungeon.get_room(1, 0))
+        self.troll = Monster("troll", self.dungeon.get_room(2, 2))
 
     def testSpiderProperties(self):
         self.assertEqual(self.spider.initiative, 7)

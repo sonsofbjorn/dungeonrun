@@ -1,3 +1,4 @@
+import random
 from dungeonrun import player
 from dungeonrun import dungeon
 
@@ -100,11 +101,22 @@ def load_player(uname):
             (username, role, score, highscore) = line.split(sep=",")
             if username == uname.capitalize():
                 print("Welcome back "+username
-                      + "\nYour current role is a " + role
+                      + "\nYour current character is " + role
                       + "\nYour highest score is " + str(score)
                       + "\nOverall highest score is " + str(highscore))
                 return username, role, score
     raise Exception("Something went wrong. What? No idea... Ask Sebbe")
+
+
+def deletePlayer(uname):
+    with open("players.txt", "r+") as f:
+        new_f = f.readlines()
+        f.seek(0)
+        for line in new_f:
+            if str(uname.capitalize()) not in line:
+                f.write(line)
+        f.truncate()
+        return
 
 
 def start_game(username, role, score, start_room, dungeon):
@@ -116,7 +128,10 @@ def start_game(username, role, score, start_room, dungeon):
 
 
 def map_loop(char, dungeon):
+    dungeon.print_monsters()
     while True:
+        if char.hp < 1:
+            break
         print(char.name + ", you are in", char.show_location)
         print(char.name + ", where do you want to go? West, North, East, or South?")
         inp = input(">>")
@@ -130,26 +145,73 @@ def map_loop(char, dungeon):
 
         if char.current_room.hasExit is True:
             print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
-        elif len(char.current_room.monsters) < 0:
-            print("Hello monsters")
-        elif len(char.current_room.treasures) < 0:
-            print("here be treasures")
+        elif len(char.current_room.monsters) > 0:
+            while len(char.current_room.monsters) > 0:
+                combat(char)
+        # elif len(char.current_room.treasures) > 0:
+            # print("here be treasures")
 
+
+def combat(char):
+    initiative_list = []
+    monster = char.current_room.monsters[0]
+    print("You have been attacked by a", monster.name + "!")
+    print("Don't die - you'll end up in a loop if you do.")
+    char_init = char.roll_dice("initiative")
+    monster_init = monster.roll_dice("initiative")
+    if monster_init > char_init:
+        initiative_list.append(monster)
+        initiative_list.append(char)
+    else:
+        initiative_list.append(char)
+        initiative_list.append(monster)
+    while len(initiative_list) > 1:
+        for actor in initiative_list:
+            if char.hp < 1:
+                print("You have been slain by", monster.name + "!")
+                initiative_list = []
+                char.current_room.monsters.clear()
+                game_over(char)
+                # quit game
+                break
+
+            if monster.hp < 1:
+                print("You have slain the", monster.name + "!")
+                initiative_list = []
+                char.current_room.monsters.pop(0)
+                break
+            elif actor.name == "Micke":
+                while True:
+                    print("Choose your action:\n"
+                          "[1] Attack\n"
+                          "[2] Flee")
+                    choice = input(">>")
+                    if choice == "1":
+                        actor.attack_function(monster)
+                        break
+                    elif choice == "2":
+                        print("You can't flee. The escape combat function is not completed.")
+            else:
+                actor.attack_function(char)
+
+
+def game_over(char):
+    print("Game over.")
 
 class Menu:
-
     def main_menu(self):
         while True:
             print("Welcome to... DUNGEON RUN!\n"
                   "[1] New Character\n"
                   "[2] Load Character\n"
-                  "[3] Highscore\n"
-                  "[4] Quit")
+                  "[3] Remove Character\n"
+                  "[4] Highest score\n"
+                  "[5] Quit")
 
             menuchoice = input(">>")
             if menuchoice == "1":
                 while True:
-                    print("Please create Username")
+                    print("Please create a 'Name' for the role")
                     uname = input(">>")
                     if not player_exists(uname.capitalize()):
                         uclass = choose_role()
@@ -159,11 +221,11 @@ class Menu:
                         start_game(*load_player(uname), startlc, dungeon)
                         break
                     else:
-                        print("Username already exists!")
+                        print("Name already exists!")
                 # skicka vidare till en funktion
 
             elif menuchoice == "2":
-                print("Please enter Username")
+                print("Please enter the Name")
                 uname = input(">>")
                 if player_exists(uname):
                     temp = load_player(uname)
@@ -171,14 +233,23 @@ class Menu:
                     startlc = start_location(dungeon)
                     start_game(*temp, startlc, dungeon)
                 else:
-                    print("Username does not exits, Please create a new username")
+                    print("Name does not exits, Please create a 'Name' for the role.")
 
             elif menuchoice == "3":
-                print("Highscore")
+                print("Please enter Name")
+                uname = input(">>")
+                if player_exists(uname):
+                    deletePlayer(uname)
+                    print(uname.capitalize() + " is deleted!")
+                else:
+                    print("Name does not exist!")
+
+            elif menuchoice == "4":
+                print("Highest score")
                 print("Press [ENTER] to continue")
                 input(">>")
 
-            elif menuchoice == "4":
+            elif menuchoice == "5":
                 print("See you next time!")
                 break
             else:

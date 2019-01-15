@@ -32,7 +32,6 @@ class Map:
             'SE': self.get_room(size-1, size-1)
             }
 
-
     def __iter__(self):
         for rooms in self.matrix:
             yield rooms
