@@ -34,8 +34,28 @@ class Monster:
             self.dexterity = 2
             self.rarity = 5
 
-    def generate_attack(self):
-        attack_value = 0
-        for x in range(0, self.attack):
-            attack_value += random.randrange(0, self.attack)
-        return attack_value
+    def roll_dice(self, dice_type):
+        if dice_type == "attack":
+            dice_type = self.attack
+        elif dice_type == "dexterity":
+            dice_type = self.dexterity
+        elif dice_type == "initiative":
+            dice_type = self.initiative
+        value = 0
+        for x in range(0, dice_type):
+            value += random.randrange(0, dice_type)
+        return value
+
+    def attack_function(self, player):
+        attacker_roll = self.roll_dice("attack")
+        player_roll = player.roll_dice("dexterity")
+        if attacker_roll > player_roll:
+            if player.hero_class == "knight":
+                # Another IF needed to see if player blocks attack
+                print("something something knight shield")
+            print(player.name, "is hit by", self.name + "!")
+            player.hp -= 1
+            print("you have", player.hp, "hp remaining!")
+        else:
+            print(self.name, "attacks", player.name + ", but misses!")
+
