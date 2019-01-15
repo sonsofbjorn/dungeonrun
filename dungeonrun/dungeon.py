@@ -1,5 +1,5 @@
 import random
-from dungeonrun import monster
+from dungeonrun.monster import Monster
 '''
 X = COL
 Y = ROW
@@ -71,7 +71,7 @@ class Map:
             for room in row:
                 mlist = list(foes)
                 while(mlist):
-                    newmonster = monster.Monster(mlist.pop(), room)
+                    newmonster = Monster(mlist.pop(), room)
                     if (newmonster.rarity >= random.randint(0, 100)):
                         room.monsters.append(newmonster)
                         yield newmonster

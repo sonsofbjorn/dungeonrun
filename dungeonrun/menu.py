@@ -198,6 +198,7 @@ def combat(char):
 def game_over(char):
     print("Game over.")
 
+
 class Menu:
     def main_menu(self):
         while True:
