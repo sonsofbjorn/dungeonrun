@@ -1,5 +1,6 @@
 import random
-from dungeonrun import monster
+from dungeonrun.monster import Monster
+
 '''
 X = COL
 Y = ROW
@@ -23,7 +24,7 @@ class Map:
         self.generate_doors()
         # monsterlist is a list of generated monster objects in the dungeon
         # Monsters know where they are (they have a room object as position)
-        self.monsterlist = list(self.generate_monsters())
+        self.monsterlist = list(self.generate_monsters(Monster.available_monster.keys()))
 
         self.corner = {
             'NW': self.get_room(0, 0),
@@ -71,7 +72,7 @@ class Map:
             for room in row:
                 mlist = list(foes)
                 while(mlist):
-                    newmonster = monster.Monster(mlist.pop(), room)
+                    newmonster = Monster(mlist.pop(), room)
                     if (newmonster.rarity >= random.randint(0, 100)):
                         room.monsters.append(newmonster)
                         yield newmonster
@@ -98,3 +99,15 @@ class Room:
 
         # Position X,Y tuple
         self.position = (x, y)
+
+class Treasure
+    available_items = {
+                "Loose change": {"value": 2, "rarity": 40},
+                "Money pouch": {"value": 6, "rarity": 20},
+                "Gold jewelry": {"value": 10, "rarity": 15},
+                "Gemstone": {"value": 14, "rarity": 10},
+                "Small treasurechest": {"value": 20, "rarity": 5}}
+
+    def __init__(self, item_type, room):
+        self.room = room
+        self.__dict__ = self.avaliable_items[item_type]
