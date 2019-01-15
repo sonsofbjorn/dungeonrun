@@ -50,17 +50,18 @@ class Player:
             if self.hero_class == "thief":
                 critical_hit = random.randrange(0, 100)
                 if critical_hit >= 75:
+                    print("OH YEAH, IT'S A CRITICAL HIT!")
                     monster.hp -= 2
                 else:
-                    print("You attack the", monster.name, "and hit!")
+                    print("You attack the", monster.unit_type, "and hit!")
                     monster.hp -= 1
             else:
-                print("You attack the", monster.name, "and hit!")
+                print("You attack the", monster.unit_type, "and hit!")
                 monster.hp -= 1
                 if monster.hp > 0:
-                    print(monster.name, "current hp is:", monster.hp)
+                    print(monster.unit_type, "current hp is:", monster.hp)
         else:
-            print("You attack", monster.name + ", but you miss!")
+            print("You attack", monster.unit_type + ", but you miss!")
 
     @property
     def show_location(self):
@@ -93,7 +94,10 @@ class Player:
         return new_room
 
     def escape_combat(self):
-        escape_chance = self.dexterity*10
+        if self.hero_class == "wizard":
+            escape_chance = 80
+        else:
+            escape_chance = self.dexterity*10
         escape = random.randrange(0, 100)
         if escape >= escape_chance:
             escape = True
