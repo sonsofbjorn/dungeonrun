@@ -7,45 +7,40 @@ class View:
         self.m = dungeon
         self.p = player
 
+    def clear_console(self):
+        if platform.system() == "Linux" or "Darwin":
+            return os.system('clear')
+        elif platform.system() == "Windows":
+            return os.system('cls')
+
     def draw_map(self):
         tests = []
         for row in self.m:
+            row_list = []
             for x in range(3):
                 for room in row:
                     if room.position == self.p.show_location:
                         if x == 1:
-                            print(" ", end="")
-                            print(" ╳  ", end="")
-                            print(" ", end="")
+                            row_list.append("  ╳   ")
                         else:
-                            print("   ", end="")
-                            print("", end="")
-                            print("   ", end="")
+                            row_list.append("      ")
                     elif room.hasExit and room.dark is False:
                         if x == 1:
-                            print("░", end="")
-                            print("exit", end="")
-                            print("░", end="")
+                            row_list.append("░exit░")
                         else:
-                            print("░░░", end="")
-                            print("", end="")
-                            print("░░░", end="")
+                            row_list.append("░░░░░░")
 
                     elif room.dark:
-                        print("▓▓", end="")
-                        print("▓▓", end="")
-                        print("▓▓", end="")
+                        row_list.append("▓▓▓▓▓▓")
                     else:
-                        print("░░", end="")
-                        print("░░", end="")
-                        print("░░", end="")
-                print()
+                        row_list.append("░░░░░░")
 
-    def print_it(self, text):
-        if platform.system() == "Linux":
-            os.system('clear')
-        elif platform.system() == "Windows":
-            os.system('cls')
+                tests.append("\n")
+                tests.append("".join(row_list))
+        return tests
+
+    def print_start_menu(self, text):
+        self.clear_console()
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
@@ -68,6 +63,36 @@ class View:
                 hehe1 = ("║"+" "*50+"║")
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
+
+
+    def print_game(self, text):
+        self.clear_console()
+        print("______                                                              ".center(os.get_terminal_size().columns))
+        print("|  _  \                                                             ".center(os.get_terminal_size().columns))
+        print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
+        print("| | | || | | || '_ \  / _` | / _ \ / _ \ | '_ \ | '__|| | | || '_ \ ".center(os.get_terminal_size().columns))
+        print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
+        print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
+        print("        ╔═════════════ __/ | ══════════════════════════════╗        ".center(os.get_terminal_size().columns))
+        print("        ║             |___/                                ║        ".center(os.get_terminal_size().columns))
+        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+        a = 0
+        for i in range(len(text)):
+            hehe = ("║"+text[a].center(50)+"║")
+            print(hehe.center(os.get_terminal_size().columns))
+            a += 1
+        if len(text) < 10:
+            count = 10 - len(text)
+            for i in range(count):
+                hehe1 = ("║"+" "*50+"║")
+                print(hehe1.center(os.get_terminal_size().columns))
+        print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
+
+
+
+
 
 
 
