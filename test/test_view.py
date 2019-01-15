@@ -6,7 +6,8 @@ from dungeonrun.dungeon import Map
 
 class testView(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         self.m = Map(5)
         self.p = player.Player("bob", "knight", self.m.get_room(0, 1))
         self.v = view.View(self.m, self.p)
@@ -32,7 +33,10 @@ class testView(unittest.TestCase):
 
     def testPrintIt(self):
         print("\n")
-        self.v.print_it(self.v.test_list())
+        self.v.print_start_menu(self.v.test_list())
 
+    def testPrintMap(self):
+        print("\n")
+        self.v.print_game(self.v.draw_map())
 
 
