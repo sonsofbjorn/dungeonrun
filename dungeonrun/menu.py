@@ -178,10 +178,10 @@ def delete_player(uname):
 
 
 def start_game(username, role, score, start_room, dungeon):
-
     dude = player.Player(username, role, start_room, score)
     dude.current_room.dark = False
-    # monster + treasure generation
+    dude.current_room.monsters = []
+    dude.current_room.treasures = []
     map_loop(dude, dungeon)
 
 
@@ -203,17 +203,29 @@ def map_loop(char, dungeon):
         if char.current_room.hasExit is True:
             print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
         elif len(char.current_room.monsters) > 0:
+            show_monsters = "Enemies! In the room ahead, you see foes:\n"
+            for monster in char.current_room.monsters:
+                show_monsters += monster.unit_type + "\n"
+            print(show_monsters)
             while len(char.current_room.monsters) > 0:
                 combat(char)
-        # elif len(char.current_room.treasures) > 0:
-        # print("here be treasures")
+        elif len(char.current_room.treasures) > 0:
+            while len(char.current_room.treasures) > 0:
+                loot(char)
+            print("Your accumulated score is", str(char.score) + ".")
+
+
+def loot(char):
+    for loot in char.current_room.treasures:
+        char.score = int(char.score)
+        char.score += loot.value
+        print("Oooh,", loot.item_type + "! You have added it to your backpack.\n")
+        char.current_room.treasures.pop(0)
 
 
 def combat(char):
     initiative_list = []
     monster = char.current_room.monsters[0]
-    ##print("You have been attacked by a", monster.unit_type.keys + "!")
-    print("Don't die - you'll end up in a loop if you do.")
     char_init = char.roll_dice("initiative")
     monster_init = monster.roll_dice("initiative")
     if monster_init > char_init:
