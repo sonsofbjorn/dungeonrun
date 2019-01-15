@@ -1,8 +1,7 @@
-from dungeonrun import player
-from dungeonrun import menu
+from dungeonrun.menu import Menu
 
 def main():
-    menu.Menu.main_menu(0)
+    Menu.main_menu(0)
 
 
 if __name__ == "__main__":
