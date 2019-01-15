@@ -32,29 +32,32 @@ class Map:
             'SE': self.get_room(size-1, size-1)
             }
 
-        # NW -> NE
-        for x in range(size):
-            room = self.get_room(x, 0)
-            room.doors["N"] = False
-
-        # NE -> SE
-        for y in range(size):
-            room = self.get_room(size-1, y)
-            room.doors["E"] = False
-
-        # SE -> SW
-        for x in range(size):
-            room = self.get_room(x, size-1)
-            room.doors["S"] = False
-
-        # SW -> NE
-        for y in range(size):
-            room = self.get_room(0, y)
-            room.doors["W"] = False
 
     def __iter__(self):
         for rooms in self.matrix:
             yield rooms
+
+    def generate_doors(self):
+        """This generate the doors for the rooms"""
+        # NW -> NE
+        for x in range(self.size):
+            room = self.get_room(x, 0)
+            room.doors["N"] = False
+
+        # NE -> SE
+        for y in range(self.size):
+            room = self.get_room(self.size-1, y)
+            room.doors["E"] = False
+
+        # SE -> SW
+        for x in range(self.size):
+            room = self.get_room(x, self.size-1)
+            room.doors["S"] = False
+
+        # SW -> NE
+        for y in range(self.size):
+            room = self.get_room(0, y)
+            room.doors["W"] = False
 
     # This is here because in matrix row is first instead of col
     def get_room(self, x, y):
@@ -87,7 +90,7 @@ class Map:
         return new_room
 
     def generate_monsters(self, foes=("giant spider", "skeleton",
-                                         "orc", "troll")):
+                                      "orc", "troll")):
         """ This function puts monsters in all rooms if they are common enough.
         At most one of each monster in foes gets created in the room.
         """
@@ -104,14 +107,15 @@ class Map:
         """ This is a debug function """
         for monster in self.monsterlist:
             print(monster.position.position, monster.name)
-        return ("Map contains {1} monsters in {0} rooms".format(self.size**2,
-            len(self.monsterlist)))
+        return ("Map contains {1} monsters in {0} rooms"
+                .format(self.size**2, len(self.monsterlist)))
+
 
 class Room:
     def __init__(self, x, y, isDark=True, hasExit=False,
                  monsters=[], treasures=[]):
         self.dark, self.hasExit = isDark, hasExit
-        self.monsters = [] # Why doesn't the kwarg above suffice?
+        self.monsters = []  # Why doesn't the kwarg above suffice?
         self.treasures = []
 
         # DOORS N E S W
