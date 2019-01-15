@@ -52,15 +52,16 @@ class View:
         print("| | | || | | || '_ \  / _` | / _ \ / _ \ | '_ \ | '__|| | | || '_ \ ".center(os.get_terminal_size().columns))
         print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
-        print("        ╔═════════════ __/ |═══════════════════════════════╗        ".center(os.get_terminal_size().columns))
+        print("        ╔═════════════ __/ | ══════════════════════════════╗        ".center(os.get_terminal_size().columns))
         print("        ║             |___/                                ║        ".center(os.get_terminal_size().columns))
+        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         a = 0
         for i in range(len(text)):
-            y = 25-(len(text[a])/2)
-            hehe = ("║"+" "*int(y)+text[a]+" "*int(y)+"║")
+            hehe = ("║"+text[a].center(50)+"║")
             print(hehe.center(os.get_terminal_size().columns))
             a += 1
-            y += 1
         if len(text) < 10:
             count = 10 - len(text)
             for i in range(count):
@@ -80,6 +81,15 @@ class View:
                       "[2] North-East",
                       "[3] South-West",
                       "[4] South-East")
+        return optionlist
+
+    def start_menu_list(self):
+        optionlist = ("Welcome to... DUNGEON RUN!",
+                  "[1] New Character",
+                  "[2] Load Character",
+                  "[3] Remove Character",
+                  "[4] Highest score",
+                  "[5] Quit")
         return optionlist
 
 
