@@ -37,9 +37,24 @@ class Player:
             attack_value += random.randrange(0, self.attack)
         return attack_value
 
+    def generate_dodge(self):
+        dodge_value = 0
+        for x in range(0, self.dexterity):
+            dodge_value += random.randrange(0, self.dexterity)
+        return dodge_value
+
     @property
     def show_location(self):
         return self.current_room.position
 
     def move_character(self, room):
         self.current_room = room
+
+    def escape_combat(self):
+        escape_chance = self.dexterity*10
+        escape = random.randrange(0, 100)
+        if escape >= escape_chance:
+            escape = True
+        else:
+            escape = False
+        return escape
