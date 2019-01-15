@@ -11,14 +11,14 @@ class Monster:
                           "skeleton": {
                                     "initiative": 4,
                                     "hp": 2,
-                                    "attack": 2,
+                                    "attack": 3,
                                     "dexterity": 3,
                                     "rarity": 15},
                           "orc": {
                                     "initiative": 6,
                                     "hp": 3,
                                     "attack": 4,
-                                    "dexterity": 5,
+                                    "dexterity": 4,
                                     "rarity": 10},
                           "troll": {
                                     "initiative": 2,
