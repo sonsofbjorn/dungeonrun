@@ -1,5 +1,5 @@
 import os
-
+import platform
 
 class View:
 
@@ -42,7 +42,10 @@ class View:
                 print()
 
     def print_it(self, text):
-        os.system('cls')
+        if platform.system() == "Linux":
+            os.system('clear')
+        elif platform.system() == "Windows":
+            os.system('cls')
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
