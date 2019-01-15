@@ -202,14 +202,14 @@ def map_loop(char, dungeon):
 
         if char.current_room.hasExit is True:
             print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
-        elif len(char.current_room.monsters) > 0:
+        while len(char.current_room.monsters) > 0:
             show_monsters = "Enemies! In the room ahead, you see foes:\n"
             for monster in char.current_room.monsters:
                 show_monsters += monster.unit_type + "\n"
             print(show_monsters)
             while len(char.current_room.monsters) > 0:
                 combat(char)
-        elif len(char.current_room.treasures) > 0:
+        while len(char.current_room.treasures) > 0:
             while len(char.current_room.treasures) > 0:
                 loot(char)
             print("Your accumulated score is", str(char.score) + ".")
@@ -259,7 +259,15 @@ def combat(char):
                         actor.attack_function(monster)
                         break
                     elif choice == "2":
-                        print("You can't flee. The escape combat function is not completed.")
+                        escape = char.escape_combat()
+                        if escape:
+                            char.current_room = char.old_room
+                            print("You have escaped")
+                            initiative_list.clear()
+                            break
+                        else:
+                            print("You have failed to escape")
+                            break
             else:
                 actor.attack_function(char)
 

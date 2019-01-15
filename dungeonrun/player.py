@@ -44,25 +44,25 @@ class Player:
             value += random.randrange(0, dice_type)
         return value
 
-    def attack_function(self, monster):
+    def attack_function(self, enemy):
         attacker_roll = self.roll_dice("attack")
-        monster_roll = monster.roll_dice("dexterity")
+        monster_roll = enemy.roll_dice("dexterity")
         if attacker_roll > monster_roll:
             if self.hero_class == "thief":
                 critical_hit = random.randrange(0, 100)
                 if critical_hit >= 75:
                     print("OH YEAH, IT'S A CRITICAL HIT!")
-                    monster.hp -= 2
+                    enemy.hp -= 2
                 else:
-                    print("You attack the", monster.unit_type, "and hit!")
-                    monster.hp -= 1
+                    print("You attack the", enemy.unit_type, "and hit!")
+                    enemy.hp -= 1
             else:
-                print("You attack the", monster.unit_type, "and hit!")
-                monster.hp -= 1
-                if monster.hp > 0:
-                    print(monster.unit_type, "current hp is:", monster.hp)
+                print("You attack the", enemy.unit_type, "and hit!")
+                enemy.hp -= 1
+                if enemy.hp > 0:
+                    print(enemy.unit_type, "current hp is:", enemy.hp)
         else:
-            print("You attack", monster.unit_type + ", but you miss!")
+            print("You attack", enemy.unit_type + ", but you miss!")
 
     @property
     def show_location(self):

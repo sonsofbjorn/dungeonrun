@@ -3,28 +3,28 @@ import random
 
 class Monster:
 
-    available_monsters = {"giant spider": {
+    available_monsters = {"Giant spider": {
                               "unit_type": "giant spider",
                               "initiative": 7,
                               "hp": 1,
                               "attack": 2,
                               "dexterity": 3,
                               "rarity": 20},
-                          "skeleton": {
+                          "Skeleton": {
                               "unit_type": "skeleton",
                               "initiative": 4,
                               "hp": 2,
                               "attack": 3,
                               "dexterity": 3,
                               "rarity": 15},
-                          "orc": {
+                          "Orc": {
                               "unit_type": "orc",
                               "initiative": 6,
                               "hp": 3,
                               "attack": 4,
                               "dexterity": 4,
                               "rarity": 10},
-                          "troll": {
+                          "Troll": {
                               "unit_type": "troll",
                               "initiative": 2,
                               "hp": 4,
@@ -62,8 +62,8 @@ class Monster:
             if player.hero_class == "knight":
                 # Another IF needed to see if player blocks attack
                 print("something something knight shield")
-            print(player.name, "is hit by", str(self.unit_type) + "!")
+            print(player.name, "is hit by the", str(self.unit_type) + "!")
             player.hp -= 1
-            print("you have", player.hp, "hp remaining!")
+            print("You have", player.hp, "hp remaining!")
         else:
-            print(self.unit_type, "attacks", player.name + ", but misses!")
+            print("The", self.unit_type, "attacks", player.name + ", but misses!")

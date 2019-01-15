@@ -74,23 +74,11 @@ class Map:
         for row in self:
             for room in row:
                 mlist = list(foes)
-                while(mlist):
+                while mlist:
                     newmonster = Monster(mlist.pop(), room)
                     if newmonster.rarity >= random.randint(0, 100):
                         room.monsters.append(newmonster)
                         yield newmonster
-
-                        '''
-                        
-    available_items = {
-                "Loose change": {"value": 2, "rarity": 40},
-                "Money pouch": {"value": 6, "rarity": 20},
-                "Gold jewelry": {"value": 10, "rarity": 15},
-                "Gemstone": {"value": 14, "rarity": 10},
-                "Small treasurechest": {"value": 20, "rarity": 5}}
-                        
-                        '''
-
 
     def generate_treasure(self, gold=("Loose change", "Money pouch",
                                       "Gold jewelry", "Gemstone", "Small treasure chest")):
@@ -104,7 +92,6 @@ class Map:
                     if newtreasure.rarity >= random.randint(0, 100):
                         room.treasures.append(newtreasure)
                         yield newtreasure
-
 
     def print_monsters(self):
         """ This is a debug function """
@@ -136,7 +123,7 @@ class Treasure:
                 "Money pouch": {"item_type": "money pouch", "value": 6, "rarity": 20},
                 "Gold jewelry": {"item_type": "gold jewelry", "value": 10, "rarity": 15},
                 "Gemstone": {"item_type": "a gemstone", "value": 14, "rarity": 10},
-                "Small treasurechest": {"item_type": "a mall treasure chest", "value": 20, "rarity": 5}}
+                "Small treasurechest": {"item_type": "a small treasure chest", "value": 20, "rarity": 5}}
 
     def __init__(self, item_type, room):
         self.room = room
