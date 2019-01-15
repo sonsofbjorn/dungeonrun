@@ -100,7 +100,7 @@ def load_player(uname):
             (username, role, score, highscore) = line.split(sep=",")
             if username == uname.capitalize():
                 print("Welcome back "+username
-                      + "\nYour current role is a " + role
+                      + "\nYour current character is " + role
                       + "\nYour highest score is " + str(score)
                       + "\nOverall highest score is " + str(highscore))
                 return username, role, score
@@ -112,7 +112,6 @@ def deletePlayer(uname):
         new_f = f.readlines()
         f.seek(0)
         for line in new_f:
-            (username, role, score, highscore) = line.split(sep=",")
             if str(uname.capitalize()) not in line:
                 f.write(line)
         f.truncate()
@@ -162,7 +161,7 @@ class Menu:
             menuchoice = input(">>")
             if menuchoice == "1":
                 while True:
-                    print("Please create Username")
+                    print("Please create a 'Name' for the role")
                     uname = input(">>")
                     if not player_exists(uname.capitalize()):
                         uclass = choose_role()
@@ -172,11 +171,11 @@ class Menu:
                         start_game(*load_player(uname), startlc, dungeon)
                         break
                     else:
-                        print("Username already exists!")
+                        print("Name already exists!")
                 # skicka vidare till en funktion
 
             elif menuchoice == "2":
-                print("Please enter Username")
+                print("Please enter the Name")
                 uname = input(">>")
                 if player_exists(uname):
                     temp = load_player(uname)
@@ -184,16 +183,16 @@ class Menu:
                     startlc = start_location(dungeon)
                     start_game(*temp, startlc, dungeon)
                 else:
-                    print("Username does not exits, Please create a new username")
+                    print("Name does not exits, Please create a 'Name' for the role.")
 
             elif menuchoice == "3":
-                print("Please enter Username")
+                print("Please enter Name")
                 uname = input(">>")
                 if player_exists(uname):
                     deletePlayer(uname)
-                    print(uname + " is deleted.")
+                    print(uname.capitalize() + " is deleted!")
                 else:
-                    print("Username does not exist")
+                    print("Name does not exist!")
 
             elif menuchoice == "4":
                 print("Highest score")
