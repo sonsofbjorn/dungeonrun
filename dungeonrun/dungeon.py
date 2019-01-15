@@ -1,6 +1,5 @@
 import random
 from dungeonrun.monster import Monster
-
 '''
 X = COL
 Y = ROW
