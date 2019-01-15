@@ -3,6 +3,64 @@ from dungeonrun import player
 from dungeonrun import dungeon
 
 
+class Menu:
+    def main_menu(self):
+        while True:
+            print("Welcome to... DUNGEON RUN!\n"
+                  "[1] New Character\n"
+                  "[2] Load Character\n"
+                  "[3] Remove Character\n"
+                  "[4] Highest score\n"
+                  "[5] Quit")
+
+            menuchoice = input(">>")
+            if menuchoice == "1":
+                while True:
+                    print("Please create a 'Name' for the role")
+                    uname = input(">>")
+                    if not player_exists(uname.capitalize()):
+                        uclass = choose_role()
+                        dungeon = create_dungeon(select_mapsize())
+                        startlc = start_location(dungeon)
+                        save_new_player(uname, uclass, 0, 0)
+                        start_game(*load_player(uname), startlc, dungeon)
+                        break
+                    else:
+                        print("Name already exists!")
+                # skicka vidare till en funktion
+
+            elif menuchoice == "2":
+                print("Please enter the Name")
+                uname = input(">>")
+                if player_exists(uname):
+                    temp = load_player(uname)
+                    dungeon = create_dungeon(select_mapsize())
+                    startlc = start_location(dungeon)
+                    start_game(*temp, startlc, dungeon)
+                else:
+                    print("Name does not exits, Please create a 'Name' for the role.")
+
+            elif menuchoice == "3":
+                print("Please enter Name")
+                uname = input(">>")
+                if player_exists(uname):
+                    delete_player(uname)
+                    print(uname.capitalize() + " is deleted!")
+                else:
+                    print("Name does not exist!")
+
+            elif menuchoice == "4":
+                print("Highest score")
+                print("Press [ENTER] to continue")
+                input(">>")
+
+            elif menuchoice == "5":
+                print("See you next time!")
+                break
+            else:
+                print("Incorrect input!")
+
+
 def create_dungeon(size):
     instance = dungeon.Map(size)
     return instance
@@ -148,7 +206,7 @@ def map_loop(char, dungeon):
             while len(char.current_room.monsters) > 0:
                 combat(char)
         # elif len(char.current_room.treasures) > 0:
-            # print("here be treasures")
+        # print("here be treasures")
 
 
 def combat(char):
@@ -170,7 +228,7 @@ def combat(char):
                 print("You have been slain by", monster.unit_type + "!")
                 initiative_list = []
                 char.current_room.monsters.clear()
-                game_over(char)
+                game_over()
                 # quit game
                 break
 
@@ -194,63 +252,5 @@ def combat(char):
                 actor.attack_function(char)
 
 
-def game_over(char):
+def game_over():
     print("Game over.")
-
-
-class Menu:
-    def main_menu(self):
-        while True:
-            print("Welcome to... DUNGEON RUN!\n"
-                  "[1] New Character\n"
-                  "[2] Load Character\n"
-                  "[3] Remove Character\n"
-                  "[4] Highest score\n"
-                  "[5] Quit")
-
-            menuchoice = input(">>")
-            if menuchoice == "1":
-                while True:
-                    print("Please create a 'Name' for the role")
-                    uname = input(">>")
-                    if not player_exists(uname.capitalize()):
-                        uclass = choose_role()
-                        dungeon = create_dungeon(select_mapsize())
-                        startlc = start_location(dungeon)
-                        save_new_player(uname, uclass, 0, 0)
-                        start_game(*load_player(uname), startlc, dungeon)
-                        break
-                    else:
-                        print("Name already exists!")
-                # skicka vidare till en funktion
-
-            elif menuchoice == "2":
-                print("Please enter the Name")
-                uname = input(">>")
-                if player_exists(uname):
-                    temp = load_player(uname)
-                    dungeon = create_dungeon(select_mapsize())
-                    startlc = start_location(dungeon)
-                    start_game(*temp, startlc, dungeon)
-                else:
-                    print("Name does not exits, Please create a 'Name' for the role.")
-
-            elif menuchoice == "3":
-                print("Please enter Name")
-                uname = input(">>")
-                if player_exists(uname):
-                    delete_player(uname)
-                    print(uname.capitalize() + " is deleted!")
-                else:
-                    print("Name does not exist!")
-
-            elif menuchoice == "4":
-                print("Highest score")
-                print("Press [ENTER] to continue")
-                input(">>")
-
-            elif menuchoice == "5":
-                print("See you next time!")
-                break
-            else:
-                print("Incorrect input!")
