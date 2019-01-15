@@ -16,7 +16,7 @@ class testView(unittest.TestCase):
 #    def testMap(self):
  #       self.v.draw_map()
   #      print("\n")
-
+    '''
     def testMovePlayer(self):
         print("\n")
         self.p.current_room.dark = False
@@ -28,6 +28,11 @@ class testView(unittest.TestCase):
         self.p.move_character(self.m.enter_door(self.p.current_room, "N"))
         self.p.move_character(self.m.enter_door(self.p.current_room, "N"))
         self.v.draw_map()
+        '''
+
+    def testPrintIt(self):
+        print("\n")
+        self.v.print_it(self.v.test_list())
 
 
 
