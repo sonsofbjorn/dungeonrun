@@ -2,12 +2,12 @@ from dungeonrun import player
 from dungeonrun import dungeon
 
 
-def createDungeon(size):
+def create_dungeon(size):
     instance = dungeon.Map(size)
     return instance
 
 
-def startlocation(dungeon, startcorner):
+def start_location(dungeon):
     while True:
         print("Choose your starting location:\n"
               "[1] North-West\n"
@@ -16,19 +16,19 @@ def startlocation(dungeon, startcorner):
               "[4] South-East\n")
         startcorner = input(">>")
         if startcorner == "1":
-            startcorner = dungeon.get_room(0, 0)
+            startcorner = dungeon.corner["NW"]
             dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
             break
         elif startcorner == "2":
-            startcorner = dungeon.get_room(dungeon.size-1, 0)
-            dungeon.get_room(dungeon.size-1, 0).hasExit = True
-            break
-        elif startcorner == "3":
-            startcorner = dungeon.get_room(0, dungeon.size-1)
+            startcorner = dungeon.corner["NE"]
             dungeon.get_room(0, dungeon.size-1).hasExit = True
             break
+        elif startcorner == "3":
+            startcorner = dungeon.corner["SW"]
+            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+            break
         elif startcorner == "4":
-            startcorner = dungeon.get_room(dungeon.size-1, dungeon.size-1)
+            startcorner = dungeon.corner["SE"]
             dungeon.get_room(0, 0).hasExit = True
             break
         else:
@@ -36,7 +36,7 @@ def startlocation(dungeon, startcorner):
     return startcorner
 
 
-def selectmapsize():
+def select_mapsize():
     while True:
         print("Please choose your mapsize:\n"
               "[1] 4x4\n"
@@ -57,7 +57,7 @@ def selectmapsize():
     return umap
 
 
-def chooserole():
+def choose_role():
     while True:
         print("Please choose your role:\n"
               "[1] Knight\n"
@@ -78,12 +78,12 @@ def chooserole():
     return uclass
 
 
-def saveNewPlayer(uname, role, score, highscore):
+def save_new_player(uname, role, score, highscore):
     with open("players.txt", "a+") as f:
         f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
 
 
-def playerExists(uname):
+def player_exists(uname):
     with open("players.txt", "r") as f:
         file = f.readlines()
         for line in file:
@@ -93,7 +93,7 @@ def playerExists(uname):
     return False
 
 
-def loadPlayer(uname):
+def load_player(uname):
     with open("players.txt", "r") as f:
         file = f.readlines()
         for line in file:
@@ -107,16 +107,15 @@ def loadPlayer(uname):
     raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
 
-def startGame(username, role, score, start_room, dungeon):
+def start_game(username, role, score, start_room, dungeon):
 
     dude = player.Player(username, role, start_room, score)
     dude.current_room.dark = False
     # monster + treasure generation
-    mapLoop(dude, dungeon)
+    map_loop(dude, dungeon)
 
 
-def mapLoop(char, dungeon):
-
+def map_loop(char, dungeon):
     while True:
         print(char.name + ", you are in", char.show_location)
         print(char.name + ", where do you want to go? West, North, East, or South?") # This should be neatly handled
@@ -152,12 +151,12 @@ class Menu:
                 while True:
                     print("Please create Username")
                     uname = input(">>")
-                    if not playerExists(uname.capitalize()):
-                        uclass = chooserole()
-                        dungeon = createDungeon(selectmapsize())
-                        startlc = startlocation(dungeon)
-                        saveNewPlayer(uname, uclass, 0, 0)
-                        startGame(*loadPlayer(uname), startlc, dungeon)
+                    if not player_exists(uname.capitalize()):
+                        uclass = choose_role()
+                        dungeon = create_dungeon(select_mapsize())
+                        startlc = start_location(dungeon)
+                        save_new_player(uname, uclass, 0, 0)
+                        start_game(*load_player(uname), startlc, dungeon)
                         break
                     else:
                         print("Username already exists!")
@@ -166,11 +165,11 @@ class Menu:
             elif menuchoice == "2":
                 print("Please enter Username")
                 uname = input(">>")
-                if playerExists(uname):
-                    temp = loadPlayer(uname)
-                    dungeon = createDungeon(selectmapsize())
-                    startlc = startlocation(dungeon)
-                    startGame(*temp, startlc, dungeon)
+                if player_exists(uname):
+                    temp = load_player(uname)
+                    dungeon = create_dungeon(select_mapsize())
+                    startlc = start_location(dungeon)
+                    start_game(*temp, startlc, dungeon)
                 else:
                     print("Username does not exits, Please create a new username")
 
