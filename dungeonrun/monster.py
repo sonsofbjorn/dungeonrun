@@ -2,8 +2,9 @@ import random
 
 
 class Monster:
+
     available_monsters = {"giant spider": {
-                              "unit_type" : "giant spider",
+                              "unit_type": "giant spider",
                               "initiative": 7,
                               "hp": 1,
                               "attack": 2,
@@ -17,7 +18,7 @@ class Monster:
                               "dexterity": 3,
                               "rarity": 15},
                           "orc": {
-                              "unit_type" : "orc",
+                              "unit_type": "orc",
                               "initiative": 6,
                               "hp": 3,
                               "attack": 4,

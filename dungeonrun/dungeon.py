@@ -23,7 +23,8 @@ class Map:
         self.generate_doors()
         # monsterlist is a list of generated monster objects in the dungeon
         # Monsters know where they are (they have a room object as position)
-        self.monsterlist = list(self.generate_monsters(Monster.available_monster.keys()))
+        self.monsterlist = list(self.generate_monsters(
+            Monster.available_monsters.keys()))
 
         self.corner = {
             'NW': self.get_room(0, 0),
