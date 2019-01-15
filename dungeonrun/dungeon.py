@@ -1,5 +1,5 @@
 import random
-from dungeonrun import Monster
+from dungeonrun import monster
 '''
 X = COL
 Y = ROW
@@ -20,6 +20,10 @@ class Map:
         self.matrix = tuple(tuple(Room(x, y)
                             for x in range(size))
                             for y in range(size))
+
+        # monsterlist is a list of generated monster objects in the dungeon
+        # Monsters know where they are (they have a room object as position)
+        self.monsterlist = list(self.generate_monsters())
 
         self.corner = {
             'NW': self.get_room(0, 0),
@@ -82,26 +86,33 @@ class Map:
         new_room.dark = False
         return new_room
 
-    def generateMonsters(self, monsters=["giant spider", "skeleton",
-                                         "orc", "troll"]):
+    def generate_monsters(self, foes=("giant spider", "skeleton",
+                                         "orc", "troll")):
         """ This function puts monsters in all rooms if they are common enough.
-        At most one of each monster in monsterlist gets created.
+        At most one of each monster in foes gets created in the room.
         """
         for row in self:
             for room in row:
-                monsterlist = monsters
-                while (monsterlist):
-                    monster = Monster(monsterlist.pop(), room.position)
-                    if (monster.rarity >= random.randint(0, 100)):
-                        room.monsters.append(monster)
-                        yield room.position  # debug
+                mlist = list(foes)
+                while(mlist):
+                    newmonster = monster.Monster(mlist.pop(), room)
+                    if (newmonster.rarity >= random.randint(0, 100)):
+                        room.monsters.append(newmonster)
+                        yield newmonster
 
+    def print_monsters(self):
+        """ This is a debug function """
+        for monster in self.monsterlist:
+            print(monster.position.position, monster.name)
+        return ("Map contains {1} monsters in {0} rooms".format(self.size**2,
+            len(self.monsterlist)))
 
 class Room:
     def __init__(self, x, y, isDark=True, hasExit=False,
                  monsters=[], treasures=[]):
         self.dark, self.hasExit = isDark, hasExit
-        self.monsters, self.treasures = monsters, treasures
+        self.monsters = [] # Why doesn't the kwarg above suffice?
+        self.treasures = []
 
         # DOORS N E S W
         self.doors = {"N": True, "E": True, "S": True, "W": True}
