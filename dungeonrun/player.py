@@ -18,7 +18,7 @@ class Player:
 
         elif hero_class.lower() == "wizard":
             self.initiative = 6
-            self.hp = 4
+            self.hp = 2
             self.attack = 9
             self.dexterity = 5
 
@@ -31,17 +31,36 @@ class Player:
         else:
             raise Exception("No such class")
 
-    def generate_attack(self):
-        attack_value = 0
-        for x in range(0, self.attack):
-            attack_value += random.randrange(0, self.attack)
-        return attack_value
+    def roll_dice(self, dice_type):
+        if dice_type == "attack":
+            dice_type = self.attack
+        elif dice_type == "dexterity":
+            dice_type = self.dexterity
+        elif dice_type == "initiative":
+            dice_type = self.initiative
+        value = 0
+        for x in range(0, dice_type):
+            value += random.randrange(0, dice_type)
+        return value
 
-    def generate_dodge(self):
-        dodge_value = 0
-        for x in range(0, self.dexterity):
-            dodge_value += random.randrange(0, self.dexterity)
-        return dodge_value
+    def attack_function(self, monster):
+        attacker_roll = self.roll_dice("attack")
+        monster_roll = monster.roll_dice("dexterity")
+        if attacker_roll > monster_roll:
+            if self.hero_class == "thief":
+                critical_hit = random.randrange(0, 100)
+                if critical_hit >= 75:
+                    monster.hp -= 2
+                else:
+                    print("You attack the", monster.name, "and hit!")
+                    monster.hp -= 1
+            else:
+                print("You attack the", monster.name, "and hit!")
+                monster.hp -= 1
+                if monster.hp > 0:
+                    print(monster.name, "current hp is:", monster.hp)
+        else:
+            print("You attack", monster.name + ", but you miss!")
 
     @property
     def show_location(self):
@@ -68,7 +87,7 @@ class Player:
         elif direction == "S":
             new_room = dungeon_map.get_room(x, y+1)
         else:
-            raise Exception("How did you enter else?")
+            return False
         new_room.dark = False
         self.current_room = new_room
         return new_room

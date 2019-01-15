@@ -1,3 +1,4 @@
+import random
 from dungeonrun import player
 from dungeonrun import dungeon
 
@@ -127,7 +128,10 @@ def start_game(username, role, score, start_room, dungeon):
 
 
 def map_loop(char, dungeon):
+    dungeon.print_monsters()
     while True:
+        if char.hp < 1:
+            break
         print(char.name + ", you are in", char.show_location)
         print(char.name + ", where do you want to go? West, North, East, or South?")
         inp = input(">>")
@@ -141,14 +145,60 @@ def map_loop(char, dungeon):
 
         if char.current_room.hasExit is True:
             print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
-        elif len(char.current_room.monsters) < 0:
-            print("Hello monsters")
-        elif len(char.current_room.treasures) < 0:
-            print("here be treasures")
+        elif len(char.current_room.monsters) > 0:
+            while len(char.current_room.monsters) > 0:
+                combat(char)
+        # elif len(char.current_room.treasures) > 0:
+            # print("here be treasures")
 
+
+def combat(char):
+    initiative_list = []
+    monster = char.current_room.monsters[0]
+    print("You have been attacked by a", monster.name + "!")
+    print("Don't die - you'll end up in a loop if you do.")
+    char_init = char.roll_dice("initiative")
+    monster_init = monster.roll_dice("initiative")
+    if monster_init > char_init:
+        initiative_list.append(monster)
+        initiative_list.append(char)
+    else:
+        initiative_list.append(char)
+        initiative_list.append(monster)
+    while len(initiative_list) > 1:
+        for actor in initiative_list:
+            if char.hp < 1:
+                print("You have been slain by", monster.name + "!")
+                initiative_list = []
+                char.current_room.monsters.clear()
+                game_over(char)
+                # quit game
+                break
+
+            if monster.hp < 1:
+                print("You have slain the", monster.name + "!")
+                initiative_list = []
+                char.current_room.monsters.pop(0)
+                break
+            elif actor.name == "Micke":
+                while True:
+                    print("Choose your action:\n"
+                          "[1] Attack\n"
+                          "[2] Flee")
+                    choice = input(">>")
+                    if choice == "1":
+                        actor.attack_function(monster)
+                        break
+                    elif choice == "2":
+                        print("You can't flee. The escape combat function is not completed.")
+            else:
+                actor.attack_function(char)
+
+
+def game_over(char):
+    print("Game over.")
 
 class Menu:
-
     def main_menu(self):
         while True:
             print("Welcome to... DUNGEON RUN!\n"
