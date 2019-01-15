@@ -2,12 +2,12 @@ import unittest
 
 from dungeonrun import view
 from dungeonrun import player
-from dungeonrun import dungeon
+from dungeonrun.dungeon import Map
 
 class testView(unittest.TestCase):
 
     def setUp(self):
-        self.m = dungeon.Map(5)
+        self.m = Map(5)
         self.p = player.Player("bob", "knight", self.m.get_room(0, 1))
         self.v = view.View(self.m, self.p)
         self.m.get_room(2, 2).hasExit = True
