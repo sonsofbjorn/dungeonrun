@@ -3,33 +3,36 @@ import random
 
 class Monster:
     available_monsters = {"giant spider": {
-                                    "initiative": 7,
-                                    "hp": 1,
-                                    "attack": 2,
-                                    "dexterity": 3,
-                                    "rarity": 20},
+                              "unit_type" : "giant spider",
+                              "initiative": 7,
+                              "hp": 1,
+                              "attack": 2,
+                              "dexterity": 3,
+                              "rarity": 20},
                           "skeleton": {
-                                    "initiative": 4,
-                                    "hp": 2,
-                                    "attack": 3,
-                                    "dexterity": 3,
-                                    "rarity": 15},
+                              "unit_type": "skeleton",
+                              "initiative": 4,
+                              "hp": 2,
+                              "attack": 3,
+                              "dexterity": 3,
+                              "rarity": 15},
                           "orc": {
-                                    "initiative": 6,
-                                    "hp": 3,
-                                    "attack": 4,
-                                    "dexterity": 4,
-                                    "rarity": 10},
+                              "unit_type" : "orc",
+                              "initiative": 6,
+                              "hp": 3,
+                              "attack": 4,
+                              "dexterity": 4,
+                              "rarity": 10},
                           "troll": {
-                                    "initiative": 2,
-                                    "hp": 4,
-                                    "attack": 7,
-                                    "dexterity": 2,
-                                    "rarity": 5}}
+                              "unit_type": "troll",
+                              "initiative": 2,
+                              "hp": 4,
+                              "attack": 7,
+                              "dexterity": 2,
+                              "rarity": 5}}
 
     def __init__(self, unit_type, room):
         self.room = room
-
 
         self.unit_type = self.available_monsters[unit_type]
 
@@ -58,9 +61,8 @@ class Monster:
             if player.hero_class == "knight":
                 # Another IF needed to see if player blocks attack
                 print("something something knight shield")
-            print(player.name, "is hit by", self.name + "!")
+            print(player.name, "is hit by", str(self.unit_type) + "!")
             player.hp -= 1
             print("you have", player.hp, "hp remaining!")
         else:
-            print(self.name, "attacks", player.name + ", but misses!")
-
+            print(self.unit_type, "attacks", player.name + ", but misses!")
