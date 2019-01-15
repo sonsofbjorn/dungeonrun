@@ -20,7 +20,7 @@ class Map:
         self.matrix = tuple(tuple(Room(x, y)
                             for x in range(size))
                             for y in range(size))
-
+        self.generate_doors()
         # monsterlist is a list of generated monster objects in the dungeon
         # Monsters know where they are (they have a room object as position)
         self.monsterlist = list(self.generate_monsters())
