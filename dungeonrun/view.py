@@ -13,30 +13,27 @@ class View:
         elif platform.system() == "Windows":
             return os.system('cls')
 
-    def draw_map(self):
-        tests = []
+    def draw_map2(self):
+        output = []
+        outrow = ""
         for row in self.m:
-            row_list = []
-            for x in range(3):
+            for n in range(3):
                 for room in row:
                     if room.position == self.p.show_location:
-                        if x == 1:
-                            row_list.append("  ╳   ")
+                        if n == 1:
+                            out = "░░╳░░░"
                         else:
-                            row_list.append("      ")
+                            out = "░░░░░░"
                     elif room.hasExit and room.dark is False:
-                        if x == 1:
-                            row_list.append("░exit░")
-                        else:
-                            row_list.append("░░░░░░")
-
+                        out = "░EXIT░"
                     elif room.dark:
-                        row_list.append("▓▓▓▓▓▓")
+                        out = "▓▓▓▓▓▓"
                     else:
-                        row_list.append("░░░░░░")
-
-                tests.append("".join(row_list))
-        return tests
+                        out = "░░░░░░"
+                    outrow += out
+                output.append(outrow)
+                outrow = ""
+        return output
 
     def print_start_menu(self, text):
         self.clear_console()
@@ -51,11 +48,9 @@ class View:
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
-        a = 0
-        for i in range(len(text)):
-            hehe = ("║"+text[a].center(50)+"║")
-            print(hehe.center(os.get_terminal_size().columns))
-            a += 1
+        for row in text:
+            row = ("║"+row.center(50)+"║")
+            print(row.center(os.get_terminal_size().columns))
         if len(text) < 10:
             count = 10 - len(text)
             for i in range(count):
@@ -63,33 +58,60 @@ class View:
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
 
-
-    def print_game(self, text):
+    def print_game(self, dungeonmap, menulist):
         self.clear_console()
+        nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+self.p.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
         print("| | | || | | || '_ \  / _` | / _ \ / _ \ | '_ \ | '__|| | | || '_ \ ".center(os.get_terminal_size().columns))
         print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
-        print("        ╔═════════════ __/ | ══════════════════════════════╗        ".center(os.get_terminal_size().columns))
-        print("        ║             |___/                                ║        ".center(os.get_terminal_size().columns))
-        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
-        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
-        print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+        print("   ╔══════════════════ __/ | ═══════════════════════════════════╗ ╔══════════════════╗  ".center(os.get_terminal_size().columns+20), end="")
+        print("   ║                  |___/     MAP                             ║ ║       NAME:      ║  ".center(os.get_terminal_size().columns-20))
+        print(nameprint.center(os.get_terminal_size().columns+20), end="")
+        print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
+        sidebox = self.print_hp_score_list()
         a = 0
-        for i in range(len(text)):
-            hehe = ("║"+text[a].center(50)+"║")
-            print(hehe.center(os.get_terminal_size().columns))
+        for row in dungeonmap:
+            if a < 8:
+                row = ("║"+row.center(60)+"║"+sidebox[a])
+                if a%2 == 0:
+                    print(row.center(os.get_terminal_size().columns+22), end="")
+                else:
+                    print(row.center(os.get_terminal_size().columns-22))
+            else:
+                row = ("║" + row.center(60) + "║")
+                print(row.center(os.get_terminal_size().columns))
             a += 1
-        if len(text) < 10:
-            count = 10 - len(text)
+        if len(dungeonmap) < 10:
+            count = 10 - len(dungeonmap)
             for i in range(count):
-                hehe1 = ("║"+" "*50+"║")
+                hehe1 = ("║"+" "*60+"║")
                 print(hehe1.center(os.get_terminal_size().columns))
-        print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
+        print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
+        print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
+        print("╚════════════════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
+        print("   ╔════════════════════════════════════════════════════════════════════════════╗   ".center(os.get_terminal_size().columns))
+        print("   ║                                                                            ║   ".center(os.get_terminal_size().columns))
+        print("   ║                     HERE GOES ALL STRINGS FOR THE GAME                     ║   ".center(os.get_terminal_size().columns))
+        for i in range(10):
+            extralines = ("║" + " " * 76 + "║")
+            print(extralines.center(os.get_terminal_size().columns))
+        print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))
 
+    def print_hp_score_list(self):
 
+        hp_score_list = (" ╔══════════════════╗",
+                         " ║        HP:       ║",
+                         " ║"+str(self.p.hp).center(18)+"║",
+                         " ╚══════════════════╝",
+                         " ╔══════════════════╗",
+                         " ║      SCORE:      ║",
+                         " ║"+str(self.p.score).center(18)+"║",
+                         " ╚══════════════════╝"
+                         )
+        return hp_score_list
 
 
 
