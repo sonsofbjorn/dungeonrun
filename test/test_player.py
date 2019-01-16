@@ -40,6 +40,24 @@ class testPlayer(unittest.TestCase):
     def testPosition2(self):
         self.assertEqual(self.char2.show_location, (0, 1))
 
-    def testMoveNorthPlayer(self):
+    def testMovePlayerNorth(self):
         new_room = self.char.move_character('N', self.dungeon)
         self.assertEqual(new_room, self.dungeon.get_room(1, 0))
+
+    def testMovePlayerSouth(self):
+        new_room = self.char.move_character('S', self.dungeon)
+        self.assertEqual(new_room, self.dungeon.get_room(1, 2))
+
+    def testMovePlayerEast(self):
+        new_room = self.char.move_character('E', self.dungeon)
+        self.assertEqual(new_room, self.dungeon.get_room(2, 1))
+
+    def testMovePlayerWest(self):
+        new_room = self.char.move_character('W', self.dungeon)
+        print(new_room.position)
+        self.assertEqual(new_room, self.dungeon.get_room(1, 2))
+
+    def testMovePlayerOtOfBounds(self):
+        new_room = self.char.move_character('N', self.dungeon)
+        new_room = self.char.move_character('N', self.dungeon)
+        self.assertFalse(new_room)
