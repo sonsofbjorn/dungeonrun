@@ -33,17 +33,20 @@ class Monster:
                               "rarity": 5}}
 
     def __init__(self, unit_type, room):
-        self.hp = self.available_monsters[unit_type["hp"]]
+        self.__dict__ = self.unit_type
 
         self.room = room
 
         self.unit_type = self.available_monsters[unit_type]
 
-        self.__dict__ = self.unit_type
+        self.current_hp = 4
 
         def __iter__():
             for monsters in self.available_monsters:
                 yield monsters
+
+    def decreaseHP(self):
+        self.current_hp -= 1
 
     def roll_dice(self, dice_type):
         if dice_type == "attack":
