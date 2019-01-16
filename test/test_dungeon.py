@@ -51,7 +51,7 @@ class testDungeon(unittest.TestCase):
 
     def testMonsterList(self):
         # This test can fail if monsters are rare enough
-        self.assertFalse(len(self.dungeon.monsterlist) == 0)
+        self.assertNotEqual(len(self.dungeon.monsterlist), 0)
 
     def testMonsterFill(self):
         # This test can fail if monsters are super common
@@ -61,4 +61,4 @@ class testDungeon(unittest.TestCase):
                 monstercount += len(room.monsters)
         fill = (monstercount/(self.dungeon.size**2))*100
         self.assertFalse(fill > 100)
-        self.assertFalse(monstercount != len(self.dungeon.monsterlist))
+        self.assertEqual(monstercount, len(self.dungeon.monsterlist))
