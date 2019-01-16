@@ -24,6 +24,7 @@ class View:
     err_long_name = ["", "Max 18 characters!"]
     err_invalid_char = ["", "Invalid character ','"]
     err_player_exists = ["", "Player name is taken"]
+    err_load_error = ["", "Load error, ask Micke"]
     """ END OF ERROR MESSAGES"""
 
 
@@ -59,7 +60,7 @@ class View:
                 outrow = ""
         return output
 
-    def print_start_menu(self, input_menu, *err):
+    def print_start_menu(self, input_menu, *args, **kwargs):
         self.clear_console()
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
@@ -75,8 +76,8 @@ class View:
 
         menu = []
         menu = input_menu.copy()
-        if err[0]:
-            menu += self.error_msg
+        if kwargs:
+            menu += args[0]
         for row in menu:
             row = ("║"+row.center(50)+"║")
             print(row.center(os.get_terminal_size().columns))
