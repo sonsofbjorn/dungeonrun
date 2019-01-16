@@ -16,9 +16,16 @@ class View:
                   "[3] South-West",
                   "[4] South-East"]
 
-    enter_char_name = ["Enter character name: "]
+    enter_char_name = ["", "Enter character name: "]
 
-    error_msg = ["", "Not a vavlid choice!"]
+    """ ERROR MESESAGES BELLOW """
+    error_msg = []
+    err_choice = ["", "Invalid choice!"]
+    err_long_name = ["", "Max 18 characters!"]
+    err_invalid_char = ["", "Invalid character ','"]
+    err_player_exists = ["", "Player name is taken"]
+    """ END OF ERROR MESSAGES"""
+
 
     def __init__(self, dungeon, player):
         self.m = dungeon
@@ -68,8 +75,7 @@ class View:
 
         menu = []
         menu = input_menu.copy()
-        #menu.append('')
-        if err:
+        if err[0]:
             menu += self.error_msg
         for row in menu:
             row = ("║"+row.center(50)+"║")
@@ -82,6 +88,7 @@ class View:
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
         menu = []
+        #self.error_msg = []
 
     def print_game(self, dungeonmap, menulist):
         self.clear_console()
@@ -158,3 +165,7 @@ class View:
 
     def handle_input(self):
         return input()
+
+    def handle_error(self, err):
+        self.error_msg = []
+        self.error_msg = err
