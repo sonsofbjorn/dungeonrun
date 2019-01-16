@@ -58,7 +58,7 @@ class View:
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
 
-    def print_game(self, text):
+    def print_game(self, dungeonmap, menulist):
         self.clear_console()
         nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+self.p.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
@@ -73,7 +73,7 @@ class View:
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
         sidebox = self.print_hp_score_list()
         a = 0
-        for row in text:
+        for row in dungeonmap:
             if a < 8:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
                 if a%2 == 0:
@@ -84,8 +84,8 @@ class View:
                 row = ("║" + row.center(60) + "║")
                 print(row.center(os.get_terminal_size().columns))
             a += 1
-        if len(text) < 10:
-            count = 10 - len(text)
+        if len(dungeonmap) < 10:
+            count = 10 - len(dungeonmap)
             for i in range(count):
                 hehe1 = ("║"+" "*60+"║")
                 print(hehe1.center(os.get_terminal_size().columns))
