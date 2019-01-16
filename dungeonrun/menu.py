@@ -136,7 +136,7 @@ def choose_role():
     return uclass
 
 
-def save_new_player(uname, role, score, highscore):
+def save_player(uname, role, score, highscore):
     with open("players.txt", "a+") as f:
         f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
 
