@@ -6,3 +6,7 @@ Vamsi,knight,0,0
 Micke2,thief,0,0
 Micke3,knight,0,0
 Micke0,knight,0,0
+123,wizard,0,0
+Pelle,knight,0,0
+323,thief,0,0
+Quit(),knight,0,0

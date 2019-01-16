@@ -16,6 +16,13 @@ class View:
                   "[3] South-West",
                   "[4] South-East"]
 
+    choose_role = ["Please choose your role:",
+              "[1] Knight",
+              "[2] Wizard",
+              "[3] Thief"]
+
+    good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
+
     enter_char_name = ["", "Enter character name: "]
 
     """ ERROR MESESAGES BELLOW """

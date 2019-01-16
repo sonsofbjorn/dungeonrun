@@ -1,6 +1,7 @@
 from view import View
 from player import Player
 from dungeon import Map
+import time
 
 
 class Controller:
@@ -26,6 +27,7 @@ class Controller:
                 break
             elif usr_choice == "4":
                 self.view.print_start_menu(View.good_bye)
+                time.sleep(3)
                 quit()
             else:
                 #self.view.handle_error(View.err_choice)
@@ -57,9 +59,9 @@ class Controller:
                 break
 
         # character role
+        self.view.print_start_menu(View.choose_role)
         while True:
             character_name = usr_choice
-            self.view.print_start_menu(View.choose_role)
             usr_choice = self.view.handle_input()
             if usr_choice == "1":
                 character_role = "knight"
@@ -79,7 +81,7 @@ class Controller:
         self.save_player(character_name, character_role, 0, 0)
         return True
 
-    def player_exists(uname):
+    def player_exists(self, uname):
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
@@ -88,11 +90,11 @@ class Controller:
                     return True
         return False
 
-    def save_player(uname, role, score, highscore):
+    def save_player(self, uname, role, score, highscore):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
 
-    def load_player(uname):
+    def load_player(self, uname):
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
