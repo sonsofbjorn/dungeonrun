@@ -1,7 +1,6 @@
 import unittest
 
-from dungeonrun.monster import Monster
-from dungeonrun.dungeon import Map
+from dungeonrun.dungeon import Map, Monster
 from dungeonrun.player import Player
 
 

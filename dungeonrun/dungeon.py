@@ -125,28 +125,28 @@ class Monster:
         self.unit_type = unit_type
         self.room = room
 
-        if self.name.lower() == "giant spider":
+        if self.unit_type == "giant spider":
             self.initiative = 7
             self.hp = 1
             self.attack = 2
             self.dexterity = 3
             self.rarity = 20
 
-        if self.name.lower() == "skeleton":
+        if self.unit_type == "skeleton":
             self.initiative = 4
             self.hp = 2
             self.attack = 3
             self.dexterity = 3
             self.rarity = 15
 
-        if self.name.lower() == "orc":
+        if self.unit_type == "orc":
             self.initiative = 6
             self.hp = 3
             self.attack = 4
             self.dexterity = 4
             self.rarity = 10
 
-        if self.name.lower() == "troll":
+        if self.unit_type == "troll":
             self.initiative = 2
             self.hp = 4
             self.attack = 7
