@@ -1,8 +1,9 @@
-from dungeonrun import player
-from dungeonrun import menu
+from controller import Controller
+
 
 def main():
-    menu.Menu.main_menu(0)
+    cntrlr = Controller()
+    cntrlr.main_menu()
 
 
 if __name__ == "__main__":
