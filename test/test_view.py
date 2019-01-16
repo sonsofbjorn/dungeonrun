@@ -10,7 +10,7 @@ class testView(unittest.TestCase):
     def setUpClass(self):
         self.m = Map(8)
         self.p = player.Player("SebastianDenAndreo", "knight", self.m.get_room(0, 1))
-        self.v = view.View(self.m, self.p)
+        self.v = view.View()
         self.m.get_room(2, 2).hasExit = True
 
 
@@ -30,13 +30,3 @@ class testView(unittest.TestCase):
         self.p.move_character(self.m.enter_door(self.p.current_room, "N"))
         self.v.draw_map()
         '''
-
-    def testPrintIt(self):
-        print("\n")
-        self.v.print_start_menu(self.v.test_list())
-
-    def testPrintMap(self):
-        print("\n")
-        self.v.print_game(self.v.draw_map2())
-
-

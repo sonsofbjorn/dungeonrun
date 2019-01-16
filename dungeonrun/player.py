@@ -19,7 +19,7 @@ class Player:
 
         elif hero_class.lower() == "wizard":
             self.initiative = 6
-            self.hp = 2
+            self.hp = 4
             self.attack = 9
             self.dexterity = 5
 

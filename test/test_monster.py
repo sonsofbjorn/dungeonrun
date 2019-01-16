@@ -13,11 +13,11 @@ class testMap(unittest.TestCase):
 
         self.monster_list = [m for m in Monster.available_monsters]
 
-        self.spider = Monster("Giant spider", self.dungeon.get_room(1, 2))
-        self.skeleton = Monster("Skeleton", self.dungeon.get_room(0, 3))
-        self.orc = Monster("Orc", self.dungeon.get_room(1, 0))
-        self.troll = Monster("Troll", self.dungeon.get_room(2, 2))
-        self.troll2 = Monster("Troll", self.dungeon.get_room(2, 2))
+        self.spider = Monster("giant spider", self.dungeon.get_room(1, 2))
+        self.skeleton = Monster("skeleton", self.dungeon.get_room(0, 3))
+        self.orc = Monster("orc", self.dungeon.get_room(1, 0))
+        self.troll = Monster("troll", self.dungeon.get_room(2, 2))
+        self.troll2 = Monster("troll", self.dungeon.get_room(2, 2))
 
     def testSpiderProperties(self):
         self.assertEqual(self.spider.initiative, 7)
@@ -46,11 +46,3 @@ class testMap(unittest.TestCase):
         self.assertEqual(self.troll.attack,     7)
         self.assertEqual(self.troll.dexterity,  2)
         self.assertEqual(self.troll.rarity,     5)
-
-    def testAttackFunction(self):
-        print(self.troll.__dict__)
-        print(self.troll, self.troll.current_hp)
-        print(self.troll2, self.troll.current_hp)
-        self.troll.decreaseHP()
-        print(self.troll, self.troll.current_hp)
-        print(self.troll2, self.troll.current_hp)

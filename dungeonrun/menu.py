@@ -222,7 +222,7 @@ def loot(char):
         char.current_room.treasures.pop(0)
 
 
-def combat(char):
+def combat(player):
     initiative_list = []
     monster = char.current_room.monsters[0]
     char_init = char.roll_dice("initiative")
