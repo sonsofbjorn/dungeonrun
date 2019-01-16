@@ -33,7 +33,9 @@ class View:
         self.p = player
 
     def clear_console(self):
-        if platform.system() == "Linux" or "Darwin":
+        if platform.system() == "Linux":
+            return os.system('clear')
+        if platform.system() == "Darwin":
             return os.system('clear')
         elif platform.system() == "Windows":
             return os.system('cls')

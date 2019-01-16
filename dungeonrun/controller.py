@@ -34,8 +34,6 @@ class Controller:
                                            error=True)
 
     def new_character(self):
-        character_name = ""
-        character_role = ""
 
         self.view.print_start_menu(View.enter_char_name)
 
