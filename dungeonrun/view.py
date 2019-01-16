@@ -1,7 +1,24 @@
+import types
 import os
 import platform
 
 class View:
+
+    welcome_menu = ("Welcome to... DUNGEON RUN!",
+                "[1] New Character",
+                "[2] Load Character",
+                "[3] Highest score",
+                "[4] Quit")
+
+    start_location = ("Choose your starting location:",
+                  "[1] North-West",
+                  "[2] North-East",
+                  "[3] South-West",
+                  "[4] South-East")
+
+    enter_char_name = ("Enter character name: ")
+
+    error_msg = ["\nNot a vavlid choice!\n"]
 
     def __init__(self, dungeon, player):
         self.m = dungeon
@@ -35,7 +52,7 @@ class View:
                 outrow = ""
         return output
 
-    def print_start_menu(self, text):
+    def print_start_menu(self, menu, *err):
         self.clear_console()
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
@@ -48,11 +65,14 @@ class View:
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
-        for row in text:
+        for row in menu:
             row = ("║"+row.center(50)+"║")
             print(row.center(os.get_terminal_size().columns))
-        if len(text) < 10:
-            count = 10 - len(text)
+
+        error = ("║"+err(50)+"║")
+        print(error.center(os.get_terminal_size().columns))
+        if len(menu) < 10:
+            count = 10 - len(menu)
             for i in range(count):
                 hehe1 = ("║"+" "*50+"║")
                 print(hehe1.center(os.get_terminal_size().columns))
@@ -120,24 +140,6 @@ class View:
     def center_text(self, text):
         print(text.center(os.get_terminal_size().columns))
 
-
-    def test_list(self):
-        optionlist = ("Choose your starting location:",
-                      "[1] North-West",
-                      "[2] North-East",
-                      "[3] South-West",
-                      "[4] South-East")
-        return optionlist
-
-    def start_menu_list(self):
-        optionlist = ("Welcome to... DUNGEON RUN!",
-                  "[1] New Character",
-                  "[2] Load Character",
-                  "[3] Remove Character",
-                  "[4] Highest score",
-                  "[5] Quit")
-        return optionlist
-
     def draw_start_location_options(self):
         self.print_it(self.test_list())
         startcorner = input(">>")
@@ -149,3 +151,5 @@ class View:
         inp = input(">>")
         return inp
 
+    def handle_input(self):
+        return input()

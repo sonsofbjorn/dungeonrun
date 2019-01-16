@@ -1,8 +1,9 @@
-from menu import Menu
+from controller import Controller
 
 
 def main():
-    Menu.main_menu(0)
+    cntrlr = Controller()
+    cntrlr.main_menu()
 
 
 if __name__ == "__main__":
