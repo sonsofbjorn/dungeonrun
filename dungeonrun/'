@@ -4,21 +4,21 @@ import platform
 
 class View:
 
-    welcome_menu = ["Welcome to... DUNGEON RUN!",
+    welcome_menu = ("Welcome to... DUNGEON RUN!",
                 "[1] New Character",
                 "[2] Load Character",
                 "[3] Highest score",
-                "[4] Quit"]
+                "[4] Quit")
 
-    start_location = ["Choose your starting location:",
+    start_location = ("Choose your starting location:",
                   "[1] North-West",
                   "[2] North-East",
                   "[3] South-West",
-                  "[4] South-East"]
+                  "[4] South-East")
 
-    enter_char_name = ["Enter character name: "]
+    enter_char_name = ("Enter character name: ")
 
-    error_msg = ["", "Not a vavlid choice!"]
+    error_msg = ["\nNot a vavlid choice!\n"]
 
     def __init__(self, dungeon, player):
         self.m = dungeon
@@ -52,7 +52,7 @@ class View:
                 outrow = ""
         return output
 
-    def print_start_menu(self, input_menu, *err):
+    def print_start_menu(self, menu, *err):
         self.clear_console()
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
@@ -65,23 +65,19 @@ class View:
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
-
-        menu = []
-        menu = input_menu.copy()
-        #menu.append('')
-        if err:
-            menu += self.error_msg
         for row in menu:
             row = ("║"+row.center(50)+"║")
             print(row.center(os.get_terminal_size().columns))
 
+        if err:
+            error = ("║"+err(50)+"║")
+            print(error.center(os.get_terminal_size().columns))
         if len(menu) < 10:
             count = 10 - len(menu)
             for i in range(count):
                 hehe1 = ("║"+" "*50+"║")
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
-        menu = []
 
     def print_game(self, dungeonmap, menulist):
         self.clear_console()
