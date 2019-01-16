@@ -53,4 +53,4 @@ class testMap(unittest.TestCase):
         self.m1.hp -= 1
 
         self.assertEqual(self.m1.hp,         2)
-        self.assertEqual(self.m2.hp,         4)
+        self.assertEqual(self.m2.hp,         3)
