@@ -10,3 +10,11 @@ Micke0,knight,0,0
 Pelle,knight,0,0
 323,thief,0,0
 Quit(),knight,0,0
+Bosse,knight,0,0
+Busse,knight,0,0
+Lusse,knight,0,0
+Lisse,knight,0,0
+Kusse,knight,0,0
+Musse,knight,0,0
+Kisse,knight,0,0
+Klasse,thief,0,0

@@ -1,29 +1,43 @@
-import types
 import os
 import platform
+
 
 class View:
 
     welcome_menu = ["Welcome to... DUNGEON RUN!",
-                "[1] New Character",
-                "[2] Load Character",
-                "[3] Highest score",
-                "[4] Quit"]
+                    "[1] New Character",
+                    "[2] Load Character",
+                    "[3] Highest score",
+                    "[4] Quit"]
 
     start_location = ["Choose your starting location:",
-                  "[1] North-West",
-                  "[2] North-East",
-                  "[3] South-West",
-                  "[4] South-East"]
+                      "[1] North-West",
+                      "[2] North-East",
+                      "[3] South-West",
+                      "[4] South-East"]
 
     choose_role = ["Please choose your role:",
-              "[1] Knight",
-              "[2] Wizard",
-              "[3] Thief"]
+                   "[1] Knight",
+                   "[2] Wizard",
+                   "[3] Thief"]
+
+    choose_size = ["Please choose your mapsize:",
+                   "[1] 4x4",
+                   "[2] 5x5",
+                   "[3] 8x8"]
+
+    choose_corner = ["Choose your starting location:",
+                     "[1] North-West",
+                     "[2] North-East",
+                     "[3] South-West",
+                     "[4] South-East"]
+
+    direction_option = ["where do you want to go"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
     enter_char_name = ["", "Enter character name: "]
+
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []
@@ -31,13 +45,9 @@ class View:
     err_long_name = ["", "Max 18 characters!"]
     err_invalid_char = ["", "Invalid character ','"]
     err_player_exists = ["", "Player name is taken"]
+    err_player_not_exist = ["", "Player does not exist"]
     err_load_error = ["", "Load error, ask Micke"]
     """ END OF ERROR MESSAGES"""
-
-
-    def __init__(self, dungeon, player):
-        self.m = dungeon
-        self.p = player
 
     def clear_console(self):
         if platform.system() == "Linux":
@@ -47,13 +57,13 @@ class View:
         elif platform.system() == "Windows":
             return os.system('cls')
 
-    def draw_map2(self):
+    def draw_map2(self, dungeon, player):
         output = []
         outrow = ""
-        for row in self.m:
+        for row in dungeon:
             for n in range(3):
                 for room in row:
-                    if room.position == self.p.show_location:
+                    if room.position == player.show_location:
                         if n == 1:
                             out = "░░╳░░░"
                         else:
@@ -100,9 +110,9 @@ class View:
         menu = []
         #self.error_msg = []
 
-    def print_game(self, dungeonmap, menulist):
+    def print_game(self, player, dungeonmap, menulist):
         self.clear_console()
-        nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+self.p.name.center(18)+"║  ")
+        nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+player.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
@@ -113,7 +123,7 @@ class View:
         print("   ║                  |___/     MAP                             ║ ║       NAME:      ║  ".center(os.get_terminal_size().columns-20))
         print(nameprint.center(os.get_terminal_size().columns+20), end="")
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
-        sidebox = self.print_hp_score_list()
+        sidebox = self.print_hp_score_list(player)
         a = 0
         for row in dungeonmap:
             if a < 8:
@@ -136,21 +146,23 @@ class View:
         print("╚════════════════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
         print("   ╔════════════════════════════════════════════════════════════════════════════╗   ".center(os.get_terminal_size().columns))
         print("   ║                                                                            ║   ".center(os.get_terminal_size().columns))
-        print("   ║                     HERE GOES ALL STRINGS FOR THE GAME                     ║   ".center(os.get_terminal_size().columns))
+        for row in menulist:
+            row = ("║"+row.center(76)+"║")
+            print(row.center(os.get_terminal_size().columns))
         for i in range(10):
             extralines = ("║" + " " * 76 + "║")
             print(extralines.center(os.get_terminal_size().columns))
         print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))
 
-    def print_hp_score_list(self):
+    def print_hp_score_list(self, player):
 
         hp_score_list = (" ╔══════════════════╗",
                          " ║        HP:       ║",
-                         " ║"+str(self.p.hp).center(18)+"║",
+                         " ║"+str(player.hp).center(18)+"║",
                          " ╚══════════════════╝",
                          " ╔══════════════════╗",
                          " ║      SCORE:      ║",
-                         " ║"+str(self.p.score).center(18)+"║",
+                         " ║"+str(player.score).center(18)+"║",
                          " ╚══════════════════╝"
                          )
         return hp_score_list

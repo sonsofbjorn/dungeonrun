@@ -218,7 +218,7 @@ def loot(char):
     for loot in char.current_room.treasures:
         char.score = int(char.score)
         char.score += loot.value
-        print("Oooh,", loot.item_type + "! You have added it to your backpack.\n")
+        print("oooh,", loot.item_type + "! you have added it to your backpack.\n")
         char.current_room.treasures.pop(0)
 
 
@@ -236,7 +236,7 @@ def combat(char):
     while len(initiative_list) > 1:
         for actor in initiative_list:
             if char.hp < 1:
-                print("You have been slain by", monster.unit_type + "!")
+                print("you have been slain by", monster.unit_type + "!")
                 initiative_list = []
                 char.current_room.monsters.clear()
                 game_over()
@@ -244,15 +244,15 @@ def combat(char):
                 break
 
             if monster.hp < 1:
-                print("You have slain the", monster.unit_type + "!")
+                print("you have slain the", monster.unit_type + "!")
                 initiative_list = []
                 char.current_room.monsters.pop(0)
                 break
-            elif isinstance(actor, Player):
-                while True:
-                    print("Choose your action:\n"
-                          "[1] Attack\n"
-                          "[2] Flee")
+            elif isinstance(actor, player):
+                while true:
+                    print("choose your action:\n"
+                          "[1] attack\n"
+                          "[2] flee")
                     choice = input(">>")
                     if choice == "1":
                         actor.attack_function(monster)
@@ -261,11 +261,11 @@ def combat(char):
                         escape = char.escape_combat()
                         if escape:
                             char.current_room = char.old_room
-                            print("You have escaped")
+                            print("you have escaped")
                             initiative_list.clear()
                             break
                         else:
-                            print("You have failed to escape")
+                            print("you have failed to escape")
                             break
             else:
                 actor.attack_function(char)
