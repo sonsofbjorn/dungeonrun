@@ -54,8 +54,7 @@ class testPlayer(unittest.TestCase):
 
     def testMovePlayerWest(self):
         new_room = self.char.move_character('W', self.dungeon)
-        print(new_room.position)
-        self.assertEqual(new_room, self.dungeon.get_room(1, 2))
+        self.assertEqual(new_room, self.dungeon.get_room(0, 1))
 
     def testMovePlayerOtOfBounds(self):
         new_room = self.char.move_character('N', self.dungeon)

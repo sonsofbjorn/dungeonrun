@@ -46,3 +46,11 @@ class testMap(unittest.TestCase):
         self.assertEqual(self.troll.attack,     7)
         self.assertEqual(self.troll.dexterity,  2)
         self.assertEqual(self.troll.rarity,     5)
+
+    def testMonsterHP(self):
+        self.m1 = Monster("orc", self.dungeon.get_room(0, 0))
+        self.m2 = Monster("orc", self.dungeon.get_room(0, 0))
+        self.m1.hp -= 1
+
+        self.assertEqual(self.m1.hp,         2)
+        self.assertEqual(self.m2.hp,         4)
