@@ -1,5 +1,5 @@
 import random
-from dungeonrun.monster import Monster
+
 '''
 X = COL
 Y = ROW
@@ -24,7 +24,7 @@ class Map:
         # monsterlist is a list of generated monster objects in the dungeon
         # Monsters know where they are (they have a room object as position)
         self.monsterlist = list(self.generate_monsters(
-            Monster.available_monsters.keys()))
+            Monster.available_monsters))
 
         self.treasurelist = list(self.generate_treasure(
             Treasure.available_items.keys()))
@@ -116,16 +116,88 @@ class Room:
         self.position = (x, y)
 
 
+class Monster:
+
+    available_monsters = ("giant spider", "skeleton", "orc", "troll")
+
+    def __init__(self, unit_type, room):
+
+        self.unit_type = unit_type
+        self.room = room
+
+        if self.name.lower() == "giant spider":
+            self.initiative = 7
+            self.hp = 1
+            self.attack = 2
+            self.dexterity = 3
+            self.rarity = 20
+
+        if self.name.lower() == "skeleton":
+            self.initiative = 4
+            self.hp = 2
+            self.attack = 3
+            self.dexterity = 3
+            self.rarity = 15
+
+        if self.name.lower() == "orc":
+            self.initiative = 6
+            self.hp = 3
+            self.attack = 4
+            self.dexterity = 4
+            self.rarity = 10
+
+        if self.name.lower() == "troll":
+            self.initiative = 2
+            self.hp = 4
+            self.attack = 7
+            self.dexterity = 2
+            self.rarity = 5
+
+    def roll_dice(self, dice_type):
+        if dice_type == "attack":
+            dice_type = self.attack
+        elif dice_type == "dexterity":
+            dice_type = self.dexterity
+        elif dice_type == "initiative":
+            dice_type = self.initiative
+        value = 0
+        for x in range(0, dice_type):
+            value += random.randrange(0, dice_type)
+        return value
+
+    def attack_function(self, player):
+        attacker_roll = self.roll_dice("attack")
+        player_roll = player.roll_dice("dexterity")
+        if attacker_roll > player_roll:
+            if player.hero_class == "knight":
+                # Another IF needed to see if player blocks attack
+                print("something something knight shield")
+            print(player.name, "is hit by the", str(self.unit_type) + "!")
+            player.hp -= 1
+            print("You have", player.hp, "hp remaining!")
+        else:
+            print("The", self.unit_type, "attacks", player.name + ", but misses!")
+
+
 class Treasure:
-    available_items = {
-                "Loose change": {"item_type": "loose change", "value": 2, "rarity": 40},
-                "Money pouch": {"item_type": "money pouch", "value": 6, "rarity": 20},
-                "Gold jewelry": {"item_type": "gold jewelry", "value": 10, "rarity": 15},
-                "Gemstone": {"item_type": "a gemstone", "value": 14, "rarity": 10},
-                "Small treasurechest": {"item_type": "a small treasure chest", "value": 20, "rarity": 5}}
+    available_items = {}
 
     def __init__(self, item_type, room):
+        self.item_type = item_type
         self.room = room
-        self.item_type = self.available_items[item_type]
-        self.__dict__ = self.item_type
 
+        if self.item_type.lower() == "loose change":
+            self.value = 2
+            self.rarity = 40
+        elif self.item_type.lower() == "money pouch":
+            self.value = 6
+            self.rarity = 20
+        elif self.item_type.lower() == "gold jewelry":
+            self.value = 10
+            self.rarity = 15
+        elif self.item_type.lower() == "gemstone":
+            self.value = 14
+            self.rarity = 10
+        elif self.item_type.lower() == "small treasurechest":
+            self.value = 20
+            self.rarity = 5

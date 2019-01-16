@@ -1,6 +1,5 @@
-import random
-from dungeonrun import player
-from dungeonrun import dungeon
+from dungeonrun.player import Player
+from dungeonrun.dungeon import Map
 
 
 class Menu:
@@ -62,7 +61,7 @@ class Menu:
 
 
 def create_dungeon(size):
-    instance = dungeon.Map(size)
+    instance = Map(size)
     return instance
 
 
@@ -178,7 +177,7 @@ def delete_player(uname):
 
 
 def start_game(username, role, score, start_room, dungeon):
-    dude = player.Player(username, role, start_room, score)
+    dude = Player(username, role, start_room, score)
     dude.current_room.dark = False
     dude.current_room.monsters = []
     dude.current_room.treasures = []
@@ -249,7 +248,7 @@ def combat(char):
                 initiative_list = []
                 char.current_room.monsters.pop(0)
                 break
-            elif isinstance(actor, player.Player):
+            elif isinstance(actor, Player):
                 while True:
                     print("Choose your action:\n"
                           "[1] Attack\n"
