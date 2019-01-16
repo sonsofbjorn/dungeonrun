@@ -1,20 +1,20 @@
 import unittest
 
-from dungeonrun import player
-from dungeonrun import dungeon
+from dungeonrun.player import Player
+from dungeonrun.dungeon import Map
 
 
 class testPlayer(unittest.TestCase):
     def setUp(self):
         start_pos = (1, 2)
-        self.knight = player.Player("Knightsebbe", "knight",   start_pos)
-        self.wizard = player.Player("wizSeb",      "wizard",   start_pos)
-        self.thief = player.Player("thiefSeb",    "thief",    start_pos)
+        self.knight = Player("Knightsebbe", "knight",   start_pos)
+        self.wizard = Player("wizSeb",      "wizard",   start_pos)
+        self.thief = Player("thiefSeb",    "thief",    start_pos)
 
-        self.dungeon = dungeon.Map(4)
+        self.dungeon = Map(4)
 
-        self.char = player.Player("Bob", "knight", self.dungeon.get_room(1, 1))
-        self.char2 = player.Player("Bob", "knight", self.dungeon.get_room(0, 1))
+        self.char = Player("Bob", "knight", self.dungeon.get_room(1, 1))
+        self.char2 = Player("Bob", "knight", self.dungeon.get_room(0, 1))
 
     def testKnightProperties(self):
         self.assertEqual(self.knight.initiative, 5)
@@ -40,3 +40,6 @@ class testPlayer(unittest.TestCase):
     def testPosition2(self):
         self.assertEqual(self.char2.show_location, (0, 1))
 
+    def testMoveNorthPlayer(self):
+        new_room = self.char.move_character('N', self.dungeon)
+        self.assertEqual(new_room, self.dungeon.get_room(1, 0))
