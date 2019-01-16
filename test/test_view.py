@@ -8,8 +8,8 @@ class testView(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.m = Map(5)
-        self.p = player.Player("bob", "knight", self.m.get_room(0, 1))
+        self.m = Map(8)
+        self.p = player.Player("SebastianDenAndreo", "knight", self.m.get_room(0, 1))
         self.v = view.View(self.m, self.p)
         self.m.get_room(2, 2).hasExit = True
 
@@ -37,6 +37,6 @@ class testView(unittest.TestCase):
 
     def testPrintMap(self):
         print("\n")
-        self.v.print_game(self.v.draw_map())
+        self.v.print_game(self.v.draw_map2())
 
 
