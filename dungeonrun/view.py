@@ -4,19 +4,19 @@ import platform
 
 class View:
 
-    welcome_menu = ("Welcome to... DUNGEON RUN!",
+    welcome_menu = ["Welcome to... DUNGEON RUN!",
                 "[1] New Character",
                 "[2] Load Character",
                 "[3] Highest score",
-                "[4] Quit")
+                "[4] Quit"]
 
-    start_location = ("Choose your starting location:",
+    start_location = ["Choose your starting location:",
                   "[1] North-West",
                   "[2] North-East",
                   "[3] South-West",
-                  "[4] South-East")
+                  "[4] South-East"]
 
-    enter_char_name = ("Enter character name: ")
+    enter_char_name = ["Enter character name: "]
 
     error_msg = ["\nNot a vavlid choice!\n"]
 
@@ -65,12 +65,15 @@ class View:
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
+
+        if err:
+            menu.append(self.error_msg[0])
+        else:
+            menu.append(("║"+" "*50+"║"))
         for row in menu:
             row = ("║"+row.center(50)+"║")
             print(row.center(os.get_terminal_size().columns))
 
-        error = ("║"+err(50)+"║")
-        print(error.center(os.get_terminal_size().columns))
         if len(menu) < 10:
             count = 10 - len(menu)
             for i in range(count):
