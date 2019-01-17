@@ -32,11 +32,15 @@ class View:
                      "[3] South-West",
                      "[4] South-East"]
 
-    direction_option = ["where do you want to go"]
+    direction_option = ["        [N] North      ",
+                        "[W] West         [E] East",
+                        "        [S] South      "]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
     enter_char_name = ["", "Enter character name: "]
+
+    leave_question = ["You see a staircaise,", "do you want to leave?"]
 
 
     """ ERROR MESESAGES BELLOW """
@@ -110,7 +114,7 @@ class View:
         menu = []
         #self.error_msg = []
 
-    def print_game(self, player, dungeonmap, menulist):
+    def print_game(self, player, dungeonmap, input_menu, *args, **kwargs):
         self.clear_console()
         nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+player.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
@@ -146,7 +150,11 @@ class View:
         print("╚════════════════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
         print("   ╔════════════════════════════════════════════════════════════════════════════╗   ".center(os.get_terminal_size().columns))
         print("   ║                                                                            ║   ".center(os.get_terminal_size().columns))
-        for row in menulist:
+        menu = []
+        menu = input_menu.copy()
+        if kwargs:
+            menu += args[0]
+        for row in menu:
             row = ("║"+row.center(76)+"║")
             print(row.center(os.get_terminal_size().columns))
         for i in range(10):

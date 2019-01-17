@@ -248,7 +248,7 @@ def combat(player):
                 initiative_list = []
                 char.current_room.monsters.pop(0)
                 break
-            elif isinstance(actor, player):
+            elif isinstance(actor, Player):
                 while true:
                     print("choose your action:\n"
                           "[1] attack\n"

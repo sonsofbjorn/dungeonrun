@@ -45,7 +45,6 @@ class Controller:
                 time.sleep(3)
                 quit()
             else:
-                #self.view.handle_error(View.err_choice)
                 self.view.print_start_menu(View.welcome_menu,
                                            View.err_choice,
                                            error=True)
@@ -179,13 +178,21 @@ class Controller:
                 break
             inp = self.view.handle_input()
 
-            new_room = player.move_playeracter(inp, dungeon)
+            new_room = player.move_character(inp, dungeon)
             if new_room is False:
-                print("That is not a valid direction. Try again.")
+                self.view.print_game(player,
+                                     self.view.draw_map2(dungeon, player),
+                                     View.direction_option,
+                                     View.err_choice, error=True)
             else:
-                print(player.name, "enters", player.show_location)
+                self.view.print_game(player,
+                                     self.view.draw_map2(dungeon, player),
+                                     View.direction_option)
 
             if player.current_room.hasExit is True:
+                self.view.print_game(player,
+                                     self.view.draw_map2(dungeon, player),
+                                     View.leave_question)
                 print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
             while len(player.current_room.monsters) > 0:
                 show_monsters = "Enemies! In the room ahead, you see foes:\n"
@@ -206,32 +213,31 @@ class Controller:
             print("oooh,", loot.item_type + "! you have added it to your backpack.\n")
             char.current_room.treasures.pop(0)
 
-
-    def combat(self, char):
+    def combat(self, player):
         initiative_list = []
-        monster = char.current_room.monsters[0]
-        char_init = char.roll_dice("initiative")
+        monster = player.current_room.monsters[0]
+        player_init = player.roll_dice("initiative")
         monster_init = monster.roll_dice("initiative")
-        if monster_init > char_init:
+        if monster_init > player_init:
             initiative_list.append(monster)
-            initiative_list.append(char)
+            initiative_list.append(player)
         else:
-            initiative_list.append(char)
+            initiative_list.append(player)
             initiative_list.append(monster)
         while len(initiative_list) > 1:
             for actor in initiative_list:
-                if char.hp < 1:
+                if player.hp < 1:
                     print("you have been slain by", monster.unit_type + "!")
                     initiative_list = []
-                    char.current_room.monsters.clear()
+                    player.current_room.monsters.clear()
                     break
 
                 if monster.hp < 1:
                     print("you have slain the", monster.unit_type + "!")
                     initiative_list = []
-                    char.current_room.monsters.pop(0)
+                    player.current_room.monsters.pop(0)
                     break
-                elif isinstance(actor, player):
+                elif isinstance(actor, Player):
                     while True:
                         print("choose your action:\n"
                             "[1] attack\n"
@@ -241,9 +247,9 @@ class Controller:
                             actor.attack_function(monster)
                             break
                         elif choice == "2":
-                            escape = char.escape_combat()
+                            escape = player.escape_combat()
                             if escape:
-                                char.current_room = char.old_room
+                                player.current_room = player.old_room
                                 print("you have escaped")
                                 initiative_list.clear()
                                 break
@@ -251,4 +257,4 @@ class Controller:
                                 print("you have failed to escape")
                                 break
                 else:
-                    actor.attack_function(char)
+                    actor.attack_function(player)
