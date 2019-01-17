@@ -9,7 +9,7 @@ class Controller:
         self.view = View()
 
     def main_menu(self):
-        self.view.print_start_menu(View.welcome_menu)
+        self.view.print_main_menu(View.welcome_menu)
 
         while True:
             usr_choice = self.view.handle_input()
@@ -21,7 +21,7 @@ class Controller:
                 break
             # Load char
             elif usr_choice == "2":
-                self.view.print_start_menu(View.enter_char_name)
+                self.view.print_main_menu(View.enter_char_name)
                 while True:
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
@@ -30,28 +30,28 @@ class Controller:
                         startcorner = self.start_loc(dungeon)
                         break
                     else:
-                        self.view.print_start_menu(View.enter_char_name,
-                                                   View.err_player_not_exist,
-                                                   error=True)
+                        self.view.print_main_menu(View.enter_char_name,
+                                                  View.err_player_not_exist,
+                                                  error=True)
 
                 break
             # Highscore
             elif usr_choice == "3":
-                self.view.print_start_menu(View.highscore)
+                self.view.print_main_menu(View.highscore)
                 break
             # Quit
             elif usr_choice == "4":
-                self.view.print_start_menu(View.good_bye)
+                self.view.print_main_menu(View.good_bye)
                 time.sleep(3)
                 quit()
             else:
-                self.view.print_start_menu(View.welcome_menu,
-                                           View.err_choice,
-                                           error=True)
+                self.view.print_main_menu(View.welcome_menu,
+                                          View.err_choice,
+                                          error=True)
         self.start_game(*player_tuple, startcorner, dungeon)
 
     def map_size(self):
-        self.view.print_start_menu(View.choose_size)
+        self.view.print_main_menu(View.choose_size)
         while True:
             usr_choice = self.view.handle_input()
             if usr_choice == "1":
@@ -64,9 +64,9 @@ class Controller:
                 dungeon = Map(8)
                 break
             else:
-                self.view.print_start_menu(View.welcome_menu,
-                                           View.err_choice,
-                                           error=True)
+                self.view.print_main_menu(View.welcome_menu,
+                                          View.err_choice,
+                                          error=True)
         return dungeon
 
     def start_game(self, player, role, start_room, dungeon):
@@ -77,7 +77,7 @@ class Controller:
         self.map_loop(dude, dungeon)
 
     def start_loc(self, dungeon):
-        self.view.print_start_menu(View.choose_corner)
+        self.view.print_main_menu(View.choose_corner)
         while True:
             startcorner = self.view.handle_input()
             if startcorner == "1":
@@ -97,37 +97,37 @@ class Controller:
                 dungeon.get_room(0, 0).hasExit = True
                 break
             else:
-                self.view.print_start_menu(View.welcome_menu,
-                                           View.err_choice,
-                                           error=True)
+                self.view.print_main_menu(View.welcome_menu,
+                                          View.err_choice,
+                                          error=True)
 
         # all done
         return startcorner
 
     def new_player(self):
-        self.view.print_start_menu(View.enter_char_name)
+        self.view.print_main_menu(View.enter_char_name)
 
         # character name
         while True:
             usr_choice = self.view.handle_input()
 
             if len(usr_choice) >= 18:
-                self.view.print_start_menu(View.enter_char_name,
-                                           View.err_long_name,
-                                           error=True)
+                self.view.print_main_menu(View.enter_char_name,
+                                          View.err_long_name,
+                                          error=True)
             elif ',' in usr_choice:
-                self.view.print_start_menu(View.enter_char_name,
-                                           View.err_invalid_char,
-                                           error=True)
+                self.view.print_main_menu(View.enter_char_name,
+                                          View.err_invalid_char,
+                                          error=True)
             elif self.player_exists(usr_choice):
-                self.view.print_start_menu(View.enter_char_name,
-                                           View.err_player_exists,
-                                           error=True)
+                self.view.print_main_menu(View.enter_char_name,
+                                          View.err_player_exists,
+                                          error=True)
             else:
                 break
 
         # player role
-        self.view.print_start_menu(View.choose_role)
+        self.view.print_main_menu(View.choose_role)
         while True:
             player_name = usr_choice
             usr_choice = self.view.handle_input()
@@ -141,9 +141,9 @@ class Controller:
                 player_role = "thief"
                 break
             else:
-                self.view.print_start_menu(View.choose_role,
-                                           View.err_choice,
-                                           error=True)
+                self.view.print_main_menu(View.choose_role,
+                                          View.err_choice,
+                                          error=True)
 
         # all done!
         self.save_player(player_name, player_role, 0, 0)
@@ -172,7 +172,7 @@ class Controller:
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
     def map_loop(self, player, dungeon):
-        self.view.print_game(player, self.view.draw_map2(dungeon, player), View.direction_option)
+        self.view.print_game(player, dungeon, View.direction_option)
         while True:
             if player.hp < 1:
                 break
@@ -181,17 +181,18 @@ class Controller:
             new_room = player.move_character(inp, dungeon)
             if new_room is False:
                 self.view.print_game(player,
-                                     self.view.draw_map2(dungeon, player),
+                                     dungeon,
                                      View.direction_option,
-                                     View.err_choice, error=True)
+                                     View.err_choice,
+                                     error=True)
             else:
                 self.view.print_game(player,
-                                     self.view.draw_map2(dungeon, player),
+                                     dungeon,
                                      View.direction_option)
 
             if player.current_room.hasExit is True:
                 self.view.print_game(player,
-                                     self.view.draw_map2(dungeon, player),
+                                     dungeon,
                                      View.leave_question)
                 print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
             while len(player.current_room.monsters) > 0:

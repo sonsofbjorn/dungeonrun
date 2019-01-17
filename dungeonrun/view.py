@@ -83,7 +83,7 @@ class View:
                 outrow = ""
         return output
 
-    def print_start_menu(self, input_menu, *args, **kwargs):
+    def print_main_menu(self, input_menu, *args, **kwargs):
         self.clear_console()
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
@@ -114,7 +114,7 @@ class View:
         menu = []
         #self.error_msg = []
 
-    def print_game(self, player, dungeonmap, input_menu, *args, **kwargs):
+    def print_game(self, player, dungeon, input_menu, *args, **kwargs):
         self.clear_console()
         nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+player.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
@@ -129,6 +129,7 @@ class View:
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
         sidebox = self.print_hp_score_list(player)
         a = 0
+        dungeonmap = self.draw_map2(player, dungeon)
         for row in dungeonmap:
             if a < 8:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
