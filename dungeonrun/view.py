@@ -61,7 +61,7 @@ class View:
         elif platform.system() == "Windows":
             return os.system('cls')
 
-    def draw_map2(self, dungeon, player):
+    def draw_map2(self, player, dungeon):
         output = []
         outrow = ""
         for row in dungeon:

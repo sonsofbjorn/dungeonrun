@@ -9,31 +9,42 @@ class Controller:
         self.view = View()
 
     def main_menu(self):
+        """
+        Logic for main menu. Here we get information from the user.
+        player_tuple is a tuple, containing name and role
+        start_loc_menu is a string containing, "NW" and so on.
+        dungeon_size is an int.
+
+        When we have all the necessary information we run init_objects.
+        That function will generate the objects and then pass on into the
+        game_loop
+        """
+        # PRINTS MAIN MENU
         self.view.print_main_menu(View.welcome_menu)
 
+        # 1. NEW PLAYER, 2. LOAD CHAR, 3. HIGHSCORE, 4. 
         while True:
             usr_choice = self.view.handle_input()
-            # New char
+
             if usr_choice == "1":
-                player_tuple = self.new_player()
-                dungeon = self.map_size()
-                startcorner = self.start_loc(dungeon)
+                player_tuple = self.new_player_menu()
+                dungeon = self.map_size_menu()
+                start_loc = self.start_loc_menu(dungeon)
                 break
-            # Load char
+
             elif usr_choice == "2":
                 self.view.print_main_menu(View.enter_char_name)
                 while True:
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
-                        dungeon = self.map_size()
-                        startcorner = self.start_loc(dungeon)
+                        dungeon_size = self.map_size_menu()
+                        start_loc = self.start_loc_menu()
                         break
                     else:
                         self.view.print_main_menu(View.enter_char_name,
                                                   View.err_player_not_exist,
                                                   error=True)
-
                 break
             # Highscore
             elif usr_choice == "3":
@@ -48,63 +59,98 @@ class Controller:
                 self.view.print_main_menu(View.welcome_menu,
                                           View.err_choice,
                                           error=True)
-        self.start_game(*player_tuple, startcorner, dungeon)
 
-    def map_size(self):
+        self.init_objects(*player_tuple, start_loc, dungeon_size)
+
+    def map_size_menu(self):
+        """
+        Menu for asking what size the player wants to play on.
+        Returns an int to be used in init_objects
+        """
         self.view.print_main_menu(View.choose_size)
         while True:
             usr_choice = self.view.handle_input()
             if usr_choice == "1":
-                dungeon = Map(4)
+                dungeon_size = 4
                 break
             elif usr_choice == "2":
-                dungeon = Map(5)
+                dungeon_size = 5
                 break
             elif usr_choice == "3":
-                dungeon = Map(8)
+                dungeon_size = 8
                 break
             else:
                 self.view.print_main_menu(View.welcome_menu,
                                           View.err_choice,
                                           error=True)
-        return dungeon
+        return dungeon_size
 
-    def start_game(self, player, role, start_room, dungeon):
-        dude = Player(player, role, start_room)
-        dude.current_room.isDark = False
-        dude.current_room.monsters = []
-        dude.current_room.treasures = []
-        self.map_loop(dude, dungeon)
+    def init_objects(self, player, role, start_loc, dungeon_size):
+        """
+        this function will init objects
+        player, role, start_loc is a string.
+        dungeon_size is an int
+        This function will generate game objects,
+        dungeon, start_room and player
+        """
+        # Create dungeon
+        dungeon = Map(dungeon_size)
 
-    def start_loc(self, dungeon):
+        # Get start room and set exit
+        start_loc = start_loc
+        if start_loc == "NW":
+            start_room = dungeon.corner["NW"]
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+        elif start_loc == "NE":
+            start_room = dungeon.corner["NE"]
+            dungeon.get_room(0, dungeon.size-1).hasExit = True
+        elif start_loc == "SW":
+            start_room = dungeon.corner["SW"]
+            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+        elif start_loc == "SE":
+            start_room = dungeon.corner["SE"]
+            dungeon.get_room(0, 0).hasExit = True
+
+        print(start_room)
+        player = Player(player, role, start_room)
+        player.current_room.isDark = False
+        player.current_room.monsters = []
+        player.current_room.treasures = []
+        self.game_loop(player, dungeon)  # Should we run this here?
+
+    def start_loc_menu(self):
+        """
+        Asks viwer to show menu for starting location
+        returns the choice as a string
+        """
         self.view.print_main_menu(View.choose_corner)
         while True:
-            startcorner = self.view.handle_input()
-            if startcorner == "1":
-                startcorner = dungeon.corner["NW"]
-                dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+            usr_choice = self.view.handle_input()
+            if usr_choice == "1":
+                start_loc = "NW"
                 break
-            elif startcorner == "2":
-                startcorner = dungeon.corner["NE"]
-                dungeon.get_room(0, dungeon.size-1).hasExit = True
+            elif usr_choice == "2":
+                start_loc = "NE"
                 break
-            elif startcorner == "3":
-                startcorner = dungeon.corner["SW"]
-                dungeon.get_room(dungeon.size-1, 0).hasExit = True
+            elif usr_choice == "3":
+                start_loc = "SW"
                 break
-            elif startcorner == "4":
-                startcorner = dungeon.corner["SE"]
-                dungeon.get_room(0, 0).hasExit = True
+            elif usr_choice == "4":
+                start_loc = "SE"
                 break
             else:
                 self.view.print_main_menu(View.welcome_menu,
                                           View.err_choice,
                                           error=True)
+        # This string is sent into init_objects function later
+        return start_loc
 
-        # all done
-        return startcorner
-
-    def new_player(self):
+    def new_player_menu(self):
+        """
+        Here we get all the necessary information to create a player object
+        later in init_objects.
+        Returns a tuple with name and role
+        """
         self.view.print_main_menu(View.enter_char_name)
 
         # character name
@@ -163,6 +209,10 @@ class Controller:
             f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
 
     def load_player(self, uname):
+        """
+        This loads a player from players.txt
+        Returns a tuple with name and role which will be used in init_objects
+        """
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
@@ -171,7 +221,7 @@ class Controller:
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
-    def map_loop(self, player, dungeon):
+    def game_loop(self, player, dungeon):
         self.view.print_game(player, dungeon, View.direction_option)
         while True:
             if player.hp < 1:

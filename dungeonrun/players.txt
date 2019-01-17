@@ -19,3 +19,5 @@ Musse,knight,0,0
 Kisse,knight,0,0
 Klasse,thief,0,0
 Katja,wizard,0,0
+Larissa,wizard,0,0
+Larissas,wizard,0,0
