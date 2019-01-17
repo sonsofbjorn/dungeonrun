@@ -167,11 +167,18 @@ class Monster:
         player_roll = player.roll_dice("dexterity")
         if attacker_roll > player_roll:
             if player.hero_class == "knight":
-                # Another IF needed to see if player blocks attack
-                print("something something knight shield")
-            print(player.name, "is hit by the", str(self.unit_type) + "!")
-            player.hp -= 1
-            print("You have", player.hp, "hp remaining!")
+                if player.block is True:
+                    print("You have been hit by", str(self.unit_type) + ", but blocked it with your shield!")
+                    player.block = False
+                else:
+                    print(player.name, "is hit by the", str(self.unit_type) + "!")
+                    player.hp -= 1
+                    print("You have", player.hp, "hp remaining!")
+
+            else:
+                print(player.name, "is hit by the", str(self.unit_type) + "!")
+                player.hp -= 1
+                print("You have", player.hp, "hp remaining!")
         else:
             print("The", self.unit_type, "attacks", player.name + ", but misses!")
 
