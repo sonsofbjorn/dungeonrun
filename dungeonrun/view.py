@@ -1,5 +1,6 @@
 import os
 import platform
+import types
 
 
 class View:
@@ -33,14 +34,25 @@ class View:
                      "[4] South-East"]
 
     direction_option = ["        [N] North      ",
-                        "[W] West         [E] East",
+                        "[W] West          [E] East",
                         "        [S] South      "]
+
+    attack_options = ["[1] Attack!",
+                      "[2] Flee!"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
     enter_char_name = ["", "Enter character name: "]
 
     leave_question = ["You see a staircaise,", "do you want to leave?"]
+
+    show_monsters = ["Uhuh! ENEMIES! You see the following foes: ", ""]
+    score_text = ["Your current score is: "]
+    loot_text = ["You found loot! The following loot was added to your backback: "]
+    player_dead = ["You have been slained by: "]
+    player_killed = ["You have slain the: "]
+    player_escaped = ["You have escaped!"]
+    player_failed_escape = ["You have failed to escape!"]
 
 
     """ ERROR MESESAGES BELLOW """
@@ -100,7 +112,12 @@ class View:
         menu = []
         menu = input_menu.copy()
         if kwargs:
-            menu += args[0]
+            if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
+                to_list = list()
+                to_list.append(args[0])
+            else:
+                to_list = args[0]
+            menu += to_list
         for row in menu:
             row = ("║"+row.center(50)+"║")
             print(row.center(os.get_terminal_size().columns))
@@ -115,6 +132,16 @@ class View:
         #self.error_msg = []
 
     def print_game(self, player, dungeon, input_menu, *args, **kwargs):
+        """
+        This prints all the GFX for the game loop.
+        Needs player object, dungeon and a menu list. Use *args and **kwargs
+        to display extra information addition to the menu list.
+
+        *args = an extra list of information we want to display
+        **kwargs = is a keyword boolean and should be true if we want to
+        show extra info.
+        """
+
         self.clear_console()
         nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+player.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
@@ -154,7 +181,12 @@ class View:
         menu = []
         menu = input_menu.copy()
         if kwargs:
-            menu += args[0]
+            if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
+                to_list = list()
+                to_list.append(args[0])
+            else:
+                to_list = args[0]
+            menu += to_list
         for row in menu:
             row = ("║"+row.center(76)+"║")
             print(row.center(os.get_terminal_size().columns))

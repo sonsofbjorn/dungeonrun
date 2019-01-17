@@ -1,6 +1,7 @@
 from view import View
 from player import Player
 from dungeon import Map
+
 import time
 
 
@@ -22,7 +23,7 @@ class Controller:
         # PRINTS MAIN MENU
         self.view.print_main_menu(View.welcome_menu)
 
-        # 1. NEW PLAYER, 2. LOAD CHAR, 3. HIGHSCORE, 4. 
+        # 1. NEW PLAYER, 2. LOAD CHAR, 3. HIGHSCORE, 4.
         while True:
             usr_choice = self.view.handle_input()
 
@@ -206,7 +207,8 @@ class Controller:
 
     def save_player(self, uname, role, score, highscore):
         with open("players.txt", "a+") as f:
-            f.write(uname.capitalize()+","+role+","+str(score)+","+str(highscore)+"\n")
+            f.write(uname.capitalize()
+                    + ","+role+","+str(score)+","+str(highscore)+"\n")
 
     def load_player(self, uname):
         """
@@ -222,6 +224,10 @@ class Controller:
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
     def game_loop(self, player, dungeon):
+        """
+        Main game loop, takes in player and dungeon and let the player
+        play in the dungeon! :)
+        """
         self.view.print_game(player, dungeon, View.direction_option)
         while True:
             if player.hp < 1:
@@ -244,27 +250,42 @@ class Controller:
                 self.view.print_game(player,
                                      dungeon,
                                      View.leave_question)
-                print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
             while len(player.current_room.monsters) > 0:
-                show_monsters = "Enemies! In the room ahead, you see foes:\n"
                 for monster in player.current_room.monsters:
-                    show_monsters += monster.unit_type + "\n"
-                print(show_monsters)
+                    self.view.print_game(player,
+                                         dungeon,
+                                         View.show_monsters,
+                                         monster.unit_type,
+                                         foes=True)
+                time.sleep(3)
                 while len(player.current_room.monsters) > 0:
-                    self.combat(player)
+                    self.combat(player, dungeon)
             while len(player.current_room.treasures) > 0:
-                while len(player.current_room.treasures) > 0:
-                    self.loot(player)
-                print("Your accumulated score is", str(player.score) + ".")
+                # Not as intended
+                self.view.print_game(player,
+                                     dungeon,
+                                     View.score_text,
+                                     player.score,
+                                     score=True)
 
-    def loot(self, char):
-        for loot in char.current_room.treasures:
-            char.score = int(char.score)
-            char.score += loot.value
-            print("oooh,", loot.item_type + "! you have added it to your backpack.\n")
-            char.current_room.treasures.pop(0)
+    def loot(self, player):
+        """
+        Returns a list of looted items to be displayed for the user
+        """
+        looted = []
+        for loot in player.current_room.treasures:
+            player.score = int(player.score)
+            player.score += loot.value
+            player.current_room.treasures.pop(0)
+            looted.append(loot.item_type)
+        return looted
 
-    def combat(self, player):
+    def combat(self, player, dungeon):
+        """
+        Takes in player and dungeon
+        Runs combats and returns true or false
+        SUGGESTION: RETURNS WON, ESCAPED OR LOST
+        """
         initiative_list = []
         monster = player.current_room.monsters[0]
         player_init = player.roll_dice("initiative")
@@ -278,22 +299,33 @@ class Controller:
         while len(initiative_list) > 1:
             for actor in initiative_list:
                 if player.hp < 1:
-                    print("you have been slain by", monster.unit_type + "!")
+                    self.view.print_game(player,
+                                         dungeon,
+                                         View.player_dead,
+                                         monster.unit_type,
+                                         killed_by=True)
+                    time.sleep(5)
                     initiative_list = []
                     player.current_room.monsters.clear()
-                    break
+                    return False
 
                 if monster.hp < 1:
-                    print("you have slain the", monster.unit_type + "!")
+                    self.view.print_game(player,
+                                         dungeon,
+                                         View.player_killed,
+                                         monster.unit_type,
+                                         killed=True)
                     initiative_list = []
                     player.current_room.monsters.pop(0)
                     break
                 elif isinstance(actor, Player):
                     while True:
-                        print("choose your action:\n"
-                            "[1] attack\n"
-                            "[2] flee")
-                        choice = input(">>")
+                        self.view.print_game(player,
+                                             dungeon,
+                                             View.attack_options,
+                                             monster.unit_type,
+                                             monster=True)
+                        choice = self.view.handle_input()
                         if choice == "1":
                             actor.attack_function(monster)
                             break
@@ -301,11 +333,17 @@ class Controller:
                             escape = player.escape_combat()
                             if escape:
                                 player.current_room = player.old_room
-                                print("you have escaped")
+                                self.view.print_game(player,
+                                                     dungeon,
+                                                     View.player_escaped)
+                                time.sleep(3)
                                 initiative_list.clear()
-                                break
+                                return False
                             else:
-                                print("you have failed to escape")
+                                self.view.print_game(player,
+                                                     dungeon,
+                                                     View.player_failed_escape)
                                 break
                 else:
                     actor.attack_function(player)
+        return True
