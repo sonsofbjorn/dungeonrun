@@ -21,7 +21,7 @@ class Menu:
                         uclass = choose_role()
                         dungeon = create_dungeon(select_mapsize())
                         startlc = start_location(dungeon)
-                        save_new_player(uname, uclass, 0, 0)
+                        save_player(uname, uclass, 0, 0)
                         start_game(*load_player(uname), startlc, dungeon)
                         break
                     else:
@@ -218,27 +218,27 @@ def loot(char):
     for loot in char.current_room.treasures:
         char.score = int(char.score)
         char.score += loot.value
-        print("oooh,", loot.item_type + "! you have added it to your backpack.\n")
+        print("Oooh,", loot.item_type + "! you have added it to your backpack.\n")
         char.current_room.treasures.pop(0)
 
 
 def combat(player):
     initiative_list = []
-    monster = char.current_room.monsters[0]
-    char_init = char.roll_dice("initiative")
+    monster = player.current_room.monsters[0]
+    char_init = player.roll_dice("initiative")
     monster_init = monster.roll_dice("initiative")
     if monster_init > char_init:
         initiative_list.append(monster)
-        initiative_list.append(char)
+        initiative_list.append(player)
     else:
-        initiative_list.append(char)
+        initiative_list.append(player)
         initiative_list.append(monster)
     while len(initiative_list) > 1:
         for actor in initiative_list:
-            if char.hp < 1:
+            if player.hp < 1:
                 print("you have been slain by", monster.unit_type + "!")
                 initiative_list = []
-                char.current_room.monsters.clear()
+                player.current_room.monsters.clear()
                 game_over()
                 # quit game
                 break
@@ -246,10 +246,10 @@ def combat(player):
             if monster.hp < 1:
                 print("you have slain the", monster.unit_type + "!")
                 initiative_list = []
-                char.current_room.monsters.pop(0)
+                player.current_room.monsters.pop(0)
                 break
             elif isinstance(actor, player):
-                while true:
+                while True:
                     print("choose your action:\n"
                           "[1] attack\n"
                           "[2] flee")
@@ -258,9 +258,9 @@ def combat(player):
                         actor.attack_function(monster)
                         break
                     elif choice == "2":
-                        escape = char.escape_combat()
+                        escape = player.escape_combat()
                         if escape:
-                            char.current_room = char.old_room
+                            player.current_room = player.old_room
                             print("you have escaped")
                             initiative_list.clear()
                             break
@@ -268,8 +268,9 @@ def combat(player):
                             print("you have failed to escape")
                             break
             else:
-                actor.attack_function(char)
+                actor.attack_function(player)
 
 
 def game_over():
     print("Game over.")
+
