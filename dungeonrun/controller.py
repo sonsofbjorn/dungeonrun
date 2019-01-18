@@ -332,7 +332,7 @@ class Controller:
             if player.hp < 1:
                 break
 
-            if player.AI is True:
+            if player.ai is True:
                 if player.current_room.position[0] > player.destination.position[0]:
                     print("going west")
                     inp = "w"
