@@ -1,3 +1,4 @@
 Sebbe,knight,0,0
 Pelle,wizard,0,0
 Tester,wizard,0,0
+Mathiastheslayer,knight,0,0
