@@ -21,13 +21,12 @@ class Map:
                             for x in range(size))
                             for y in range(size))
         self.generate_doors()
+
         # monsterlist is a list of generated monster objects in the dungeon
         # Monsters know where they are (they have a room object as position)
-        self.monsterlist = list(self.generate_monsters(
-            Monster.available_monsters))
-
-        self.treasurelist = list(self.generate_treasure(
-            Treasure.available_items))
+        # same goes for treasures
+        self.monsterlist = list(self.fill_room(Monster.available))
+        self.treasurelist = list(self.fill_room(Treasure.available))
 
         self.corner = {
             'NW': self.get_room(0, 0),
@@ -66,29 +65,25 @@ class Map:
     def get_room(self, x, y):
         return self.matrix[y][x]
 
-    def generate_monsters(self, foes):
-        """ This function puts monsters in all rooms if they are common enough.
-        At most one of each monster in foes gets created in the room.
+    def fill_room(self, things):
+        """
+        Takes a list of things (treasures or monsters)
+        This function puts things in all rooms if they are common enough.
+        At most one of each thing in things gets created in the room.
         """
         for row in self:
             for room in row:
-                mlist = list(foes)
-                while mlist:
-                    newmonster = Monster(mlist.pop(), room)
-                    if newmonster.rarity >= random.randint(0, 100):
-                        room.monsters.append(newmonster)
-                        yield newmonster
-
-    def generate_treasure(self, items):
-        # TODO: rewrite into general room filler function
-        for row in self:
-            for room in row:
-                tlist = list(items)
-                while(tlist):
-                    newtreasure = Treasure(tlist.pop(), room)
-                    if newtreasure.rarity >= random.randint(0, 100):
-                        room.treasures.append(newtreasure)
-                        yield newtreasure
+                for thing in things:
+                    if thing in Monster.available:
+                        thing = Monster(thing, room)
+                    elif thing in Treasure.available:
+                        thing = Treasure(thing, room)
+                    else: raise Exception("Can't put unknown items in room.")
+                    if thing.rarity >= random.randint(0,100):
+                        if isinstance(thing, Monster):
+                            room.monsters.append(thing)
+                        else: room.treasures.append(thing)
+                        yield thing
 
     def print_monsters(self):
         """ This is a debug function """
@@ -116,7 +111,7 @@ class Room:
 
 class Monster:
 
-    available_monsters = ("giant spider", "skeleton", "orc", "troll")
+    available = ("giant spider", "skeleton", "orc", "troll")
 
     def __init__(self, unit_type, room):
 
@@ -181,25 +176,25 @@ class Monster:
 
 
 class Treasure:
-    available_items = {"loose change","money pouch",
-    "gold jewelry","gemstone","small treasurechest"}
+    available = ("loose change","money pouch",
+    "gold jewelry","gemstone","small treasurechest")
 
     def __init__(self, item_type, room):
         self.item_type = item_type
         self.room = room
 
-        if self.item_type.lower() == "loose change":
+        if self.item_type  == "loose change":
             self.value = 2
             self.rarity = 40
-        elif self.item_type.lower() == "money pouch":
+        elif self.item_type  == "money pouch":
             self.value = 6
             self.rarity = 20
-        elif self.item_type.lower() == "gold jewelry":
+        elif self.item_type  == "gold jewelry":
             self.value = 10
             self.rarity = 15
-        elif self.item_type.lower() == "gemstone":
+        elif self.item_type  == "gemstone":
             self.value = 14
             self.rarity = 10
-        elif self.item_type.lower() == "small treasurechest":
+        elif self.item_type  == "small treasurechest":
             self.value = 20
             self.rarity = 5
