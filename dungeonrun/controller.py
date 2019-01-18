@@ -1,7 +1,9 @@
 from view import View
 from player import Player
 from dungeon import Map
+from AI import AI
 import time
+import random
 
 
 class Controller:
@@ -28,6 +30,7 @@ class Controller:
                         player_tuple = self.load_player(player_name)
                         dungeon = self.map_size()
                         startcorner = self.start_loc(dungeon)
+                        View.ai_results()
                         break
                     else:
                         self.view.print_start_menu(View.enter_char_name,
@@ -35,17 +38,24 @@ class Controller:
                                                    error=True)
 
                 break
-            # Highscore
+            # Use AI
             elif usr_choice == "3":
+                player_tuple = self.load_AI()
+                dungeon = self.map_size_AI()
+                startcorner = self.start_loc_AI(dungeon)
+                print(player_tuple, startcorner, dungeon)
+                break
+            # Highscore
+            elif usr_choice == "4":
                 self.view.print_start_menu(View.highscore)
                 break
             # Quit
-            elif usr_choice == "4":
+            elif usr_choice == "5":
                 self.view.print_start_menu(View.good_bye)
                 time.sleep(3)
                 quit()
             else:
-                #self.view.handle_error(View.err_choice)
+                # self.view.handle_error(View.err_choice)
                 self.view.print_start_menu(View.welcome_menu,
                                            View.err_choice,
                                            error=True)
@@ -69,13 +79,6 @@ class Controller:
                                            View.err_choice,
                                            error=True)
         return dungeon
-
-    def start_game(self, player, role, start_room, dungeon):
-        dude = Player(player, role, start_room)
-        dude.current_room.isDark = False
-        dude.current_room.monsters = []
-        dude.current_room.treasures = []
-        self.map_loop(dude, dungeon)
 
     def start_loc(self, dungeon):
         self.view.print_start_menu(View.choose_corner)
@@ -104,6 +107,40 @@ class Controller:
 
         # all done
         return startcorner
+
+    def map_size_AI(self):
+        umap = 0
+        map_choice = random.randrange(0, 100)
+        if map_choice < 26:
+            dungeon = Map(4)
+        elif map_choice >= 26 & map_choice <= 74:
+            dungeon = Map(5)
+        elif map_choice >= 75:
+            dungeon = Map(6)
+        return dungeon
+
+    def start_loc_AI(self, dungeon):
+        corner_choice = random.randrange(0, 4)
+        if corner_choice == 1:
+            startcorner = dungeon.corner["NW"]
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+        elif corner_choice == 2:
+            startcorner = dungeon.corner["NE"]
+            dungeon.get_room(0, dungeon.size-1).hasExit = True
+        elif corner_choice == 2:
+            startcorner = dungeon.corner["SW"]
+            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+        else:
+            startcorner = dungeon.corner["SE"]
+            dungeon.get_room(0, 0).hasExit = True
+        return startcorner
+
+    def start_game(self, player, role, start_room, dungeon):
+        dude = Player(player, role, start_room)
+        dude.current_room.isDark = False
+        dude.current_room.monsters = []
+        dude.current_room.treasures = []
+        self.map_loop(dude, dungeon)
 
     def new_player(self):
         self.view.print_start_menu(View.enter_char_name)
@@ -172,6 +209,32 @@ class Controller:
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
+    def load_AI(self):
+        self.view.print_start_menu(View.choose_AI)
+        while True:
+            uclass = input(">>")
+            if uclass == "1":
+                uname = "AI Knight"
+                hp = 9
+                break
+            elif uclass == "2":
+                uname = "AI Wizard"
+                hp = 4
+                break
+            elif uclass == "3":
+                uname = "AI Thief"
+                hp = 5
+                break
+            else:
+                print("Incorrect input")
+        with open("AI.txt", "r") as f:
+            file = f.readlines()
+            for line in file:
+                (username, role, score, highscore) = line.split(sep=",")
+                if username == uname:
+                    return username, role
+
+
     def map_loop(self, player, dungeon):
         self.view.print_game(player, self.view.draw_map2(dungeon, player), View.direction_option)
         while True:
@@ -179,7 +242,7 @@ class Controller:
                 break
             inp = self.view.handle_input()
 
-            new_room = player.move_playeracter(inp, dungeon)
+            new_room = player.move_character(inp, dungeon)
             if new_room is False:
                 print("That is not a valid direction. Try again.")
             else:
