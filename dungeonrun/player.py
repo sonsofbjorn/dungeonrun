@@ -1,15 +1,15 @@
 import random
-DEFAULT_HP = 100
+DEFAULT_HP = 10
 
 
 class Player:
-    def __init__(self, name, hero_class, start_room, score=0, hp=DEFAULT_HP):
+    def __init__(self, name, hero_class, start_room, score=0):
         self.name = name.capitalize()
-        self.hp = hp
         self.hero_class = hero_class
         self.current_room = start_room
         self.score = score
         self.old_room = start_room
+        self.ai = False
 
         if hero_class.lower() == "knight":
             self.initiative = 5
@@ -35,6 +35,8 @@ class Player:
         else:
             raise Exception("No such class")
 
+        self.max_hp = self.hp
+
     def roll_dice(self, dice_type):
         if dice_type == "attack":
             dice_type = self.attack
@@ -54,18 +56,18 @@ class Player:
             if self.special_ability == "crit":
                 critical_hit = random.randrange(0, 100)
                 if critical_hit >= 75:
-                    print("OH YEAH, IT'S A CRITICAL HIT!")
                     enemy.hp -= 2
+                    return "It's a critical hit!"
                 else:
-                    print("You attack the", enemy.unit_type, "and hit!")
                     enemy.hp -= 1
+                    return "You attack", enemy.unit_type, "and hit!"
             else:
-                print("You attack the", enemy.unit_type, "and hit!")
+                return "You attack", enemy.unit_type, "and hit!"
                 enemy.hp -= 1
                 if enemy.hp > 0:
-                    print(enemy.unit_type, "current hp is:", enemy.hp)
+                    return enemy.unit_type, "current hp is:", enemy.hp
         else:
-            print("You attack", enemy.unit_type + ", but you miss!")
+            return "You attack", enemy.unit_type, "but you missed!"
 
     @property
     def show_location(self):
@@ -93,7 +95,7 @@ class Player:
             new_room = dungeon_map.get_room(x, y+1)
         else:
             return False
-        new_room.dark = False
+        new_room.is_dark = False
         self.old_room = self.current_room
         self.current_room = new_room
         return new_room
