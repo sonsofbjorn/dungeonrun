@@ -1,5 +1,5 @@
 import random
-DEFAULT_HP = 100
+DEFAULT_HP = 10
 
 
 class Player:
@@ -31,6 +31,8 @@ class Player:
 
         else:
             raise Exception("No such class")
+
+        self.max_hp = self.hp
 
     def roll_dice(self, dice_type):
         if dice_type == "attack":

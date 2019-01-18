@@ -5,3 +5,4 @@ Test,knight,0,5
 Vamsi,knight,0,345
 Balle,knight,0,123
 2,thief,0,0
+Testing,knight,0,0

@@ -158,7 +158,7 @@ class View:
         a = 0
         dungeonmap = self.draw_map2(player, dungeon)
         for row in dungeonmap:
-            if a < 8:
+            if a < 12:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
                 if a%2 == 0:
                     print(row.center(os.get_terminal_size().columns+22), end="")
@@ -196,10 +196,16 @@ class View:
         print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))
 
     def print_hp_score_list(self, player):
+        losthp = player.max_hp - int(player.hp)
+        hpbar = "▒"*int(losthp)+"▓"*int(player.hp)
 
         hp_score_list = (" ╔══════════════════╗",
                          " ║        HP:       ║",
-                         " ║"+str(player.hp).center(18)+"║",
+                         " ║"+hpbar.center(18)+"║",
+                         " ╚══════════════════╝",
+                         " ╔══════════════════╗",
+                         " ║      CLASS:      ║",
+                         " ║"+player.hero_class.center(18) + "║",
                          " ╚══════════════════╝",
                          " ╔══════════════════╗",
                          " ║      SCORE:      ║",
