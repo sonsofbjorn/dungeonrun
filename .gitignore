@@ -104,3 +104,6 @@ venv.bak/
 .mypy_cache/
 *.xml
 *.iml
+
+# ignore players.txt
+/dungeonrun/players.txt

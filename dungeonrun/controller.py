@@ -35,7 +35,6 @@ class Controller:
                 break
 
             elif usr_choice == "2":
-                self.view.print_main_menu(View.enter_char_name)
                 while True:
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
@@ -47,7 +46,7 @@ class Controller:
                         self.view.print_main_menu(View.enter_char_name,
                                                   View.err_player_not_exist,
                                                   error=True)
-                        break
+                break
             # Use AI
             elif usr_choice == "3":
                 player_tuple = self.load_AI()
@@ -55,9 +54,11 @@ class Controller:
                 start_loc = self.start_loc_AI()
                 break
             # Highscore
+
             elif usr_choice == "4":
-                self.view.print_main_menu(View.highscore)
-                break
+                self.view.print_main_menu(self.get_top_highschores())
+                cont_inp = self.view.handle_input()
+
             # Quit
             elif usr_choice == "5":
                 self.view.print_main_menu(View.good_bye)
@@ -165,6 +166,10 @@ class Controller:
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_invalid_char,
                                           error=True)
+            elif len(usr_choice) == 0:
+                self.view.print_main_menu(View.enter_char_name,
+                                          View.err_choice,
+                                          error=True)
             elif self.player_exists(usr_choice):
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_player_exists,
@@ -221,6 +226,22 @@ class Controller:
                 if username == uname.capitalize():
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
+
+    def get_top_highschores(self):
+        """
+        This function reads players.txt and returns a list
+        of strings for the top 5 players
+        """
+        scores = []
+        filename = "players.txt"
+        with open(filename, mode="r") as f:
+            for line in f:
+                x = line.split(',')
+                scores.append("{:006d}{:>20s}".format(int(x[-1]), x[0]))
+            scores.sort()
+            scores.append('~ H I G H S C O R E ~')
+            scores.reverse()
+        return scores[:6]
 
     def load_AI(self):
         '''
@@ -302,6 +323,7 @@ class Controller:
 
         self.view.print_game(player, dungeon, View.direction_option)
         while True:
+
             if player.hp < 1:
                 break
 
@@ -325,29 +347,37 @@ class Controller:
                 inp = self.view.handle_input()
             # inp = self.view.handle_input()
 
-            new_room = player.move_character(inp, dungeon)
+            # ASK PLAYER DIRECTION
+            self.view.print_game(player, dungeon, View.direction_option)
+            direction = self.view.handle_input()
+            new_room = self.move_player(player, direction, dungeon)
+
             if new_room is False:
                 self.view.print_game(player,
                                      dungeon,
                                      View.direction_option,
                                      View.err_choice,
                                      error=True)
+                time.sleep(2)
             else:
                 self.view.print_game(player,
                                      dungeon,
                                      View.direction_option)
 
             if player.current_room.hasExit is True:
+                # LOGIC FOR EXITING GAME NOT WORKING!
                 self.view.print_game(player,
                                      dungeon,
-                                     View.leave_question)
+                                     View.leave_question,
+                                     View.leave_options,
+                                     leave_q=True)
+                time.sleep(2)
             while len(player.current_room.monsters) > 0:
-                for monster in player.current_room.monsters:
-                    self.view.print_game(player,
-                                         dungeon,
-                                         View.show_monsters,
-                                         monster.unit_type,
-                                         foes=True)
+                self.view.print_game(player,
+                                     dungeon,
+                                     View.show_monsters,
+                                     player.current_room.get_room_monsters(),
+                                     foes=True)
                 time.sleep(3)
                 while len(player.current_room.monsters) > 0:
                     self.combat(player, dungeon)
@@ -379,8 +409,8 @@ class Controller:
         """
         initiative_list = []
         monster = player.current_room.monsters[0]
-        player_init = player.roll_dice("initiative")
-        monster_init = monster.roll_dice("initiative")
+        player_init = self.roll_dice(player, "initiative")
+        monster_init = self.roll_dice(monster, "initiative")
         if player.special_ability == "block":
             player.block = True
         if monster_init > player_init:
@@ -408,6 +438,7 @@ class Controller:
                                          View.player_killed,
                                          monster.unit_type,
                                          killed=True)
+                    time.sleep(3)
                     initiative_list = []
                     player.current_room.monsters.pop(0)
                     break
@@ -423,7 +454,12 @@ class Controller:
                         else:
                             choice = self.view.handle_input()
                         if choice == "1":
-                            actor.attack_function(monster)
+                            result = self.attack_function(actor, monster)
+                            self.view.print_game(player,
+                                                 dungeon,
+                                                 *result,
+                                                 show_result=True)
+                            time.sleep(2)
                             break
                         elif choice == "2":
                             escape = player.escape_combat()
@@ -439,7 +475,88 @@ class Controller:
                                 self.view.print_game(player,
                                                      dungeon,
                                                      View.player_failed_escape)
+                                time.sleep(3)
                                 break
                 else:
-                    actor.attack_function(player)
+                    result = self.attack_function(actor, player)
+                    self.view.print_game(player,
+                                         dungeon,
+                                         *result,
+                                         show_result=True)
+                    time.sleep(2)
         return True
+
+    def move_player(self, player, direction, dungeon_map):
+        x = player.current_room.position[0]
+        y = player.current_room.position[1]
+
+        direction = direction.upper()[:1]
+
+        while True:
+            if player.current_room.doors.get(direction) is False:
+                return False
+            else:
+                break
+
+        if direction == "W":
+            new_room = dungeon_map.get_room(x-1, y)
+        elif direction == "N":
+            new_room = dungeon_map.get_room(x, y-1)
+        elif direction == "E":
+            new_room = dungeon_map.get_room(x+1, y)
+        elif direction == "S":
+            new_room = dungeon_map.get_room(x, y+1)
+        else:
+            return False
+        new_room.dark = False
+        player.old_room = player.current_room
+        player.current_room = new_room
+
+        return new_room
+
+    def attack_function(self, attacker, defender):
+        attacker_roll = self.roll_dice(attacker, "attack")
+        defender_roll = self.roll_dice(defender, "dexterity")
+
+        if attacker_roll > defender_roll:
+            if isinstance(attacker, Player):
+                if attacker.hero_class == "thief":
+                    critical_hit = random.randrange(0, 100)
+                    if critical_hit >= 75:
+                        defender.hp -= 2
+                        return attacker.name, View.player_crit, defender.unit_type
+                    else:
+                        defender.hp -= 1
+                        return attacker.name, View.player_hit, defender.unit_type
+                else:
+                    defender.hp -= 1
+                    return View.player_hit, defender.unit_type, View.for_one_dmg
+            else:
+                if defender.hero_class == "knight":
+                    if defender.block is True:
+                        defender.block = False
+                        return View.monster_hit, attacker.unit_type, View.shield_block
+                    else:
+                        defender.hp -= 1
+                        return View.monster_hit, attacker.unit_type, View.for_one_dmg
+                else:
+                    defender.hp -= 1
+                    return View.monster_hit, attacker.unit_type, View.for_one_dmg
+        else:
+            if isinstance(attacker, Player):
+                return View.player_miss, defender.unit_type
+            else:
+                return attacker.unit_type, View.monster_miss
+
+
+    def roll_dice(self, user, dice_type):
+        if dice_type == "attack":
+            dice_type = user.attack
+        elif dice_type == "dexterity":
+            dice_type = user.dexterity
+        elif dice_type == "initiative":
+            dice_type = user.initiative
+        value = 0
+        for x in range(0, dice_type):
+            value += random.randrange(0, dice_type)
+        return value

@@ -49,6 +49,8 @@ class View:
 
     attack_options = ["[1] Attack!",
                       "[2] Flee!"]
+    leave_options = ["[1] Yes",
+                     "[2] No"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
@@ -57,12 +59,21 @@ class View:
     leave_question = ["You see a staircaise,", "do you want to leave?"]
 
     show_monsters = ["Uhuh! ENEMIES! You see the following foes: ", ""]
+
     score_text = ["Your current score is: "]
     loot_text = ["You found loot! The following loot was added to your backback: "]
     player_dead = ["You have been slained by: "]
     player_killed = ["You have slain the: "]
     player_escaped = ["You have escaped!"]
     player_failed_escape = ["You have failed to escape!"]
+    player_hit = ["You hit"]
+    monster_hit = ["You have been hit by "]
+    for_one_dmg = ["for 1 damage"]
+    player_miss = ["You missed"]
+    monster_miss = ["missed you"]
+    player_crit = [" did a critical hit "]
+    shield_block = ["but your shield blocked the attack!"]
+    hit = [" hit "]
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []
@@ -129,7 +140,12 @@ class View:
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
 
         menu = []
-        menu = input_menu.copy()
+
+        if isinstance(input_menu, str) or not hasattr(input_menu, "__iter__"):
+            menu.append(input_menu)
+        else:
+            menu = input_menu.copy()
+
         if kwargs:
             if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
                 to_list = list()
@@ -174,9 +190,17 @@ class View:
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
         sidebox = self.print_hp_score_list(player)
         a = 0
-        dungeonmap = self.draw_map(player, dungeon)
+        dungeonmap = self.draw_map2(player, dungeon)
+        if len(dungeonmap) < 13:
+            for x in range(6):
+                hehe1 = ("║" + " " * 60 + "║")
+                print(hehe1.center(os.get_terminal_size().columns))
+        elif len(dungeonmap) < 16:
+            for x in range(4):
+                hehe1 = ("║" + " " * 60 + "║")
+                print(hehe1.center(os.get_terminal_size().columns))
         for row in dungeonmap:
-            if a < 8:
+            if a < 12:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
                 if a % 2 == 0:
                     print(row.center(os.get_terminal_size().columns+22), end="")
@@ -186,10 +210,13 @@ class View:
                 row = ("║" + row.center(60) + "║")
                 print(row.center(os.get_terminal_size().columns))
             a += 1
-        if len(dungeonmap) < 10:
-            count = 10 - len(dungeonmap)
-            for i in range(count):
-                hehe1 = ("║"+" "*60+"║")
+        if len(dungeonmap) < 13:
+            for x in range(6):
+                hehe1 = ("║" + " " * 60 + "║")
+                print(hehe1.center(os.get_terminal_size().columns))
+        elif len(dungeonmap) < 16:
+            for x in range(5):
+                hehe1 = ("║" + " " * 60 + "║")
                 print(hehe1.center(os.get_terminal_size().columns))
         print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
         print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
@@ -197,7 +224,12 @@ class View:
         print("   ╔════════════════════════════════════════════════════════════════════════════╗   ".center(os.get_terminal_size().columns))
         print("   ║                                                                            ║   ".center(os.get_terminal_size().columns))
         menu = []
-        menu = input_menu.copy()
+
+        if isinstance(input_menu, str) or not hasattr(input_menu, "__iter__"):
+            menu.append(input_menu)
+        else:
+            menu = input_menu.copy()
+
         if kwargs:
             if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
                 to_list = list()
@@ -205,6 +237,7 @@ class View:
             else:
                 to_list = args[0]
             menu += to_list
+
         for row in menu:
             row = ("║"+row.center(76)+"║")
             print(row.center(os.get_terminal_size().columns))
@@ -214,9 +247,15 @@ class View:
         print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))
 
     def print_hp_score_list(self, player):
+        losthp = player.max_hp - int(player.hp)
+        hpbar = "▒"*int(losthp)+"▓"*int(player.hp)
         hp_score_list = (" ╔══════════════════╗",
                          " ║        HP:       ║",
-                         " ║"+str(player.hp).center(18)+"║",
+                         " ║"+hpbar.center(18)+"║",
+                         " ╚══════════════════╝",
+                         " ╔══════════════════╗",
+                         " ║      CLASS:      ║",
+                         " ║"+player.hero_class.center(18) + "║",
                          " ╚══════════════════╝",
                          " ╔══════════════════╗",
                          " ║      SCORE:      ║",
