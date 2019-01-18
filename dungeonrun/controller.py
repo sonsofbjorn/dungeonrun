@@ -320,42 +320,19 @@ class Controller:
         elif player.current_room.position == (dungeon.size-1, dungeon.size-1):
             player.destination = dungeon.get_room(0, 0)
 
-    def ai_move(self, player):
-        if player.current_room.position[0] > player.destination.position[0]:
-            print("going west")
-            direction = "w"
-        elif player.current_room.position[0] < player.destination.position[0]:
-            print("going east")
-            direction = "e"
-        elif player.current_room.position[1] > player.destination.position[1]:
-            print("going north")
-            direction = "n"
-        elif player.current_room.position[1] < player.destination.position[1]:
-            print("going south")
-            direction = "s"
-        else:
-            print("cannot find path to", player.destination.position)
-            direction = "lolrandum"
-        return direction
-
     def game_loop(self, player, dungeon):
         """
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
-
-        self.view.print_game(player, dungeon, View.direction_option)
         while True:
-
+            self.view.print_game(player, dungeon, View.direction_option)
             if player.hp < 1:
                 break
 
-            self.view.print_game(player, dungeon, View.direction_option)
+            direction = self.view.handle_input()
+            # inp = self.view.handle_input()
             # ASK PLAYER DIRECTION
-            if player.ai is True:
-                direction = self.ai_move(player)
-            else:
-                direction = self.view.handle_input()
             new_room = self.move_player(player, direction, dungeon)
 
             if new_room is False:
@@ -388,14 +365,10 @@ class Controller:
                 while len(player.current_room.monsters) > 0:
                     self.combat(player, dungeon)
             while len(player.current_room.treasures) > 0:
-                # Not as intended
-                self.view.print_game(player,
-                                     dungeon,
-                                     View.score_text,
-                                     str(player.score),
-                                     score=True)
+                self.loot(player, dungeon)
 
-    def loot(self, player):
+
+    def loot(self, player, dungeon):
         """
         Returns a list of looted items to be displayed for the user
         """
@@ -405,6 +378,13 @@ class Controller:
             player.score += loot.value
             player.current_room.treasures.pop(0)
             looted.append(loot.item_type)
+            self.view.print_game(player,
+                                 dungeon,
+                                 View.loot_text,
+                                 loot.item_type,
+                                 loot=True)
+            time.sleep(3)
+
         return looted
 
     def combat(self, player, dungeon):
