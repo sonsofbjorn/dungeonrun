@@ -36,6 +36,7 @@ class Controller:
 
             elif usr_choice == "2":
                 while True:
+                    self.view.print_main_menu(View.enter_char_name)
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
@@ -57,7 +58,8 @@ class Controller:
 
             elif usr_choice == "4":
                 self.view.print_main_menu(self.get_top_highschores())
-                cont_inp = self.view.handle_input()
+                self.view.handle_input()  # ENTER TO CONTINUE
+                break
 
             # Quit
             elif usr_choice == "5":
