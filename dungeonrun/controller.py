@@ -34,8 +34,8 @@ class Controller:
                 break
 
             elif usr_choice == "2":
-                self.view.print_main_menu(View.enter_char_name)
                 while True:
+                    self.view.print_main_menu(View.enter_char_name)
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
@@ -46,7 +46,7 @@ class Controller:
                         self.view.print_main_menu(View.enter_char_name,
                                                   View.err_player_not_exist,
                                                   error=True)
-                        break
+                break
             # Use AI
             elif usr_choice == "3":
                 player_tuple = self.load_AI()
@@ -311,26 +311,35 @@ class Controller:
         play in the dungeon! :)
         """
         while True:
-            self.view.print_game(player, dungeon, View.direction_option)
+
             if player.hp < 1:
                 break
+
+            # ASK PLAYER DIRECTION
+            self.view.print_game(player, dungeon, View.direction_option)
             direction = self.view.handle_input()
             new_room = self.move_player(player, direction, dungeon)
+
             if new_room is False:
                 self.view.print_game(player,
                                      dungeon,
                                      View.direction_option,
                                      View.err_choice,
                                      error=True)
+                time.sleep(2)
             else:
                 self.view.print_game(player,
                                      dungeon,
                                      View.direction_option)
 
             if player.current_room.hasExit is True:
+                # LOGIC FOR EXITING GAME NOT WORKING!
                 self.view.print_game(player,
                                      dungeon,
-                                     View.leave_question)
+                                     View.leave_question,
+                                     View.leave_options,
+                                     leave_q=True)
+                time.sleep(2)
             while len(player.current_room.monsters) > 0:
                 for monster in player.current_room.monsters:
                     self.view.print_game(player,
@@ -369,8 +378,8 @@ class Controller:
         """
         initiative_list = []
         monster = player.current_room.monsters[0]
-        player_init = player.roll_dice("initiative")
-        monster_init = monster.roll_dice("initiative")
+        player_init = self.roll_dice(player, "initiative")
+        monster_init = self.roll_dice(monster, "initiative")
         if player.special_ability == "block":
             player.block = True
         if monster_init > player_init:
@@ -413,8 +422,9 @@ class Controller:
                             result = self.attack_function(actor, monster)
                             self.view.print_game(player,
                                                  dungeon,
-                                                 *result)
-                            time.sleep(5)
+                                                 *result,
+                                                 show_result=True)
+                            time.sleep(2)
                             break
                         elif choice == "2":
                             escape = player.escape_combat()
@@ -436,7 +446,8 @@ class Controller:
                     result = self.attack_function(actor, player)
                     self.view.print_game(player,
                                          dungeon,
-                                         *result)
+                                         *result,
+                                         show_result=True)
                     time.sleep(2)
         return True
 

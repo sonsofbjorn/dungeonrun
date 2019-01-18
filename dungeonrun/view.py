@@ -49,6 +49,8 @@ class View:
 
     attack_options = ["[1] Attack!",
                       "[2] Flee!"]
+    leave_options = ["[1] Yes",
+                     "[2] No"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
@@ -57,6 +59,7 @@ class View:
     leave_question = ["You see a staircaise,", "do you want to leave?"]
 
     show_monsters = ["Uhuh! ENEMIES! You see the following foes: ", ""]
+
     score_text = ["Your current score is: "]
     loot_text = ["You found loot! The following loot was added to your backback: "]
     player_dead = ["You have been slained by: "]
@@ -205,6 +208,7 @@ class View:
             else:
                 to_list = args[0]
             menu += to_list
+
         for row in menu:
             row = ("║"+row.center(76)+"║")
             print(row.center(os.get_terminal_size().columns))
