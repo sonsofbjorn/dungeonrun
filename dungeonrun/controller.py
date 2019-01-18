@@ -18,7 +18,8 @@ class Controller:
 
         When we have all the necessary information we run init_objects.
         That function will generate the objects and then pass on into the
-        game_loop
+        game_loop.
+        Returns AI = True if player chose an AI.
         """
         # PRINTS MAIN MENU
         self.view.print_main_menu(View.welcome_menu)
@@ -66,8 +67,10 @@ class Controller:
                 self.view.print_main_menu(View.welcome_menu,
                                           View.err_choice,
                                           error=True)
-
-        self.init_objects(*player_tuple, start_loc, dungeon_size)
+        if usr_choice == "3":
+            self.init_objects(*player_tuple, start_loc, dungeon_size, True)
+        else:
+            self.init_objects(*player_tuple, start_loc, dungeon_size)
 
     def map_size_menu(self):
         """
@@ -220,6 +223,10 @@ class Controller:
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
     def load_AI(self):
+        '''
+        Loads a knight, wiz or thief character from AI.txt
+        Returns a tuple with name and role
+        '''
         self.view.print_main_menu(View.choose_AI)
         while True:
             uclass = input(">>")
@@ -241,11 +248,12 @@ class Controller:
                 if username == uname:
                     return username, role
 
-    def init_objects(self, player, role, start_loc, dungeon_size):
+    def init_objects(self, player, role, start_loc, dungeon_size, ai_check=False):
         """
         this function will init objects
         player, role, start_loc is a string.
-        dungeon_size is an int
+        dungeon_size is an int,
+        ai_check is a boolean (default False) to see if player is an AI
         This function will generate game objects,
         dungeon, start_room and player
         """
@@ -266,23 +274,56 @@ class Controller:
             start_room = dungeon.corner["SE"]
             dungeon.get_room(0, 0).hasExit = True
 
-
         player = Player(player, role, start_room)
+        if ai_check is True:
+            player.AI = True
+            player.start_room = start_room
+            self.ai_find_exit(player, dungeon)
         player.current_room.isDark = False
         player.current_room.monsters = []
         player.current_room.treasures = []
         self.game_loop(player, dungeon)  # Should we run this here?
+
+    def ai_find_exit(self, player, dungeon):
+        if player.current_room.position == (0, 0):
+            player.destination = dungeon.get_room(dungeon.size-1, dungeon.size-1)
+        elif player.current_room.position == (dungeon.size-1, 0):
+            player.destination = dungeon.get_room(0, dungeon.size-1)
+        elif player.current_room.position == (0, dungeon.size-1):
+            player.destination = dungeon.get_room(dungeon.size-1, 0)
+        elif player.current_room.position == (dungeon.size-1, dungeon.size-1):
+            player.destination = dungeon.get_room(0, 0)
 
     def game_loop(self, player, dungeon):
         """
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
+
         self.view.print_game(player, dungeon, View.direction_option)
         while True:
             if player.hp < 1:
                 break
-            inp = self.view.handle_input()
+
+            if player.AI is True:
+                if player.current_room.position[0] > player.destination.position[0]:
+                    print("going west")
+                    inp = "w"
+                elif player.current_room.position[0] < player.destination.position[0]:
+                    print("going east")
+                    inp = "e"
+                elif player.current_room.position[1] > player.destination.position[1]:
+                    print("going north")
+                    inp = "n"
+                elif player.current_room.position[1] < player.destination.position[1]:
+                    print("going south")
+                    inp = "s"
+                else:
+                    print("go find", player.destination.position)
+                    inp = "lolrandum"
+            else:
+                inp = self.view.handle_input()
+            # inp = self.view.handle_input()
 
             new_room = player.move_character(inp, dungeon)
             if new_room is False:
@@ -377,7 +418,10 @@ class Controller:
                                              View.attack_options,
                                              monster.unit_type,
                                              monster=True)
-                        choice = self.view.handle_input()
+                        if actor.AI is True:
+                            choice = "1"
+                        else:
+                            choice = self.view.handle_input()
                         if choice == "1":
                             actor.attack_function(monster)
                             break

@@ -181,8 +181,8 @@ class Monster:
 
 
 class Treasure:
-    available_items = {"loose change","money pouch",
-    "gold jewelry","gemstone","small treasurechest"}
+    available_items = {"loose change", "money pouch",
+    "gold jewelry", "gemstone", "small treasurechest"}
 
     def __init__(self, item_type, room):
         self.item_type = item_type
