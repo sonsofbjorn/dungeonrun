@@ -172,9 +172,8 @@ class Monster:
                     player.block = False
                 else:
                     print(player.name, "is hit by the", str(self.unit_type) + "!")
-                    player.hp -= 1
-                    print("You have", player.hp, "hp remaining!")
-
+                player.hp -= 1
+                print("You have", player.hp, "hp remaining!")
             else:
                 print(player.name, "is hit by the", str(self.unit_type) + "!")
                 player.hp -= 1

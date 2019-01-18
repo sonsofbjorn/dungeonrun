@@ -1,5 +1,5 @@
-from dungeonrun.player import Player
-from dungeonrun.dungeon import Map
+from player import Player
+from dungeon import Map
 
 
 class Menu:

@@ -43,12 +43,26 @@ class View:
                      "[3] South-West",
                      "[4] South-East"]
 
-    direction_option = ["where do you want to go"]
+    direction_option = ["        [N] North      ",
+                        "[W] West          [E] East",
+                        "        [S] South      "]
+
+    attack_options = ["[1] Attack!",
+                      "[2] Flee!"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
     enter_char_name = ["", "Enter character name: "]
 
+    leave_question = ["You see a staircaise,", "do you want to leave?"]
+
+    show_monsters = ["Uhuh! ENEMIES! You see the following foes: ", ""]
+    score_text = ["Your current score is: "]
+    loot_text = ["You found loot! The following loot was added to your backback: "]
+    player_dead = ["You have been slained by: "]
+    player_killed = ["You have slain the: "]
+    player_escaped = ["You have escaped!"]
+    player_failed_escape = ["You have failed to escape!"]
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []
@@ -68,7 +82,11 @@ class View:
         elif platform.system() == "Windows":
             return os.system('cls')
 
-    def draw_map2(self, dungeon, player):
+    def draw_map(self, player, dungeon):
+        """
+        This takes in player and dungeon object
+        Returns a list with the map and player loc
+        """
         output = []
         outrow = ""
         for row in dungeon:
@@ -90,15 +108,21 @@ class View:
                 outrow = ""
         return output
 
-    def print_start_menu(self, input_menu, *args, **kwargs):
+    def print_main_menu(self, input_menu, *args, **kwargs):
+        """
+        Prints main menu, takes in *args which can be list, or strings and
+        will be printed as the menu.
+        **kwargs is a keyword argument if you want to show extra information,
+        you will then send in an extra string/list.
+        """
         self.clear_console()
-        print("______                                                              ".center(os.get_terminal_size().columns))
+        print("\033[91m"+"______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
         print("| | | || | | || '_ \  / _` | / _ \ / _ \ | '_ \ | '__|| | | || '_ \ ".center(os.get_terminal_size().columns))
         print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
-        print("        ╔═════════════ __/ | ══════════════════════════════╗        ".center(os.get_terminal_size().columns))
+        print("\033[95m"+"        ╔═════════════ __/ | ══════════════════════════════╗        ".center(os.get_terminal_size().columns))
         print("        ║             |___/                                ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
@@ -107,7 +131,12 @@ class View:
         menu = []
         menu = input_menu.copy()
         if kwargs:
-            menu += args[0]
+            if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
+                to_list = list()
+                to_list.append(args[0])
+            else:
+                to_list = args[0]
+            menu += to_list
         for row in menu:
             row = ("║"+row.center(50)+"║")
             print(row.center(os.get_terminal_size().columns))
@@ -119,9 +148,18 @@ class View:
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
         menu = []
-        #self.error_msg = []
 
-    def print_game(self, player, dungeonmap, menulist):
+    def print_game(self, player, dungeon, input_menu, *args, **kwargs):
+        """
+        This prints all the GFX for the game loop.
+        Needs player object, dungeon and a menu list. Use *args and **kwargs
+        to display extra information addition to the menu list.
+
+        *args = an extra list of information we want to display
+        **kwargs = is a keyword boolean and should be true if we want to
+        show extra info.
+        """
+
         self.clear_console()
         nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+player.name.center(18)+"║  ")
         print("______                                                              ".center(os.get_terminal_size().columns))
@@ -136,10 +174,11 @@ class View:
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
         sidebox = self.print_hp_score_list(player)
         a = 0
+        dungeonmap = self.draw_map(player, dungeon)
         for row in dungeonmap:
             if a < 8:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
-                if a%2 == 0:
+                if a % 2 == 0:
                     print(row.center(os.get_terminal_size().columns+22), end="")
                 else:
                     print(row.center(os.get_terminal_size().columns-22))
@@ -157,7 +196,16 @@ class View:
         print("╚════════════════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
         print("   ╔════════════════════════════════════════════════════════════════════════════╗   ".center(os.get_terminal_size().columns))
         print("   ║                                                                            ║   ".center(os.get_terminal_size().columns))
-        for row in menulist:
+        menu = []
+        menu = input_menu.copy()
+        if kwargs:
+            if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
+                to_list = list()
+                to_list.append(args[0])
+            else:
+                to_list = args[0]
+            menu += to_list
+        for row in menu:
             row = ("║"+row.center(76)+"║")
             print(row.center(os.get_terminal_size().columns))
         for i in range(10):
@@ -166,7 +214,6 @@ class View:
         print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))
 
     def print_hp_score_list(self, player):
-
         hp_score_list = (" ╔══════════════════╗",
                          " ║        HP:       ║",
                          " ║"+str(player.hp).center(18)+"║",
@@ -178,27 +225,8 @@ class View:
                          )
         return hp_score_list
 
-
-
-
-
     def center_text(self, text):
         print(text.center(os.get_terminal_size().columns))
 
-    def draw_start_location_options(self):
-        self.print_it(self.test_list())
-        startcorner = input(">>")
-        return startcorner
-
-    def draw_map_loop(self):
-        print(self.p.name + ", you are in", self.p.show_location)
-        print(self.p.name + ", where do you want to go? West, North, East, or South?")
-        inp = input(">>")
-        return inp
-
     def handle_input(self):
         return input()
-
-    def handle_error(self, err):
-        self.error_msg = []
-        self.error_msg = err

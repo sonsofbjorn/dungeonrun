@@ -19,6 +19,10 @@ Musse,knight,0,0
 Kisse,knight,0,0
 Klasse,thief,0,0
 Katja,wizard,0,0
+Larissa,wizard,0,0
+Larissas,wizard,0,0
+Micke5,wizard,0,0
+Micke4,wizard,0,0
+Micke10,thief,0,0
 1,knight,0,0
-55,wizard,0,0
-Knightman,knight,0,0
+Blorg,knight,0,0
