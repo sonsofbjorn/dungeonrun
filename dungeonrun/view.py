@@ -7,8 +7,9 @@ class View:
     welcome_menu = ["Welcome to... DUNGEON RUN!",
                     "[1] New Character",
                     "[2] Load Character",
-                    "[3] Highest score",
-                    "[4] Quit"]
+                    "[3] Load AI Character",
+                    "[4] Highest score",
+                    "[5] Quit"]
 
     start_location = ["Choose your starting location:",
                       "[1] North-West",
@@ -25,6 +26,16 @@ class View:
                    "[1] 4x4",
                    "[2] 5x5",
                    "[3] 8x8"]
+
+    choose_AI = ["Please choose AI:",
+                 "[1] AI Knight",
+                 "[2] AI Wizard",
+                 "[3] AI Thief"]
+
+    highscore = ["Display highscore:",
+                 "number 1 is me",
+                 "number 2 is you",
+                 "number 3 is some other dude"]
 
     choose_corner = ["Choose your starting location:",
                      "[1] North-West",

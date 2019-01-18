@@ -16,18 +16,21 @@ class Player:
             self.hp = 9
             self.attack = 6
             self.dexterity = 4
+            self.special_ability = "block"
 
         elif hero_class.lower() == "wizard":
             self.initiative = 6
             self.hp = 4
             self.attack = 9
             self.dexterity = 5
+            self.special_ability = "light"
 
         elif hero_class.lower() == "thief":
             self.initiative = 7
             self.hp = 5
             self.attack = 5
             self.dexterity = 7
+            self.special_ability = "crit"
 
         else:
             raise Exception("No such class")
@@ -48,7 +51,7 @@ class Player:
         attacker_roll = self.roll_dice("attack")
         monster_roll = enemy.roll_dice("dexterity")
         if attacker_roll > monster_roll:
-            if self.hero_class == "thief":
+            if self.special_ability == "crit":
                 critical_hit = random.randrange(0, 100)
                 if critical_hit >= 75:
                     print("OH YEAH, IT'S A CRITICAL HIT!")
@@ -96,7 +99,7 @@ class Player:
         return new_room
 
     def escape_combat(self):
-        if self.hero_class == "wizard":
+        if self.special_ability == "light":
             escape_chance = 20  # 20-100: you gucci
         else:
             escape_chance = self.dexterity*10
