@@ -3,6 +3,7 @@ from player import Player
 from dungeon import Map
 
 import time
+import random
 
 
 class Controller:
@@ -112,7 +113,6 @@ class Controller:
             start_room = dungeon.corner["SE"]
             dungeon.get_room(0, 0).hasExit = True
 
-        print(start_room)
         player = Player(player, role, start_room)
         player.current_room.isDark = False
         player.current_room.monsters = []
@@ -228,13 +228,12 @@ class Controller:
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
-        self.view.print_game(player, dungeon, View.direction_option)
         while True:
+            self.view.print_game(player, dungeon, View.direction_option)
             if player.hp < 1:
                 break
-            inp = self.view.handle_input()
-
-            new_room = player.move_character(inp, dungeon)
+            direction = self.view.handle_input()
+            new_room = self.move_player(player, direction, dungeon)
             if new_room is False:
                 self.view.print_game(player,
                                      dungeon,
@@ -327,7 +326,10 @@ class Controller:
                                              monster=True)
                         choice = self.view.handle_input()
                         if choice == "1":
-                            result = actor.attack_function(monster)
+                            result = self.attack_function(actor, monster)
+                            self.view.print_game(player,
+                                                 dungeon,
+                                                 *result)
                             time.sleep(5)
                             break
                         elif choice == "2":
@@ -347,6 +349,84 @@ class Controller:
                                 time.sleep(3)
                                 break
                 else:
-                    result = actor.attack_function(player)
-                    time.sleep(5)
+                    result = self.attack_function(actor, player)
+                    self.view.print_game(player,
+                                         dungeon,
+                                         *result)
+                    time.sleep(2)
         return True
+
+    def move_player(self, player, direction, dungeon_map):
+        x = player.current_room.position[0]
+        y = player.current_room.position[1]
+
+        direction = direction.upper()[:1]
+
+        while True:
+            if player.current_room.doors.get(direction) is False:
+                return False
+            else:
+                break
+
+        if direction == "W":
+            new_room = dungeon_map.get_room(x-1, y)
+        elif direction == "N":
+            new_room = dungeon_map.get_room(x, y-1)
+        elif direction == "E":
+            new_room = dungeon_map.get_room(x+1, y)
+        elif direction == "S":
+            new_room = dungeon_map.get_room(x, y+1)
+        else:
+            return False
+        new_room.dark = False
+        player.old_room = player.current_room
+        player.current_room = new_room
+
+        return new_room
+
+    def attack_function(self, attacker, defender):
+        attacker_roll = self.roll_dice(attacker, "attack")
+        defender_roll = self.roll_dice(defender, "dexterity")
+
+        if attacker_roll > defender_roll:
+            if isinstance(attacker, Player):
+                if attacker.hero_class == "thief":
+                    critical_hit = random.randrange(0, 100)
+                    if critical_hit >= 75:
+                        defender.hp -= 2
+                        return attacker.name, " did a critical hit against ", defender.unit_type
+                    else:
+                        defender.hp -= 1
+                        return attacker.name, " hit ", defender.unit_type
+                else:
+                    defender.hp -= 1
+                    return "you attack", defender.unit_type
+            else:
+                if defender.hero_class == "knight":
+                    if defender.block is True:
+                        defender.block = False
+                        return "You have been hit by ", attacker.unit_type, " but your shield blocked the attack"
+                    else:
+                        defender.hp -= 1
+                        return "You have been hit by ", attacker.unit_type
+                else:
+                    defender.hp -= 1
+                    return "You have been hit by ", attacker.unit_type
+        else:
+            if isinstance(attacker, Player):
+                return "You missed ", defender.unit_type
+            else:
+                return attacker.unit_type, " missed you!"
+
+
+    def roll_dice(self, user, dice_type):
+        if dice_type == "attack":
+            dice_type = user.attack
+        elif dice_type == "dexterity":
+            dice_type = user.dexterity
+        elif dice_type == "initiative":
+            dice_type = user.initiative
+        value = 0
+        for x in range(0, dice_type):
+            value += random.randrange(0, dice_type)
+        return value
