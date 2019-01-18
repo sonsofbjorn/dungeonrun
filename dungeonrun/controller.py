@@ -332,29 +332,28 @@ class Controller:
             if player.hp < 1:
                 break
 
+            self.view.print_game(player, dungeon, View.direction_option)
             if player.ai is True:
                 if player.current_room.position[0] > player.destination.position[0]:
                     print("going west")
-                    inp = "w"
+                    direction = "w"
                 elif player.current_room.position[0] < player.destination.position[0]:
                     print("going east")
-                    inp = "e"
+                    direction = "e"
                 elif player.current_room.position[1] > player.destination.position[1]:
                     print("going north")
-                    inp = "n"
+                    direction = "n"
                 elif player.current_room.position[1] < player.destination.position[1]:
                     print("going south")
-                    inp = "s"
+                    direction = "s"
                 else:
                     print("go find", player.destination.position)
-                    inp = "lolrandum"
+                    direction = "lolrandum"
             else:
-                inp = self.view.handle_input()
+                direction = self.view.handle_input()
             # inp = self.view.handle_input()
 
             # ASK PLAYER DIRECTION
-            self.view.print_game(player, dungeon, View.direction_option)
-            direction = self.view.handle_input()
             new_room = self.move_player(player, direction, dungeon)
 
             if new_room is False:
@@ -454,7 +453,7 @@ class Controller:
                                              View.attack_options,
                                              monster.unit_type,
                                              monster=True)
-                        if actor.AI is True:
+                        if actor.ai is True:
                             choice = "1"
                         else:
                             choice = self.view.handle_input()
