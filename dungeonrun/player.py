@@ -37,10 +37,6 @@ class Player:
 
         self.max_hp = self.hp
 
-    @set.ai
-    def set_ai(self, is_ai):
-        self.ai = is_ai
-
     def roll_dice(self, dice_type):
         if dice_type == "attack":
             dice_type = self.attack
