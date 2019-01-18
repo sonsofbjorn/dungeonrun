@@ -1,0 +1,3 @@
+AI Knight,knight,0,0
+AI Wizard,wizard,0,0
+AI Thief,thief,0,0

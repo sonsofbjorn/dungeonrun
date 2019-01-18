@@ -27,7 +27,7 @@ class Map:
             Monster.available_monsters))
 
         self.treasurelist = list(self.generate_treasure(
-            Treasure.available_items.keys()))
+            Treasure.available_items))
 
         self.corner = {
             'NW': self.get_room(0, 0),
@@ -79,13 +79,11 @@ class Map:
                         room.monsters.append(newmonster)
                         yield newmonster
 
-    def generate_treasure(self, gold=("Loose change", "Money pouch",
-                                      "Gold jewelry", "Gemstone", "Small treasure chest")):
-        """ CASH CASH BABY
-        """
+    def generate_treasure(self, items):
+        # TODO: rewrite into general room filler function
         for row in self:
             for room in row:
-                tlist = list(gold)
+                tlist = list(items)
                 while(tlist):
                     newtreasure = Treasure(tlist.pop(), room)
                     if newtreasure.rarity >= random.randint(0, 100):
@@ -172,9 +170,8 @@ class Monster:
                     player.block = False
                 else:
                     print(player.name, "is hit by the", str(self.unit_type) + "!")
-                    player.hp -= 1
-                    print("You have", player.hp, "hp remaining!")
-
+                player.hp -= 1
+                print("You have", player.hp, "hp remaining!")
             else:
                 print(player.name, "is hit by the", str(self.unit_type) + "!")
                 player.hp -= 1
@@ -184,7 +181,8 @@ class Monster:
 
 
 class Treasure:
-    available_items = {}
+    available_items = ("loose change","money pouch",
+    "gold jewelry","gemstone","small treasurechest")
 
     def __init__(self, item_type, room):
         self.item_type = item_type
