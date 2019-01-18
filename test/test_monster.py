@@ -1,17 +1,12 @@
 import unittest
 
 from dungeonrun.dungeon import Map, Monster
-from dungeonrun.player import Player
-
 
 class testMap(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
         self.dungeon = Map(4)
-        self.p = Player("kngith", "knight", self.dungeon.get_room(2,1))
-
-        self.monster_list = [m for m in Monster.available_monsters]
 
         self.spider = Monster("giant spider", self.dungeon.get_room(1, 2))
         self.skeleton = Monster("skeleton", self.dungeon.get_room(0, 3))
