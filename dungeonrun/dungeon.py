@@ -150,42 +150,6 @@ class Monster:
             self.dexterity = 2
             self.rarity = 5
 
-    def roll_dice(self, dice_type):
-        if dice_type == "attack":
-            dice_type = self.attack
-        elif dice_type == "dexterity":
-            dice_type = self.dexterity
-        elif dice_type == "initiative":
-            dice_type = self.initiative
-        value = 0
-        for x in range(0, dice_type):
-            value += random.randrange(0, dice_type)
-        return value
-
-    def attack_function(self, player):
-        attacker_roll = self.roll_dice("attack")
-        player_roll = player.roll_dice("dexterity")
-        if attacker_roll > player_roll:
-            if player.hero_class == "knight":
-                if player.block is True:
-                    return "You have been hit by", str(self.unit_type) + ", but blocked it with your shield!"
-                    player.block = False
-                else:
-<<<<<<< HEAD
-                    player.hp -= 1
-                    return player.name, "is hit by the", str(self.unit_type) + "!"
-
-=======
-                    print(player.name, "is hit by the", str(self.unit_type) + "!")
-                player.hp -= 1
-                print("You have", player.hp, "hp remaining!")
->>>>>>> 37c327d85eae8d3ab7fb5c0de4aeadad34ed6219
-            else:
-                player.hp -= 1
-                return player.name, "is hit by the", str(self.unit_type) + "!"
-        else:
-            return "The", self.unit_type, "attacks", player.name + ", but misses!"
-
 
 class Treasure:
     available_items = {}
