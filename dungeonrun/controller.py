@@ -327,7 +327,8 @@ class Controller:
                                              monster=True)
                         choice = self.view.handle_input()
                         if choice == "1":
-                            actor.attack_function(monster)
+                            result = actor.attack_function(monster)
+                            time.sleep(5)
                             break
                         elif choice == "2":
                             escape = player.escape_combat()
@@ -343,7 +344,9 @@ class Controller:
                                 self.view.print_game(player,
                                                      dungeon,
                                                      View.player_failed_escape)
+                                time.sleep(3)
                                 break
                 else:
-                    actor.attack_function(player)
+                    result = actor.attack_function(player)
+                    time.sleep(5)
         return True

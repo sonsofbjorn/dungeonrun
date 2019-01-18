@@ -51,18 +51,18 @@ class Player:
             if self.hero_class == "thief":
                 critical_hit = random.randrange(0, 100)
                 if critical_hit >= 75:
-                    print("OH YEAH, IT'S A CRITICAL HIT!")
                     enemy.hp -= 2
+                    return "It's a critical hit!"
                 else:
-                    print("You attack the", enemy.unit_type, "and hit!")
                     enemy.hp -= 1
+                    return "You attack", enemy.unit_type, "and hit!"
             else:
-                print("You attack the", enemy.unit_type, "and hit!")
+                return "You attack", enemy.unit_type, "and hit!"
                 enemy.hp -= 1
                 if enemy.hp > 0:
-                    print(enemy.unit_type, "current hp is:", enemy.hp)
+                    return enemy.unit_type, "current hp is:", enemy.hp
         else:
-            print("You attack", enemy.unit_type + ", but you miss!")
+            return "You attack", enemy.unit_type, "but you missed!"
 
     @property
     def show_location(self):
