@@ -49,8 +49,9 @@ class Controller:
                 break
             # Highscore
             elif usr_choice == "3":
-                self.view.print_main_menu(View.highscore)
-                break
+                self.view.print_main_menu(self.get_top_highschores())
+                cont_inp = self.view.handle_input()
+
             # Quit
             elif usr_choice == "4":
                 self.view.print_main_menu(View.good_bye)
@@ -112,7 +113,6 @@ class Controller:
             start_room = dungeon.corner["SE"]
             dungeon.get_room(0, 0).hasExit = True
 
-        print(start_room)
         player = Player(player, role, start_room)
         player.current_room.isDark = False
         player.current_room.monsters = []
@@ -226,6 +226,22 @@ class Controller:
                 if username == uname.capitalize():
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
+
+    def get_top_highschores(self):
+        """
+        This function reads players.txt and returns a list
+        of strings for the top 5 players
+        """
+        scores = []
+        filename = "players.txt"
+        with open(filename, mode="r") as f:
+            for line in f:
+                x = line.split(',')
+                scores.append("{:006d}{:>20s}".format(int(x[-1]), x[0]))
+            scores.sort()
+            scores.append('~ H I G H S C O R E ~')
+            scores.reverse()
+        return scores[:6]
 
     def game_loop(self, player, dungeon):
         """
