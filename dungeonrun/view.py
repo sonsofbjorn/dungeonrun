@@ -66,6 +66,14 @@ class View:
     player_killed = ["You have slain the: "]
     player_escaped = ["You have escaped!"]
     player_failed_escape = ["You have failed to escape!"]
+    player_hit = ["You hit"]
+    monster_hit = ["You have been hit by "]
+    for_one_dmg = ["for 1 damage"]
+    player_miss = ["You missed"]
+    monster_miss = ["missed you"]
+    player_crit = [" did a critical hit "]
+    shield_block = ["but your shield blocked the attack!"]
+    hit = [" hit "]
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []
@@ -132,7 +140,12 @@ class View:
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
 
         menu = []
-        menu = input_menu.copy()
+
+        if isinstance(input_menu, str) or not hasattr(input_menu, "__iter__"):
+            menu.append(input_menu)
+        else:
+            menu = input_menu.copy()
+
         if kwargs:
             if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
                 to_list = list()
@@ -200,7 +213,12 @@ class View:
         print("   ╔════════════════════════════════════════════════════════════════════════════╗   ".center(os.get_terminal_size().columns))
         print("   ║                                                                            ║   ".center(os.get_terminal_size().columns))
         menu = []
-        menu = input_menu.copy()
+
+        if isinstance(input_menu, str) or not hasattr(input_menu, "__iter__"):
+            menu.append(input_menu)
+        else:
+            menu = input_menu.copy()
+
         if kwargs:
             if isinstance(args[0], str) or not hasattr(args[0], "__iter__"):
                 to_list = list()

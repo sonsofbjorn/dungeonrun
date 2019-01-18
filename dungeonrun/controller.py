@@ -341,12 +341,11 @@ class Controller:
                                      leave_q=True)
                 time.sleep(2)
             while len(player.current_room.monsters) > 0:
-                for monster in player.current_room.monsters:
-                    self.view.print_game(player,
-                                         dungeon,
-                                         View.show_monsters,
-                                         monster.unit_type,
-                                         foes=True)
+                self.view.print_game(player,
+                                     dungeon,
+                                     View.show_monsters,
+                                     player.current_room.get_room_monsters(),
+                                     foes=True)
                 time.sleep(3)
                 while len(player.current_room.monsters) > 0:
                     self.combat(player, dungeon)
@@ -407,6 +406,7 @@ class Controller:
                                          View.player_killed,
                                          monster.unit_type,
                                          killed=True)
+                    time.sleep(3)
                     initiative_list = []
                     player.current_room.monsters.pop(0)
                     break
@@ -489,29 +489,29 @@ class Controller:
                     critical_hit = random.randrange(0, 100)
                     if critical_hit >= 75:
                         defender.hp -= 2
-                        return attacker.name, " did a critical hit against ", defender.unit_type
+                        return attacker.name, View.player_crit, defender.unit_type
                     else:
                         defender.hp -= 1
-                        return attacker.name, " hit ", defender.unit_type
+                        return attacker.name, View.player_hit, defender.unit_type
                 else:
                     defender.hp -= 1
-                    return "you attack", defender.unit_type
+                    return View.player_hit, defender.unit_type, View.for_one_dmg
             else:
                 if defender.hero_class == "knight":
                     if defender.block is True:
                         defender.block = False
-                        return "You have been hit by ", attacker.unit_type, " but your shield blocked the attack"
+                        return View.monster_hit, attacker.unit_type, View.shield_block
                     else:
                         defender.hp -= 1
-                        return "You have been hit by ", attacker.unit_type
+                        return View.monster_hit, attacker.unit_type, View.for_one_dmg
                 else:
                     defender.hp -= 1
-                    return "You have been hit by ", attacker.unit_type
+                    return View.monster_hit, attacker.unit_type, View.for_one_dmg
         else:
             if isinstance(attacker, Player):
-                return "You missed ", defender.unit_type
+                return View.player_miss, defender.unit_type
             else:
-                return attacker.unit_type, " missed you!"
+                return attacker.unit_type, View.monster_miss
 
 
     def roll_dice(self, user, dice_type):

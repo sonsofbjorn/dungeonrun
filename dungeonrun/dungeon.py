@@ -115,6 +115,16 @@ class Room:
         # Position X,Y tuple
         self.position = (x, y)
 
+    def get_room_monsters(self):
+        """
+        Returns a list of monster types.
+        Each elemement is a string!
+        """
+        room_monsters = list()
+        for monster in self.monsters:
+            room_monsters.append(monster.unit_type)
+        return room_monsters
+
 
 class Monster:
 
