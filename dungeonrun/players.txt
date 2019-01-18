@@ -24,3 +24,4 @@ Larissas,wizard,0,0
 Micke5,wizard,0,0
 Micke4,wizard,0,0
 Micke10,thief,0,0
+   !,wizard,0,0

@@ -166,6 +166,10 @@ class Controller:
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_invalid_char,
                                           error=True)
+            elif len(usr_choice) == 0:
+                self.view.print_main_menu(View.enter_char_name,
+                                          View.err_choice,
+                                          error=True)
             elif self.player_exists(usr_choice):
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_player_exists,
