@@ -26,3 +26,4 @@ Micke4,wizard,0,0
 Micke10,thief,0,0
 1,knight,0,0
 Blorg,knight,0,0
+Morglesnurf,wizard,0,0
