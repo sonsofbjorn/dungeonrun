@@ -157,6 +157,14 @@ class View:
         sidebox = self.print_hp_score_list(player)
         a = 0
         dungeonmap = self.draw_map2(player, dungeon)
+        if len(dungeonmap) < 13:
+            for x in range(6):
+                hehe1 = ("║" + " " * 60 + "║")
+                print(hehe1.center(os.get_terminal_size().columns))
+        elif len(dungeonmap) < 16:
+            for x in range(4):
+                hehe1 = ("║" + " " * 60 + "║")
+                print(hehe1.center(os.get_terminal_size().columns))
         for row in dungeonmap:
             if a < 12:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
@@ -168,10 +176,13 @@ class View:
                 row = ("║" + row.center(60) + "║")
                 print(row.center(os.get_terminal_size().columns))
             a += 1
-        if len(dungeonmap) < 10:
-            count = 10 - len(dungeonmap)
-            for i in range(count):
-                hehe1 = ("║"+" "*60+"║")
+        if len(dungeonmap) < 13:
+            for x in range(6):
+                hehe1 = ("║" + " " * 60 + "║")
+                print(hehe1.center(os.get_terminal_size().columns))
+        elif len(dungeonmap) < 16:
+            for x in range(5):
+                hehe1 = ("║" + " " * 60 + "║")
                 print(hehe1.center(os.get_terminal_size().columns))
         print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
         print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
