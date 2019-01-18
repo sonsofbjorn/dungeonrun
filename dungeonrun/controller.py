@@ -29,8 +29,8 @@ class Controller:
 
             if usr_choice == "1":
                 player_tuple = self.new_player_menu()
-                dungeon = self.map_size_menu()
-                start_loc = self.start_loc_menu(dungeon)
+                dungeon_size = self.map_size_menu()
+                start_loc = self.start_loc_menu()
                 break
 
             elif usr_choice == "2":
