@@ -171,9 +171,15 @@ class Monster:
                     return "You have been hit by", str(self.unit_type) + ", but blocked it with your shield!"
                     player.block = False
                 else:
+<<<<<<< HEAD
                     player.hp -= 1
                     return player.name, "is hit by the", str(self.unit_type) + "!"
 
+=======
+                    print(player.name, "is hit by the", str(self.unit_type) + "!")
+                player.hp -= 1
+                print("You have", player.hp, "hp remaining!")
+>>>>>>> 37c327d85eae8d3ab7fb5c0de4aeadad34ed6219
             else:
                 player.hp -= 1
                 return player.name, "is hit by the", str(self.unit_type) + "!"
