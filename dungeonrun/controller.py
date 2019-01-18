@@ -297,15 +297,17 @@ class Controller:
             start_room = dungeon.corner["SE"]
             dungeon.get_room(0, 0).has_exit = True
 
-        player.current_room.is_dark = False
 
         player = Player(player, role, start_room)
+
         if ai_check is True:
             player.AI = True
             player.start_room = start_room
             self.ai_find_exit(player, dungeon)
         player.current_room.monsters = []
         player.current_room.treasures = []
+        player.current_room.is_dark = False
+
         self.game_loop(player, dungeon)  # Should we run this here?
 
     def ai_find_exit(self, player, dungeon):
