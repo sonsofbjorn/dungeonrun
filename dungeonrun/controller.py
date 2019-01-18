@@ -329,10 +329,10 @@ class Controller:
             self.view.print_game(player, dungeon, View.direction_option)
             if player.hp < 1:
                 break
-                
-            # ASK PLAYER DIRECTION
-            self.view.print_game(player, dungeon, View.direction_option)
+
             direction = self.view.handle_input()
+            # inp = self.view.handle_input()
+            # ASK PLAYER DIRECTION
             new_room = self.move_player(player, direction, dungeon)
 
             if new_room is False:
