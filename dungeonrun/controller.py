@@ -54,9 +54,11 @@ class Controller:
                 start_loc = self.start_loc_AI()
                 break
             # Highscore
+
             elif usr_choice == "4":
-                self.view.print_main_menu(View.highscore)
-                break
+                self.view.print_main_menu(self.get_top_highschores())
+                cont_inp = self.view.handle_input()
+
             # Quit
             elif usr_choice == "5":
                 self.view.print_main_menu(View.good_bye)
@@ -194,6 +196,10 @@ class Controller:
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_invalid_char,
                                           error=True)
+            elif len(usr_choice) == 0:
+                self.view.print_main_menu(View.enter_char_name,
+                                          View.err_choice,
+                                          error=True)
             elif self.player_exists(usr_choice):
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_player_exists,
@@ -250,6 +256,22 @@ class Controller:
                 if username == uname.capitalize():
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
+
+    def get_top_highschores(self):
+        """
+        This function reads players.txt and returns a list
+        of strings for the top 5 players
+        """
+        scores = []
+        filename = "players.txt"
+        with open(filename, mode="r") as f:
+            for line in f:
+                x = line.split(',')
+                scores.append("{:006d}{:>20s}".format(int(x[-1]), x[0]))
+            scores.sort()
+            scores.append('~ H I G H S C O R E ~')
+            scores.reverse()
+        return scores[:6]
 
     def load_AI(self):
         self.view.print_main_menu(View.choose_AI)
