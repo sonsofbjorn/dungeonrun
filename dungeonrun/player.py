@@ -3,13 +3,13 @@ DEFAULT_HP = 10
 
 
 class Player:
-    def __init__(self, name, hero_class, start_room, score=0, hp=DEFAULT_HP):
+    def __init__(self, name, hero_class, start_room, score=0):
         self.name = name.capitalize()
-        self.hp = hp
         self.hero_class = hero_class
         self.current_room = start_room
         self.score = score
         self.old_room = start_room
+        self.ai = False
 
         if hero_class.lower() == "knight":
             self.initiative = 5
@@ -36,6 +36,10 @@ class Player:
             raise Exception("No such class")
 
         self.max_hp = self.hp
+
+    @set.ai
+    def set_ai(self, is_ai):
+        self.ai = is_ai
 
     def roll_dice(self, dice_type):
         if dice_type == "attack":

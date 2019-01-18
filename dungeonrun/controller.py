@@ -301,7 +301,7 @@ class Controller:
         player = Player(player, role, start_room)
 
         if ai_check is True:
-            player.AI = True
+            player.set_ai = True
             player.start_room = start_room
             self.ai_find_exit(player, dungeon)
         player.current_room.monsters = []
