@@ -1,7 +1,6 @@
 from view import View
 from player import Player
 from dungeon import Map
-from AI import AI
 import time
 import random
 
@@ -52,8 +51,7 @@ class Controller:
             elif usr_choice == "3":
                 player_tuple = self.load_AI()
                 dungeon_size = self.map_size_AI()
-                start_loc = self.start_loc_AI(dungeon_size)
-                # print(player_tuple, start_loc, dungeon_size)
+                start_loc = self.start_loc_AI()
                 break
             # Highscore
             elif usr_choice == "4":
@@ -94,39 +92,6 @@ class Controller:
                                           error=True)
         return dungeon_size
 
-    def init_objects(self, player, role, start_loc, dungeon_size):
-        """
-        this function will init objects
-        player, role, start_loc is a string.
-        dungeon_size is an int
-        This function will generate game objects,
-        dungeon, start_room and player
-        """
-        # Create dungeon
-        dungeon = Map(dungeon_size)
-
-        # Get start room and set exit
-        start_loc = start_loc
-        if start_loc == "NW":
-            start_room = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
-        elif start_loc == "NE":
-            start_room = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).hasExit = True
-        elif start_loc == "SW":
-            start_room = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).hasExit = True
-        elif start_loc == "SE":
-            start_room = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).hasExit = True
-
-        print(start_room)
-        player = Player(player, role, start_room)
-        player.current_room.isDark = False
-        player.current_room.monsters = []
-        player.current_room.treasures = []
-        self.game_loop(player, dungeon)  # Should we run this here?
-
     def start_loc_menu(self):
         """
         Asks viwer to show menu for starting location
@@ -154,45 +119,28 @@ class Controller:
         # This string is sent into init_objects function later
         return start_loc
 
-        # all done
-        return startcorner
-
     def map_size_AI(self):
-        umap = 0
+        map_size = 0
         map_choice = random.randrange(0, 100)
         if map_choice < 26:
-            dungeon = Map(4)
+            map_size = 5
         elif map_choice >= 26 & map_choice <= 74:
-            dungeon = Map(5)
+            map_size = 5
         elif map_choice >= 75:
-            dungeon = Map(6)
-        return dungeon
+            map_size = 6
+        return map_size
 
-    def start_loc_AI(self, dungeon):
+    def start_loc_AI(self):
         corner_choice = random.randrange(0, 4)
         if corner_choice == 1:
-            startcorner = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+            start_loc = "NW"
         elif corner_choice == 2:
-            startcorner = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).hasExit = True
+            start_loc = "NE"
         elif corner_choice == 2:
-            startcorner = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+            start_loc = "SW"
         else:
-            startcorner = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).hasExit = True
-        return startcorner
-
-    def start_game(self, player, role, start_room, dungeon):
-        dude = Player(player, role, start_room)
-        dude.current_room.isDark = False
-        dude.current_room.monsters = []
-        dude.current_room.treasures = []
-        self.map_loop(dude, dungeon)
-
-    def new_player(self):
-        self.view.print_start_menu(View.enter_char_name)
+            start_loc = "SE"
+        return start_loc
 
     def new_player_menu(self):
         """
@@ -272,20 +220,17 @@ class Controller:
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
     def load_AI(self):
-        self.view.print_start_menu(View.choose_AI)
+        self.view.print_main_menu(View.choose_AI)
         while True:
             uclass = input(">>")
             if uclass == "1":
                 uname = "AI Knight"
-                hp = 9
                 break
             elif uclass == "2":
                 uname = "AI Wizard"
-                hp = 4
                 break
             elif uclass == "3":
                 uname = "AI Thief"
-                hp = 5
                 break
             else:
                 print("Incorrect input")
@@ -295,6 +240,38 @@ class Controller:
                 (username, role, score, highscore) = line.split(sep=",")
                 if username == uname:
                     return username, role
+
+    def init_objects(self, player, role, start_loc, dungeon_size):
+        """
+        this function will init objects
+        player, role, start_loc is a string.
+        dungeon_size is an int
+        This function will generate game objects,
+        dungeon, start_room and player
+        """
+        # Create dungeon
+        dungeon = Map(dungeon_size)
+
+        # Get start room and set exit
+        if start_loc == "NW":
+            start_room = dungeon.corner["NW"]
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+        elif start_loc == "NE":
+            start_room = dungeon.corner["NE"]
+            dungeon.get_room(0, dungeon.size-1).hasExit = True
+        elif start_loc == "SW":
+            start_room = dungeon.corner["SW"]
+            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+        elif start_loc == "SE":
+            start_room = dungeon.corner["SE"]
+            dungeon.get_room(0, 0).hasExit = True
+
+
+        player = Player(player, role, start_room)
+        player.current_room.isDark = False
+        player.current_room.monsters = []
+        player.current_room.treasures = []
+        self.game_loop(player, dungeon)  # Should we run this here?
 
     def game_loop(self, player, dungeon):
         """
@@ -363,6 +340,8 @@ class Controller:
         monster = player.current_room.monsters[0]
         player_init = player.roll_dice("initiative")
         monster_init = monster.roll_dice("initiative")
+        if player.special_ability == "block":
+            player.block = True
         if monster_init > player_init:
             initiative_list.append(monster)
             initiative_list.append(player)
