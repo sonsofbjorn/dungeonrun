@@ -127,14 +127,14 @@ class View:
         you will then send in an extra string/list.
         """
         self.clear_console()
-        print("\033[91m"+"______                                                              ".center(os.get_terminal_size().columns))
+        print("\033[31m"+"______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
         print("| | | || | | || '_ \  / _` | / _ \ / _ \ | '_ \ | '__|| | | || '_ \ ".center(os.get_terminal_size().columns))
         print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
-        print("\033[95m"+"        ╔═════════════ __/ | ══════════════════════════════╗        ".center(os.get_terminal_size().columns))
-        print("        ║             |___/                                ║        ".center(os.get_terminal_size().columns))
+        print("\033[32m"+"         ╔═════════════\033[31m __/ | \033[32m══════════════════════════════╗        ".center(os.get_terminal_size().columns+10), end="")
+        print("        ║             \033[31m|___/\033[32m                                ║        ".center(os.get_terminal_size().columns+10))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
         print("        ║                                                  ║        ".center(os.get_terminal_size().columns))
