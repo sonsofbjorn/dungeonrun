@@ -1,6 +1,5 @@
 import os
 import platform
-import types
 
 
 class View:
@@ -54,7 +53,6 @@ class View:
     player_escaped = ["You have escaped!"]
     player_failed_escape = ["You have failed to escape!"]
 
-
     """ ERROR MESESAGES BELLOW """
     error_msg = []
     err_choice = ["", "Invalid choice!"]
@@ -73,7 +71,11 @@ class View:
         elif platform.system() == "Windows":
             return os.system('cls')
 
-    def draw_map2(self, player, dungeon):
+    def draw_map(self, player, dungeon):
+        """
+        This takes in player and dungeon object
+        Returns a list with the map and player loc
+        """
         output = []
         outrow = ""
         for row in dungeon:
@@ -96,6 +98,12 @@ class View:
         return output
 
     def print_main_menu(self, input_menu, *args, **kwargs):
+        """
+        Prints main menu, takes in *args which can be list, or strings and
+        will be printed as the menu.
+        **kwargs is a keyword argument if you want to show extra information,
+        you will then send in an extra string/list.
+        """
         self.clear_console()
         print("______                                                              ".center(os.get_terminal_size().columns))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
@@ -129,7 +137,6 @@ class View:
                 print(hehe1.center(os.get_terminal_size().columns))
         print("╚══════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
         menu = []
-        #self.error_msg = []
 
     def print_game(self, player, dungeon, input_menu, *args, **kwargs):
         """
@@ -156,11 +163,11 @@ class View:
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
         sidebox = self.print_hp_score_list(player)
         a = 0
-        dungeonmap = self.draw_map2(player, dungeon)
+        dungeonmap = self.draw_map(player, dungeon)
         for row in dungeonmap:
             if a < 8:
                 row = ("║"+row.center(60)+"║"+sidebox[a])
-                if a%2 == 0:
+                if a % 2 == 0:
                     print(row.center(os.get_terminal_size().columns+22), end="")
                 else:
                     print(row.center(os.get_terminal_size().columns-22))
@@ -196,7 +203,6 @@ class View:
         print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))
 
     def print_hp_score_list(self, player):
-
         hp_score_list = (" ╔══════════════════╗",
                          " ║        HP:       ║",
                          " ║"+str(player.hp).center(18)+"║",
@@ -208,27 +214,8 @@ class View:
                          )
         return hp_score_list
 
-
-
-
-
     def center_text(self, text):
         print(text.center(os.get_terminal_size().columns))
 
-    def draw_start_location_options(self):
-        self.print_it(self.test_list())
-        startcorner = input(">>")
-        return startcorner
-
-    def draw_map_loop(self):
-        print(self.p.name + ", you are in", self.p.show_location)
-        print(self.p.name + ", where do you want to go? West, North, East, or South?")
-        inp = input(">>")
-        return inp
-
     def handle_input(self):
         return input()
-
-    def handle_error(self, err):
-        self.error_msg = []
-        self.error_msg = err
