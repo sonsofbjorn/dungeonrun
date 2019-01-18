@@ -320,6 +320,24 @@ class Controller:
         elif player.current_room.position == (dungeon.size-1, dungeon.size-1):
             player.destination = dungeon.get_room(0, 0)
 
+    def ai_move(self, player):
+        if player.current_room.position[0] > player.destination.position[0]:
+            print("going west")
+            direction = "w"
+        elif player.current_room.position[0] < player.destination.position[0]:
+            print("going east")
+            direction = "e"
+        elif player.current_room.position[1] > player.destination.position[1]:
+            print("going north")
+            direction = "n"
+        elif player.current_room.position[1] < player.destination.position[1]:
+            print("going south")
+            direction = "s"
+        else:
+            print("cannot find path to", player.destination.position)
+            direction = "lolrandum"
+        return direction
+
     def game_loop(self, player, dungeon):
         """
         Main game loop, takes in player and dungeon and let the player
@@ -333,27 +351,11 @@ class Controller:
                 break
 
             self.view.print_game(player, dungeon, View.direction_option)
+            # ASK PLAYER DIRECTION
             if player.ai is True:
-                if player.current_room.position[0] > player.destination.position[0]:
-                    print("going west")
-                    direction = "w"
-                elif player.current_room.position[0] < player.destination.position[0]:
-                    print("going east")
-                    direction = "e"
-                elif player.current_room.position[1] > player.destination.position[1]:
-                    print("going north")
-                    direction = "n"
-                elif player.current_room.position[1] < player.destination.position[1]:
-                    print("going south")
-                    direction = "s"
-                else:
-                    print("go find", player.destination.position)
-                    direction = "lolrandum"
+                direction = self.ai_move(player)
             else:
                 direction = self.view.handle_input()
-            # inp = self.view.handle_input()
-
-            # ASK PLAYER DIRECTION
             new_room = self.move_player(player, direction, dungeon)
 
             if new_room is False:
