@@ -109,19 +109,19 @@ class Controller:
         start_loc = start_loc
         if start_loc == "NW":
             start_room = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
         elif start_loc == "NE":
             start_room = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).hasExit = True
+            dungeon.get_room(0, dungeon.size-1).has_exit = True
         elif start_loc == "SW":
             start_room = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+            dungeon.get_room(dungeon.size-1, 0).has_exit = True
         elif start_loc == "SE":
             start_room = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).hasExit = True
+            dungeon.get_room(0, 0).has_exit = True
 
         player = Player(player, role, start_room)
-        player.current_room.isDark = False
+        player.current_room.is_dark = False
         player.current_room.monsters = []
         player.current_room.treasures = []
         self.game_loop(player, dungeon)  # Should we run this here?
@@ -309,20 +309,19 @@ class Controller:
         # Get start room and set exit
         if start_loc == "NW":
             start_room = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
         elif start_loc == "NE":
             start_room = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).hasExit = True
+            dungeon.get_room(0, dungeon.size-1).has_exit = True
         elif start_loc == "SW":
             start_room = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+            dungeon.get_room(dungeon.size-1, 0).has_exit = True
         elif start_loc == "SE":
             start_room = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).hasExit = True
-
+            dungeon.get_room(0, 0).has_exit = True
 
         player = Player(player, role, start_room)
-        player.current_room.isDark = False
+        player.current_room.is_dark = False
         player.current_room.monsters = []
         player.current_room.treasures = []
         self.game_loop(player, dungeon)  # Should we run this here?
@@ -354,7 +353,7 @@ class Controller:
                                      dungeon,
                                      View.direction_option)
 
-            if player.current_room.hasExit is True:
+            if player.current_room.has_exit is True:
                 # LOGIC FOR EXITING GAME NOT WORKING!
                 self.view.print_game(player,
                                      dungeon,
@@ -376,7 +375,7 @@ class Controller:
                 self.view.print_game(player,
                                      dungeon,
                                      View.score_text,
-                                     player.score,
+                                     str(player.score),
                                      score=True)
 
     def loot(self, player):
@@ -495,7 +494,7 @@ class Controller:
             new_room = dungeon_map.get_room(x, y+1)
         else:
             return False
-        new_room.dark = False
+        new_room.is_dark = False
         player.old_room = player.current_room
         player.current_room = new_room
 

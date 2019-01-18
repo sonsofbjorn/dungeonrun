@@ -75,19 +75,19 @@ def start_location(dungeon):
         startcorner = input(">>")
         if startcorner == "1":
             startcorner = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).hasExit = True
+            dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
             break
         elif startcorner == "2":
             startcorner = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).hasExit = True
+            dungeon.get_room(0, dungeon.size-1).has_exit = True
             break
         elif startcorner == "3":
             startcorner = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).hasExit = True
+            dungeon.get_room(dungeon.size-1, 0).has_exit = True
             break
         elif startcorner == "4":
             startcorner = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).hasExit = True
+            dungeon.get_room(0, 0).has_exit = True
             break
         else:
             print("Incorrect input!")
@@ -178,7 +178,7 @@ def delete_player(uname):
 
 def start_game(username, role, score, start_room, dungeon):
     dude = Player(username, role, start_room, score)
-    dude.current_room.dark = False
+    dude.current_room.is_dark = False
     dude.current_room.monsters = []
     dude.current_room.treasures = []
     map_loop(dude, dungeon)
@@ -199,7 +199,7 @@ def map_loop(char, dungeon):
         else:
             print(char.name, "enters", char.show_location)
 
-        if char.current_room.hasExit is True:
+        if char.current_room.has_exit is True:
             print("You see a stairway, leading up towards the surface.\nDo you want to leave?")
         while len(char.current_room.monsters) > 0:
             show_monsters = "Enemies! In the room ahead, you see foes:\n"

@@ -99,9 +99,9 @@ class Map:
 
 
 class Room:
-    def __init__(self, x, y, isDark=True, hasExit=False,
+    def __init__(self, x, y, is_dark=True, has_exit=False,
                  monsters=[], treasures=[]):
-        self.dark, self.hasExit = isDark, hasExit
+        self.is_dark, self.has_exit = is_dark, has_exit
         self.monsters = []  # Why doesn't the kwarg above suffice?
         self.treasures = []
 

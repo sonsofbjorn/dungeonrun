@@ -95,7 +95,7 @@ class Player:
             new_room = dungeon_map.get_room(x, y+1)
         else:
             return False
-        new_room.dark = False
+        new_room.is_dark = False
         self.old_room = self.current_room
         self.current_room = new_room
         return new_room

@@ -1,1 +1,2 @@
 Sebbe,knight,0,0
+Pelle,wizard,0,0

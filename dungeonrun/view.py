@@ -108,9 +108,9 @@ class View:
                             out = "░░╳░░░"
                         else:
                             out = "░░░░░░"
-                    elif room.hasExit and room.dark is False:
+                    elif room.has_exit and room.is_dark is False:
                         out = "░EXIT░"
-                    elif room.dark:
+                    elif room.is_dark:
                         out = "▓▓▓▓▓▓"
                     else:
                         out = "░░░░░░"
@@ -190,7 +190,7 @@ class View:
         print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
         sidebox = self.print_hp_score_list(player)
         a = 0
-        dungeonmap = self.draw_map2(player, dungeon)
+        dungeonmap = self.draw_map(player, dungeon)
         if len(dungeonmap) < 13:
             for x in range(6):
                 hehe1 = ("║" + " " * 60 + "║")
