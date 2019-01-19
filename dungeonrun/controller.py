@@ -297,13 +297,12 @@ class Controller:
             start_room = dungeon.corner["SE"]
             dungeon.get_room(0, 0).has_exit = True
 
-
         player = Player(player, role, start_room)
 
         if ai_check is True:
             player.ai = True
             player.start_room = start_room
-            self.ai_find_exit(player, dungeon)
+            player.destination = self.ai_find_exit(player, dungeon)
         player.current_room.monsters = []
         player.current_room.treasures = []
         player.current_room.is_dark = False
@@ -319,6 +318,28 @@ class Controller:
             player.destination = dungeon.get_room(dungeon.size-1, 0)
         elif player.current_room.position == (dungeon.size-1, dungeon.size-1):
             player.destination = dungeon.get_room(0, 0)
+        return player.destination
+
+    def ai_move(self, player):
+        if player.current_room.position[0] > player.destination.position[0]:
+            print("going west")
+            direction = "w"
+        elif player.current_room.position[0] < player.destination.position[0]:
+            print("going east")
+            direction = "e"
+        elif player.current_room.position[1] > player.destination.position[1]:
+            print("going north")
+            direction = "n"
+        elif player.current_room.position[1] < player.destination.position[1]:
+            print("going south")
+            direction = "s"
+        elif player.current_room.position == player.destination.position:
+            quit()
+            direction = 0
+        else:
+            print("go find", player.destination.position)
+            direction = "lolrandum"
+        return direction
 
     def game_loop(self, player, dungeon):
         """
@@ -330,9 +351,11 @@ class Controller:
             if player.hp < 1:
                 break
 
-            direction = self.view.handle_input()
-            # inp = self.view.handle_input()
             # ASK PLAYER DIRECTION
+            if player.ai is True:
+                direction = self.ai_move(player)
+            else:
+                direction = self.view.handle_input()
             new_room = self.move_player(player, direction, dungeon)
 
             if new_room is False:
@@ -341,7 +364,8 @@ class Controller:
                                      View.direction_option,
                                      View.err_choice,
                                      error=True)
-                time.sleep(2)
+                if player.ai is False:
+                    time.sleep(2)
             else:
                 self.view.print_game(player,
                                      dungeon,
@@ -354,19 +378,20 @@ class Controller:
                                      View.leave_question,
                                      View.leave_options,
                                      leave_q=True)
-                time.sleep(2)
+                if player.ai is False:
+                    time.sleep(2)
             while len(player.current_room.monsters) > 0:
                 self.view.print_game(player,
                                      dungeon,
                                      View.show_monsters,
                                      player.current_room.get_room_monsters(),
                                      foes=True)
-                time.sleep(3)
+                if player.ai is False:
+                    time.sleep(3)
                 while len(player.current_room.monsters) > 0:
                     self.combat(player, dungeon)
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
-
 
     def loot(self, player, dungeon):
         """
@@ -383,7 +408,8 @@ class Controller:
                                  View.loot_text,
                                  loot.item_type,
                                  loot=True)
-            time.sleep(3)
+            if player.ai is False:
+                time.sleep(3)
 
         return looted
 
@@ -413,7 +439,8 @@ class Controller:
                                          View.player_dead,
                                          monster.unit_type,
                                          killed_by=True)
-                    time.sleep(5)
+                    if player.ai is False:
+                        time.sleep(5)
                     initiative_list = []
                     player.current_room.monsters.clear()
                     return False
@@ -424,7 +451,8 @@ class Controller:
                                          View.player_killed,
                                          monster.unit_type,
                                          killed=True)
-                    time.sleep(3)
+                    if player.ai is False:
+                        time.sleep(3)
                     initiative_list = []
                     player.current_room.monsters.pop(0)
                     break
@@ -445,7 +473,8 @@ class Controller:
                                                  dungeon,
                                                  *result,
                                                  show_result=True)
-                            time.sleep(2)
+                            if player.ai is False:
+                                time.sleep(2)
                             break
                         elif choice == "2":
                             escape = player.escape_combat()
@@ -454,14 +483,16 @@ class Controller:
                                 self.view.print_game(player,
                                                      dungeon,
                                                      View.player_escaped)
-                                time.sleep(3)
+                                if player.ai is False:
+                                    time.sleep(2)
                                 initiative_list.clear()
                                 return False
                             else:
                                 self.view.print_game(player,
                                                      dungeon,
                                                      View.player_failed_escape)
-                                time.sleep(3)
+                                if player.ai is False:
+                                    time.sleep(3)
                                 break
                 else:
                     result = self.attack_function(actor, player)
@@ -469,7 +500,8 @@ class Controller:
                                          dungeon,
                                          *result,
                                          show_result=True)
-                    time.sleep(2)
+                    if player.ai is False:
+                        time.sleep(2)
         return True
 
     def move_player(self, player, direction, dungeon_map):
