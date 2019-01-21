@@ -8,8 +8,8 @@ import random
 class Controller:
     def __init__(self):
         self.view = View()
-        self.kill_count = 0
-        self.loot_count = 0
+        self.killed_monsters = []
+        self.looted_items = []
 
     def main_menu(self):
         """
@@ -357,7 +357,8 @@ class Controller:
                                      leave_q=True)
                 usrinp = input(">>")
                 if usrinp == "1":
-                    self.exit_game()
+                    self.statistics()
+                    time.sleep(3)
                     break
                 if usrinp == "2":
                     pass
@@ -381,31 +382,21 @@ class Controller:
 
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
-                self.loot_count += 1
 
-        self.statistics()
+    def statistics(self, player):
+        results = []
+        results = View.stats_count.copy()
 
-    def statistics(self):
-        kcount = list()
-        lcount = list()
-        result = list()
-        kcount.copy(View.kill_count)
-        lcount.copy(View.loot_count)
+        # RESULTS [1] KILLED
+        # RESULTS [2] TREASURES
+        # RESULT [3] TOTAL SCORE
+        results[1] += str(len(self.killed_monsters))
+        results[2] += str(len(self.looted_items))
+        results[3] += str(player.score)
 
-        kcount.append(self.kill_count)
-        lcount.append(self.loot_count)
-
-        result.append(kcount)
-        result.append(lcount)
         self.view.print_main_menu(View.good_bye,
-                                  *result,
+                                  results,
                                   end=True)
-
-    def exit_game(self):
-        self.statistics()
-        time.sleep(3)
-        quit()
-
 
     def loot(self, player, dungeon):
         """
@@ -415,7 +406,7 @@ class Controller:
         for loot in player.current_room.treasures:
             player.score = int(player.score)
             player.score += loot.value
-            player.current_room.treasures.pop(0)
+            self.looted_items.append(player.current_room.treasures.pop(0))
             looted.append(loot.item_type)
             self.view.print_game(player,
                                  dungeon,
@@ -463,10 +454,9 @@ class Controller:
                                          View.player_killed,
                                          monster.unit_type,
                                          killed=True)
-                    self.kill_count += 1
                     time.sleep(3)
                     initiative_list = []
-                    player.current_room.monsters.pop(0)
+                    self.killed_monsters.append(player.current_room.monsters.pop(0))
                     break
                 elif isinstance(actor, Player):
                     while True:

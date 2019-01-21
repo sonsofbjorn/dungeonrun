@@ -1,5 +1,6 @@
 import os
 import platform
+import time
 
 
 class View:
@@ -54,8 +55,8 @@ class View:
                      "[2] No"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
-    kill_count = ["Kill count: "]
-    loot_count = ["Tresure count: "]
+
+    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: "]
 
     enter_char_name = ["", "Enter character name: "]
 
