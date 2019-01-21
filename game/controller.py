@@ -279,6 +279,23 @@ class Controller:
                 if username == uname:
                     return username, role
 
+    def generate_exit(self, dungeon_size, dungeon, start_room):
+        '''
+        This will generate an exit
+        It will generate a new exit if the 
+        location is the same as the player
+        start_room
+        '''
+        while(True):
+
+            rand_x = random.randint(0, dungeon_size)
+            rand_y = random.randint(0, dungeon_size)
+            exit_room = dungeon.get_room(rand_x, rand_y)
+
+            if exit_room is not start_room:
+                exit_room.has_exit = True
+                break
+
     def init_objects(self, player, role, start_loc,
                      dungeon_size, ai_check=False):
         """
@@ -295,18 +312,20 @@ class Controller:
         # Get start room and set exit
         if start_loc == "NW":
             start_room = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
+            #dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
         elif start_loc == "NE":
             start_room = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).has_exit = True
+            #dungeon.get_room(0, dungeon.size-1).has_exit = True
         elif start_loc == "SW":
             start_room = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).has_exit = True
+            #dungeon.get_room(dungeon.size-1, 0).has_exit = True
         elif start_loc == "SE":
             start_room = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).has_exit = True
+            #dungeon.get_room(0, 0).has_exit = True
+
 
         player = Player(player, role, start_room)
+        self.generate_exit(dungeon_size, dungeon, start_room)
 
         if ai_check is True:
             player.ai = True
@@ -355,23 +374,26 @@ class Controller:
                                      View.direction_option)
 
             if player.current_room.has_exit is True:
-                self.view.print_game(player,
-                                     dungeon,
-                                     View.leave_question,
-                                     View.leave_options,
-                                     leave_q=True)
-                usrinp = self.view.handle_input()
-                if usrinp == "1":
-                    self.statistics(player)
-                    time.sleep(3)
-                    break
-                if usrinp == "2":
-                    pass
-                else:
-                    self.view.print_game(View.leave_question,
-                                         View.err_choice,
-                                         error=True)
-                time.sleep(2)
+                while True:
+                    self.view.print_game(player,
+                                        dungeon,
+                                        View.leave_question,
+                                        View.leave_options,
+                                        leave_q=True)
+                    usrinp = self.view.handle_input()
+                    if usrinp == "1":
+                        self.statistics(player)
+                        time.sleep(3)
+                        quit()
+                    if usrinp == "2":
+                        break
+                    else:
+                        self.view.print_game(player,
+                                            dungeon,
+                                            View.leave_question,
+                                            View.err_choice,
+                                            error=True)
+                    time.sleep(2)
             while len(player.current_room.monsters) > 0:
                 self.view.print_game(player,
                                      dungeon,

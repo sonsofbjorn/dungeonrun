@@ -114,3 +114,5 @@ bin/build1.02.54 - 18012019.exe - Shortcut.lnk
 *.xml
 *.txt
 game/Compiler.bat
+.vscode/settings.json
+game/players.txt
