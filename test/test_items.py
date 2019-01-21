@@ -1,6 +1,6 @@
 import unittest
 
-from dungeonrun.dungeon import Map, Treasure
+from game.dungeon import Map, Treasure
 
 class testItems(unittest.TestCase):
 

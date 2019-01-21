@@ -8,6 +8,8 @@ import random
 class Controller:
     def __init__(self):
         self.view = View()
+        self.killed_monsters = []
+        self.looted_items = []
 
     def main_menu(self):
         """
@@ -35,8 +37,8 @@ class Controller:
                 break
 
             elif usr_choice == "2":
+                self.view.print_main_menu(View.enter_char_name)
                 while True:
-                    self.view.print_main_menu(View.enter_char_name)
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
@@ -93,9 +95,10 @@ class Controller:
                 dungeon_size = 8
                 break
             else:
-                self.view.print_main_menu(View.welcome_menu,
+                self.view.print_main_menu(View.choose_size,
                                           View.err_choice,
                                           error=True)
+                time.sleep(3)
         return dungeon_size
 
     def start_loc_menu(self):
@@ -119,7 +122,7 @@ class Controller:
                 start_loc = "SE"
                 break
             else:
-                self.view.print_main_menu(View.welcome_menu,
+                self.view.print_main_menu(View.choose_corner,
                                           View.err_choice,
                                           error=True)
         # This string is sent into init_objects function later
@@ -276,7 +279,8 @@ class Controller:
                 if username == uname:
                     return username, role
 
-    def init_objects(self, player, role, start_loc, dungeon_size, ai_check=False):
+    def init_objects(self, player, role, start_loc,
+                     dungeon_size, ai_check=False):
         """
         this function will init objects
         player, role, start_loc is a string.
@@ -301,7 +305,6 @@ class Controller:
         elif start_loc == "SE":
             start_room = dungeon.corner["SE"]
             dungeon.get_room(0, 0).has_exit = True
-
 
         player = Player(player, role, start_room)
 
@@ -330,10 +333,9 @@ class Controller:
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
+
         while True:
             self.view.print_game(player, dungeon, View.direction_option)
-            if player.hp < 1:
-                break
 
             direction = self.view.handle_input()
             # inp = self.view.handle_input()
@@ -353,12 +355,22 @@ class Controller:
                                      View.direction_option)
 
             if player.current_room.has_exit is True:
-                # LOGIC FOR EXITING GAME NOT WORKING!
                 self.view.print_game(player,
                                      dungeon,
                                      View.leave_question,
                                      View.leave_options,
                                      leave_q=True)
+                usrinp = self.view.handle_input()
+                if usrinp == "1":
+                    self.statistics(player)
+                    time.sleep(3)
+                    break
+                if usrinp == "2":
+                    pass
+                else:
+                    self.view.print_game(View.leave_question,
+                                         View.err_choice,
+                                         error=True)
                 time.sleep(2)
             while len(player.current_room.monsters) > 0:
                 self.view.print_game(player,
@@ -369,9 +381,27 @@ class Controller:
                 time.sleep(3)
                 while len(player.current_room.monsters) > 0:
                     self.combat(player, dungeon)
+
+            if player.hp < 1:
+                break
+
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
 
+    def statistics(self, player):
+        results = []
+        results = View.stats_count.copy()
+
+        # RESULTS [1] KILLED
+        # RESULTS [2] TREASURES
+        # RESULT [3] TOTAL SCORE
+        results[1] += str(len(self.killed_monsters))
+        results[2] += str(len(self.looted_items))
+        results[3] += str(player.score)
+
+        self.view.print_main_menu(View.good_bye,
+                                  results,
+                                  end=True)
 
     def loot(self, player, dungeon):
         """
@@ -381,7 +411,7 @@ class Controller:
         for loot in player.current_room.treasures:
             player.score = int(player.score)
             player.score += loot.value
-            player.current_room.treasures.pop(0)
+            self.looted_items.append(player.current_room.treasures.pop(0))
             looted.append(loot.item_type)
             self.view.print_game(player,
                                  dungeon,
@@ -431,7 +461,7 @@ class Controller:
                                          killed=True)
                     time.sleep(3)
                     initiative_list = []
-                    player.current_room.monsters.pop(0)
+                    self.killed_monsters.append(player.current_room.monsters.pop(0))
                     break
                 elif isinstance(actor, Player):
                     while True:
@@ -478,6 +508,13 @@ class Controller:
         return True
 
     def move_player(self, player, direction, dungeon_map):
+        """
+        This moves a player object on the map
+        with directions, N, E, S, W as strings
+        It then returns a new room object.
+        If the player fails in moving it returns
+        a False
+        """
         x = player.current_room.position[0]
         y = player.current_room.position[1]
 
@@ -526,7 +563,7 @@ class Controller:
                 if defender.hero_class == "knight":
                     if defender.block is True:
                         defender.block = False
-                        return View.monster_hit, attacker.unit_type, View.shield_block
+                        return View.shield_block, attacker.unit_type
                     else:
                         defender.hp -= 1
                         return View.monster_hit, attacker.unit_type, View.for_one_dmg
@@ -538,7 +575,6 @@ class Controller:
                 return View.player_miss, defender.unit_type
             else:
                 return attacker.unit_type, View.monster_miss
-
 
     def roll_dice(self, user, dice_type):
         if dice_type == "attack":
