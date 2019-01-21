@@ -8,6 +8,8 @@ import random
 class Controller:
     def __init__(self):
         self.view = View()
+        self.killed_monsters = []
+        self.looted_items = []
 
     def main_menu(self):
         """
@@ -35,8 +37,8 @@ class Controller:
                 break
 
             elif usr_choice == "2":
+                self.view.print_main_menu(View.enter_char_name)
                 while True:
-                    self.view.print_main_menu(View.enter_char_name)
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
@@ -326,6 +328,7 @@ class Controller:
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
+
         while True:
             self.view.print_game(player, dungeon, View.direction_option)
 
@@ -347,15 +350,15 @@ class Controller:
                                      View.direction_option)
 
             if player.current_room.has_exit is True:
-                # LOGIC FOR EXITING GAME NOT WORKING!
                 self.view.print_game(player,
                                      dungeon,
                                      View.leave_question,
                                      View.leave_options,
                                      leave_q=True)
-                usrinp = input(">>")
+                usrinp = self.view.handle_input()
                 if usrinp == "1":
-                    self.exit_game()
+                    self.statistics(player)
+                    time.sleep(3)
                     break
                 if usrinp == "2":
                     pass
@@ -380,12 +383,20 @@ class Controller:
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
 
-    def exit_game(self):
-        self.print_statistics
-        quit()
+    def statistics(self, player):
+        results = []
+        results = View.stats_count.copy()
 
-    def print_statistics(self):
-        print("end screen")
+        # RESULTS [1] KILLED
+        # RESULTS [2] TREASURES
+        # RESULT [3] TOTAL SCORE
+        results[1] += str(len(self.killed_monsters))
+        results[2] += str(len(self.looted_items))
+        results[3] += str(player.score)
+
+        self.view.print_main_menu(View.good_bye,
+                                  results,
+                                  end=True)
 
     def loot(self, player, dungeon):
         """
@@ -395,7 +406,7 @@ class Controller:
         for loot in player.current_room.treasures:
             player.score = int(player.score)
             player.score += loot.value
-            player.current_room.treasures.pop(0)
+            self.looted_items.append(player.current_room.treasures.pop(0))
             looted.append(loot.item_type)
             self.view.print_game(player,
                                  dungeon,
@@ -445,7 +456,7 @@ class Controller:
                                          killed=True)
                     time.sleep(3)
                     initiative_list = []
-                    player.current_room.monsters.pop(0)
+                    self.killed_monsters.append(player.current_room.monsters.pop(0))
                     break
                 elif isinstance(actor, Player):
                     while True:

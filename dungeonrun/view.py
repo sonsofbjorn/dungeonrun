@@ -1,5 +1,6 @@
 import os
 import platform
+import time
 
 
 class View:
@@ -54,6 +55,8 @@ class View:
                      "[2] No"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
+
+    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: "]
 
     enter_char_name = ["", "Enter character name: "]
 
@@ -272,4 +275,4 @@ class View:
         print(text.center(os.get_terminal_size().columns))
 
     def handle_input(self):
-        return input()
+        return input("Choice: ".rjust(os.get_terminal_size().columns//2))
