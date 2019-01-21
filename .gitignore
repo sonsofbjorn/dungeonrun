@@ -108,3 +108,5 @@ venv.bak/
 # ignore players.txt
 dungeonrun/players.txt
 bin/build1.02.54 - 18012019.exe - Shortcut.lnk
+*.xml
+*.xml
