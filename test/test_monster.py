@@ -1,6 +1,6 @@
 import unittest
 
-from dungeonrun.dungeon import Map, Monster
+from game.dungeon import Map, Monster
 
 class testMap(unittest.TestCase):
 
