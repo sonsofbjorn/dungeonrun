@@ -1,14 +1,9 @@
-from dungeon import Map
+from controller import Controller
 
 
 def main():
-    dungeon = Map(4)
-
-    print("=== MAIN ===")
-    for rooms in dungeon.matrix:
-        for room in rooms:
-            print(room.doors, end="")
-        print()
+    cntrlr = Controller()
+    cntrlr.main_menu()
 
 
 if __name__ == "__main__":

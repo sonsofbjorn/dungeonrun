@@ -1,14 +1,18 @@
 import unittest
 
-from dungeonrun import monster
+from dungeonrun.dungeon import Map, Monster
 
-class mapSizeTest(unittest.TestCase):
+class testMap(unittest.TestCase):
 
-    def setUp(self):
-        self.spider = monster.Monster("giant spider", (1, 2))
-        self.skeleton = monster.Monster("skeleton",   (1, 2))
-        self.orc = monster.Monster("orc",             (1, 2))
-        self.troll = monster.Monster("troll",         (1, 2))
+    @classmethod
+    def setUpClass(self):
+        self.dungeon = Map(4)
+
+        self.spider = Monster("giant spider", self.dungeon.get_room(1, 2))
+        self.skeleton = Monster("skeleton", self.dungeon.get_room(0, 3))
+        self.orc = Monster("orc", self.dungeon.get_room(1, 0))
+        self.troll = Monster("troll", self.dungeon.get_room(2, 2))
+        self.troll2 = Monster("troll", self.dungeon.get_room(2, 2))
 
     def testSpiderProperties(self):
         self.assertEqual(self.spider.initiative, 7)
@@ -37,3 +41,11 @@ class mapSizeTest(unittest.TestCase):
         self.assertEqual(self.troll.attack,     7)
         self.assertEqual(self.troll.dexterity,  2)
         self.assertEqual(self.troll.rarity,     5)
+
+    def testMonsterHP(self):
+        self.m1 = Monster("orc", self.dungeon.get_room(0, 0))
+        self.m2 = Monster("orc", self.dungeon.get_room(0, 0))
+        self.m1.hp -= 1
+
+        self.assertEqual(self.m1.hp,         2)
+        self.assertEqual(self.m2.hp,         3)
