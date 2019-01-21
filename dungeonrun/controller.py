@@ -203,6 +203,11 @@ class Controller:
         return player_name, player_role
 
     def player_exists(self, uname):
+        '''
+        This function checks if a player is already in the players.txt.
+        :param uname: Takes a name as an aragument to check versus a file
+        :return: returns True if player exists or False if it doesnt exists
+        '''
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
