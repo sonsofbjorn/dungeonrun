@@ -355,9 +355,9 @@ class Controller:
                                      View.leave_question,
                                      View.leave_options,
                                      leave_q=True)
-                usrinp = input(">>")
+                usrinp = self.view.handle_input()
                 if usrinp == "1":
-                    self.statistics()
+                    self.statistics(player)
                     time.sleep(3)
                     break
                 if usrinp == "2":

@@ -275,4 +275,4 @@ class View:
         print(text.center(os.get_terminal_size().columns))
 
     def handle_input(self):
-        return input()
+        return input("Choice: ".rjust(os.get_terminal_size().columns//2))
