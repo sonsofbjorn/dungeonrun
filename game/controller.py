@@ -1,6 +1,6 @@
-from view import View
-from player import Player
-from dungeon import Map
+from game.view import View
+from game.player import Player
+from game.dungeon import Map
 import time
 import random
 
@@ -57,7 +57,7 @@ class Controller:
             # Highscore
 
             elif usr_choice == "4":
-                self.view.print_main_menu(self.get_top_highschores())
+                self.view.print_main_menu(self.get_top_highscores())
                 self.view.handle_input()  # ENTER TO CONTINUE
                 break
 
@@ -229,7 +229,7 @@ class Controller:
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
-    def get_top_highschores(self):
+    def get_top_highscores(self):
         """
         This function reads players.txt and returns a list
         of strings for the top 5 players
