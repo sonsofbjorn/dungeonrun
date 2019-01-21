@@ -49,6 +49,7 @@ class View:
 
     attack_options = ["[1] Attack!",
                       "[2] Flee!"]
+
     leave_options = ["[1] Yes",
                      "[2] No"]
 
@@ -58,7 +59,7 @@ class View:
 
     leave_question = ["You see a staircaise,", "do you want to leave?"]
 
-    show_monsters = ["Uhuh! ENEMIES! You see the following foes: ", ""]
+    show_monsters = ["Uhuh! ENEMIES! You see the following foes: "]
 
     score_text = ["Your current score is: "]
     loot_text = ["You found loot! The following loot was added to your backback: "]
@@ -70,9 +71,9 @@ class View:
     monster_hit = ["You have been hit by "]
     for_one_dmg = ["for 1 damage"]
     player_miss = ["You missed"]
-    monster_miss = ["missed you"]
+    monster_miss = ["Missed you!"]
     player_crit = [" did a critical hit "]
-    shield_block = ["but your shield blocked the attack!"]
+    shield_block = ["Your shield blocked the attack from  "]
     hit = [" hit "]
 
     """ ERROR MESESAGES BELLOW """
@@ -109,7 +110,10 @@ class View:
                         else:
                             out = "░░░░░░"
                     elif room.has_exit and room.is_dark is False:
-                        out = "░EXIT░"
+                        if n == 1:
+                            out = "░EXIT░"
+                        else:
+                            out = "░░░░░░"
                     elif room.is_dark:
                         out = "▓▓▓▓▓▓"
                     else:

@@ -37,38 +37,6 @@ class Player:
 
         self.max_hp = self.hp
 
-    def roll_dice(self, dice_type):
-        if dice_type == "attack":
-            dice_type = self.attack
-        elif dice_type == "dexterity":
-            dice_type = self.dexterity
-        elif dice_type == "initiative":
-            dice_type = self.initiative
-        value = 0
-        for x in range(0, dice_type):
-            value += random.randrange(0, dice_type)
-        return value
-
-    def attack_function(self, enemy):
-        attacker_roll = self.roll_dice("attack")
-        monster_roll = enemy.roll_dice("dexterity")
-        if attacker_roll > monster_roll:
-            if self.special_ability == "crit":
-                critical_hit = random.randrange(0, 100)
-                if critical_hit >= 75:
-                    enemy.hp -= 2
-                    return "It's a critical hit!"
-                else:
-                    enemy.hp -= 1
-                    return "You attack", enemy.unit_type, "and hit!"
-            else:
-                return "You attack", enemy.unit_type, "and hit!"
-                enemy.hp -= 1
-                if enemy.hp > 0:
-                    return enemy.unit_type, "current hp is:", enemy.hp
-        else:
-            return "You attack", enemy.unit_type, "but you missed!"
-
     @property
     def show_location(self):
         return self.current_room.position
