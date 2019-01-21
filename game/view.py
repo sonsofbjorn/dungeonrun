@@ -198,7 +198,7 @@ class View:
         print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
         print("{green}   ╔══════════════════{red} __/ | {green}═══════════════════════════════════╗   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+16), end="")
-        print("   ║                  {red}|___/{green}                                     ║   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+9), end="")
+        print("   ║                  {red}|___/{green}                                     ║   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+8))
         print("   ║                            MAP                             ║   ".center(os.get_terminal_size().columns))
         print("   ║       ╳ = YOUR LOCATION                                    ║   ".center(os.get_terminal_size().columns))
         playerbox = self.print_hp_score_list(player)
