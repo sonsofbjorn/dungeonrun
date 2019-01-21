@@ -53,6 +53,8 @@ class View:
                      "[2] No"]
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
+    kill_count = ["Kill count: "]
+    loot_count = ["Tresure count: "]
 
     enter_char_name = ["", "Enter character name: "]
 

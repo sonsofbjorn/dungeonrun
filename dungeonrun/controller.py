@@ -8,6 +8,8 @@ import random
 class Controller:
     def __init__(self):
         self.view = View()
+        self.kill_count = 0
+        self.loot_count = 0
 
     def main_menu(self):
         """
@@ -35,8 +37,8 @@ class Controller:
                 break
 
             elif usr_choice == "2":
+                self.view.print_main_menu(View.enter_char_name)
                 while True:
-                    self.view.print_main_menu(View.enter_char_name)
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
@@ -325,6 +327,7 @@ class Controller:
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
+
         while True:
             self.view.print_game(player, dungeon, View.direction_option)
             if player.hp < 1:
@@ -348,7 +351,6 @@ class Controller:
                                      View.direction_option)
 
             if player.current_room.has_exit is True:
-                # LOGIC FOR EXITING GAME NOT WORKING!
                 self.view.print_game(player,
                                      dungeon,
                                      View.leave_question,
@@ -366,7 +368,26 @@ class Controller:
                     self.combat(player, dungeon)
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
+                self.loot_count += 1
 
+        self.statistics()
+
+    def statistics(self):
+        kcount = list()
+        lcount = list()
+        result = list()
+        kcount.copy(View.kill_count)
+        lcount.copy(View.loot_count)
+
+        kcount.append(self.kill_count)
+        lcount.append(self.loot_count)
+
+        result.append(kcount)
+        result.append(lcount)
+        self.view.print_main_menu(View.good_bye,
+                                  *result,
+                                  end=True)
+        inp = self.view.handle_input()
 
     def loot(self, player, dungeon):
         """
@@ -424,6 +445,7 @@ class Controller:
                                          View.player_killed,
                                          monster.unit_type,
                                          killed=True)
+                    self.kill_count += 1
                     time.sleep(3)
                     initiative_list = []
                     player.current_room.monsters.pop(0)
