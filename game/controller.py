@@ -462,6 +462,8 @@ class Controller:
                     time.sleep(3)
                     initiative_list = []
                     self.killed_monsters.append(player.current_room.monsters.pop(0))
+                    if player.special_ability == "block":
+                        player.block = True
                     break
                 elif isinstance(actor, Player):
                     while True:

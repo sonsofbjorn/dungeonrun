@@ -1,6 +1,5 @@
 import os
 import platform
-import time
 
 
 class View:
@@ -66,8 +65,8 @@ class View:
 
     score_text = ["Your current score is: "]
     loot_text = ["You found loot! The following loot was added to your backback: "]
-    player_dead = ["You have been slained by: "]
-    player_killed = ["You have slain the: "]
+    player_dead = ["You have been slained by the"]
+    player_killed = ["You have slain the "]
     player_escaped = ["You have escaped!"]
     player_failed_escape = ["You have failed to escape!"]
     player_hit = ["You hit the"]
