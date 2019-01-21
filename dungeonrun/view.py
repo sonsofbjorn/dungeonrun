@@ -241,7 +241,7 @@ class View:
         for row in menu:
             row = ("║"+row.center(76)+"║")
             print(row.center(os.get_terminal_size().columns))
-        for i in range(10):
+        for i in range(5-len(menu)):
             extralines = ("║" + " " * 76 + "║")
             print(extralines.center(os.get_terminal_size().columns))
         print("   ╚════════════════════════════════════════════════════════════════════════════╝   ".center(os.get_terminal_size().columns))

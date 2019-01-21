@@ -128,19 +128,19 @@ class Controller:
     def map_size_AI(self):
         map_size = 0
         map_choice = random.randrange(0, 100)
-        if map_choice < 26:
-            map_size = 5
-        elif map_choice >= 26 & map_choice <= 74:
-            map_size = 5
+        if map_choice <= 25:
+            map_size = 4
         elif map_choice >= 75:
-            map_size = 6
+            map_size = 8
+        else:
+            map_size = 5
         return map_size
 
     def start_loc_AI(self):
         corner_choice = random.randrange(0, 4)
-        if corner_choice == 1:
+        if corner_choice == 0:
             start_loc = "NW"
-        elif corner_choice == 2:
+        elif corner_choice == 1:
             start_loc = "NE"
         elif corner_choice == 2:
             start_loc = "SW"
@@ -264,7 +264,7 @@ class Controller:
                 break
             else:
                 print("Incorrect input")
-        with open("AI.txt", "r") as f:
+        with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
                 (username, role, score, highscore) = line.split(sep=",")
@@ -301,6 +301,7 @@ class Controller:
 
         if ai_check is True:
             player.ai = True
+            player.profile = "brave"
             player.start_room = start_room
             player.destination = self.ai_find_exit(player, dungeon)
         player.current_room.monsters = []
@@ -320,26 +321,124 @@ class Controller:
             player.destination = dungeon.get_room(0, 0)
         return player.destination
 
-    def ai_move(self, player):
-        if player.current_room.position[0] > player.destination.position[0]:
-            print("going west")
-            direction = "w"
-        elif player.current_room.position[0] < player.destination.position[0]:
-            print("going east")
-            direction = "e"
-        elif player.current_room.position[1] > player.destination.position[1]:
-            print("going north")
-            direction = "n"
-        elif player.current_room.position[1] < player.destination.position[1]:
-            print("going south")
-            direction = "s"
-        elif player.current_room.position == player.destination.position:
+    def ai_snake_move(self, player, dungeon):
+        '''
+        Uses ai_find_exit to calc. exit square, then moves in a serpentine direction by checking if it's position
+        alignes with the start room or exit room (if it does, go vertically, otherwise, horizontally)
+        Due to the shape of some maps (4 or 8) it cannot find all rooms by snaking.
+        However, this is technically within acceptable parameters for AI requirements.
+        Function returns direction
+        '''
+        start_x = player.start_room.position[0]  # no need to check start_y since it moves horizontally primarily
+        room_x = player.current_room.position[0]
+        room_y = player.current_room.position[1]
+        dest_x = player.destination.position[0]
+        dest_y = player.destination.position[1]
+
+        if room_x == dest_x and room_y == dest_y:
+            print("I FOUND THE EXIT!")
+            direction = "xyz"
             quit()
-            direction = 0
+
+        # start in NW
+        if player.start_room == dungeon.get_room(0, 0):
+            if room_y % 2 == 0:
+                if room_x == dest_x:
+                    direction = "s"
+                else:
+                    direction = "e"
+            elif room_y % 2 != 0:
+                if room_x == start_x:
+                    direction = "s"
+                else:
+                    direction = "w"
+
+        # start in NE
+        elif player.start_room == dungeon.get_room(dungeon.size-1, 0):
+            if room_x == dest_x and room_y == dest_y:
+                print("I FOUND THE EXIT!")
+                quit()
+            if room_y % 2 == 0:
+                if room_x == dest_x:
+                    direction = "s"
+                else:
+                    direction = "w"
+            if room_y % 2 != 0:
+                if room_x == start_x:
+                    direction = "s"
+                else:
+                    direction = "e"
+
+        # start in SW
+        elif player.start_room == dungeon.get_room(0, dungeon.size-1):
+            if dungeon.size % 2 != 0:
+                if room_y % 2 == 0:
+                    if room_x == dest_x:
+                        direction = "n"
+                    else:
+                        direction = "e"
+                elif room_y % 2 != 0:
+                    if room_x == start_x:
+                        direction = "n"
+                    else:
+                        direction = "w"
+            else:
+                if room_y % 2 != 0:
+                    if room_x == dest_x:
+                        direction = "n"
+                    else:
+                        direction = "e"
+                elif room_y % 2 == 0:
+                    if room_x == start_x:
+                        direction = "n"
+                    else:
+                        direction = "w"
+
+        # start in SE
+        elif player.start_room == dungeon.get_room(dungeon.size-1, dungeon.size-1):
+            if dungeon.size % 2 != 0:
+                if room_y % 2 == 0:
+                    if room_x == dest_x:
+                        direction = "n"
+                    else:
+                        direction = "w"
+                elif room_y % 2 != 0:
+                    if room_x == start_x:
+                        direction = "n"
+                    else:
+                        direction = "e"
+            else:
+                if room_y % 2 != 0:
+                    if room_x == dest_x:
+                        direction = "n"
+                    else:
+                        direction = "w"
+                elif room_y % 2 == 0:
+                    if room_x == start_x:
+                        direction = "n"
+                    else:
+                        direction = "e"
         else:
-            print("go find", player.destination.position)
-            direction = "lolrandum"
+            print("bug in snake move")
+            direction = 0
+            quit()
         return direction
+
+    def set_ai_profile(self, player):
+        """
+        runs in game_loop, every time player is prompted to move.
+        returns profile (player.profile)
+        """
+        if player.score == 0:
+            profile = "brave"
+        elif player.hp == 1:
+            profile = "coward"
+            print("1 hp left - RUN AWAY")
+            quit()
+        else:
+            # Defaulting to brave
+            profile = "brave"
+        return profile
 
     def game_loop(self, player, dungeon):
         """
@@ -353,7 +452,9 @@ class Controller:
 
             # ASK PLAYER DIRECTION
             if player.ai is True:
-                direction = self.ai_move(player)
+                # direction = self.ai_move(player)
+                player.profile = self.set_ai_profile(player)
+                direction = self.ai_snake_move(player, dungeon)
             else:
                 direction = self.view.handle_input()
             new_room = self.move_player(player, direction, dungeon)
@@ -464,7 +565,14 @@ class Controller:
                                              monster.unit_type,
                                              monster=True)
                         if actor.ai is True:
-                            choice = "1"
+                            if actor.profile == "brave":
+                                choice = "1"
+                            elif actor.profile == "coward":
+                                choice = "2"
+                            else:
+                                print("something wrong for AI profile check in combat")
+                                choice = "1"
+                                quit()
                         else:
                             choice = self.view.handle_input()
                         if choice == "1":
@@ -565,7 +673,6 @@ class Controller:
                 return View.player_miss, defender.unit_type
             else:
                 return attacker.unit_type, View.monster_miss
-
 
     def roll_dice(self, user, dice_type):
         if dice_type == "attack":
