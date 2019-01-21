@@ -337,7 +337,6 @@ class Controller:
 
         if room_x == dest_x and room_y == dest_y:
             print("I FOUND THE EXIT!")
-            direction = "xyz"
             quit()
 
         # start in NW
@@ -424,7 +423,7 @@ class Controller:
             quit()
         return direction
 
-    def set_ai_profile(self, player):
+    def set_ai_profile(self, player, dungeon):
         """
         runs in game_loop, every time player is prompted to move.
         returns profile (player.profile)
@@ -433,12 +432,23 @@ class Controller:
             profile = "brave"
         elif player.hp == 1:
             profile = "coward"
-            print("1 hp left - RUN AWAY")
+            for row in dungeon:
+                for room in row:
+                    if room.is_dark is False:
+                        if len(room.monsters) > 0:
+                            print("I should avoid", room.position)
             quit()
         else:
             # Defaulting to brave
             profile = "brave"
         return profile
+
+    def show_monsters(self, dungeon):
+        for row in dungeon:
+            for room in row:
+                if room.is_dark is False:
+                    if len(room.monsters) > 0:
+                        print("I know", room.position, "contains monsters.")
 
     def game_loop(self, player, dungeon):
         """
@@ -453,10 +463,12 @@ class Controller:
             # ASK PLAYER DIRECTION
             if player.ai is True:
                 # direction = self.ai_move(player)
-                player.profile = self.set_ai_profile(player)
+                player.profile = self.set_ai_profile(player, dungeon)
                 direction = self.ai_snake_move(player, dungeon)
             else:
                 direction = self.view.handle_input()
+
+
             new_room = self.move_player(player, direction, dungeon)
 
             if new_room is False:

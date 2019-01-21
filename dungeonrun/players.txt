@@ -1,3 +1,6 @@
 Sebbe,knight,0,0
-Pelle,wizard,0,0
+Pelle,wizard,0,2000
 Tester,wizard,0,0
+AI Knight,knight,0,0
+AI Wizard,wizard,0,0
+AI Thief,thief,0,0Mork,wizard,0,0
