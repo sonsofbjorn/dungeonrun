@@ -356,7 +356,7 @@ class View:
 
     def print_hp_score_list(self, player):
         losthp = player.max_hp - int(player.hp)
-        hpbar = "{yellow}".format(yellow=self.colors.get("yellow"))+("▒"*int(losthp))+"{green}".format(green=self.colors.get("green"))+("▓"*int(player.hp))
+        hpbar = "{red}".format(red=self.colors.get("red"))+("▒"*int(losthp))+"{green}".format(green=self.colors.get("green"))+("▓"*int(player.hp))
         hp_score_list = (" ╔══════════════════╗",
                          " ║       NAME:      ║",
                          " ║"+player.name.center(18)+"║",
@@ -381,7 +381,7 @@ class View:
             monster_hp = player.current_room.monsters[0].hp
             monster_max_hp = player.current_room.monsters[0].max_hp
             losthp = int(monster_max_hp) - int(monster_hp)
-            hpbar = "{yellow}".format(yellow=self.colors.get("yellow"))+("▒" * int(losthp))+"{green}".format(green=self.colors.get("green")) + ("▓" * int(monster_hp))
+            hpbar = "{red}".format(red=self.colors.get("red"))+("▒" * int(losthp))+"{green}".format(green=self.colors.get("green")) + ("▓" * int(monster_hp))
             hp_score_list = (" ╔══════════════════╗ ",
                              " ║     MONSTER:     ║ ",
                              " ║" + player.current_room.monsters[0].unit_type.center(18) + "║ ",
