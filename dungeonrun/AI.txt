@@ -1,3 +1,32 @@
 AI Knight,knight,0,0
 AI Wizard,wizard,0,0
 AI Thief,thief,0,0
+
+
+I am saving this function here. It is outdated and not utilized, but may come in handy for reference
+once alternative paths for the AI must be developed.
+
+    def ai_move(self, player):
+        room_x = player.current_room.position[0]
+        room_y = player.current_room.position[1]
+        dest_x = player.destination.position[0]
+        dest_y = player.destination.position[1]
+        if room_x > dest_x:
+            print("going west")
+            direction = "w"
+        elif room_x < dest_x:
+            print("going east")
+            direction = "e"
+        elif room_y > dest_y:
+            print("going north")
+            direction = "n"
+        elif room_y < dest_y:
+            print("going south")
+            direction = "s"
+        elif player.current_room.position == player.destination.position:
+            quit()
+            direction = 0
+        else:
+            print("go find", player.destination.position)
+            direction = "lolrandum"
+        return direction

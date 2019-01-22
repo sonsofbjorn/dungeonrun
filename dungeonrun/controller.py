@@ -93,9 +93,10 @@ class Controller:
                 dungeon_size = 8
                 break
             else:
-                self.view.print_main_menu(View.welcome_menu,
+                self.view.print_main_menu(View.choose_size,
                                           View.err_choice,
                                           error=True)
+                time.sleep(3)
         return dungeon_size
 
     def start_loc_menu(self):
@@ -119,7 +120,7 @@ class Controller:
                 start_loc = "SE"
                 break
             else:
-                self.view.print_main_menu(View.welcome_menu,
+                self.view.print_main_menu(View.choose_corner,
                                           View.err_choice,
                                           error=True)
         # This string is sent into init_objects function later
@@ -271,7 +272,8 @@ class Controller:
                 if username == uname:
                     return username, role
 
-    def init_objects(self, player, role, start_loc, dungeon_size, ai_check=False):
+    def init_objects(self, player, role, start_loc,
+                     dungeon_size, ai_check=False):
         """
         this function will init objects
         player, role, start_loc is a string.
@@ -457,8 +459,6 @@ class Controller:
         """
         while True:
             self.view.print_game(player, dungeon, View.direction_option)
-            if player.hp < 1:
-                break
 
             # ASK PLAYER DIRECTION
             if player.ai is True:
@@ -491,6 +491,16 @@ class Controller:
                                      View.leave_question,
                                      View.leave_options,
                                      leave_q=True)
+                usrinp = input(">>")
+                if usrinp == "1":
+                    self.exit_game()
+                    break
+                if usrinp == "2":
+                    pass
+                else:
+                    self.view.print_game(View.leave_question,
+                                         View.err_choice,
+                                         error=True)
                 if player.ai is False:
                     time.sleep(2)
             while len(player.current_room.monsters) > 0:
@@ -503,8 +513,19 @@ class Controller:
                     time.sleep(3)
                 while len(player.current_room.monsters) > 0:
                     self.combat(player, dungeon)
+
+            if player.hp < 1:
+                break
+
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
+
+    def exit_game(self):
+        self.print_statistics
+        quit()
+
+    def print_statistics(self):
+        print("end screen")
 
     def loot(self, player, dungeon):
         """
@@ -625,6 +646,13 @@ class Controller:
         return True
 
     def move_player(self, player, direction, dungeon_map):
+        """
+        This moves a player object on the map
+        with directions, N, E, S, W as strings
+        It then returns a new room object.
+        If the player fails in moving it returns
+        a False
+        """
         x = player.current_room.position[0]
         y = player.current_room.position[1]
 
@@ -673,7 +701,7 @@ class Controller:
                 if defender.hero_class == "knight":
                     if defender.block is True:
                         defender.block = False
-                        return View.monster_hit, attacker.unit_type, View.shield_block
+                        return View.shield_block, attacker.unit_type
                     else:
                         defender.hp -= 1
                         return View.monster_hit, attacker.unit_type, View.for_one_dmg
