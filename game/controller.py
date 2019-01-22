@@ -136,27 +136,10 @@ class Controller:
         return start_loc
 
     def map_size_AI(self):
-        map_size = 0
-        map_choice = random.randrange(0, 100)
-        if map_choice < 26:
-            map_size = 5
-        elif map_choice >= 26 & map_choice <= 74:
-            map_size = 5
-        elif map_choice >= 75:
-            map_size = 6
-        return map_size
+        return random.choice([4,5,8])
 
     def start_loc_AI(self):
-        corner_choice = random.randrange(0, 4)
-        if corner_choice == 1:
-            start_loc = "NW"
-        elif corner_choice == 2:
-            start_loc = "NE"
-        elif corner_choice == 2:
-            start_loc = "SW"
-        else:
-            start_loc = "SE"
-        return start_loc
+        return random.choice(["NW","NE","SW","SE"])
 
     def new_player_menu(self):
         """
@@ -362,17 +345,8 @@ class Controller:
         dungeon = Map(dungeon_size)
 
         # Get start room and set exit
-        if start_loc == "NW":
-            start_room = dungeon.corner["NW"]
-        elif start_loc == "NE":
-            start_room = dungeon.corner["NE"]
-        elif start_loc == "SW":
-            start_room = dungeon.corner["SW"]
-        elif start_loc == "SE":
-            start_room = dungeon.corner["SE"]
-
-        player = Player(player, role, start_room)
-        self.generate_exit(dungeon_size, dungeon, start_room)
+        player = Player(player, role, dungeon.corner[start_loc])
+        self.generate_exit(dungeon_size, dungeon, dungeon.corner[start_loc])
 
         if ai_check is True:
             player.ai = True
@@ -386,13 +360,13 @@ class Controller:
 
     def ai_find_exit(self, player, dungeon):
         if player.current_room.position == (0, 0):
-            player.destination = dungeon.get_room(dungeon.size-1, dungeon.size-1)
+            player.destination = dungeon.corner("SE")
         elif player.current_room.position == (dungeon.size-1, 0):
-            player.destination = dungeon.get_room(0, dungeon.size-1)
+            player.destination = dungeon.corner("NE")
         elif player.current_room.position == (0, dungeon.size-1):
-            player.destination = dungeon.get_room(dungeon.size-1, 0)
+            player.destination = dungeon.corner("SW")
         elif player.current_room.position == (dungeon.size-1, dungeon.size-1):
-            player.destination = dungeon.get_room(0, 0)
+            player.destination = dungeon.corner("NW")
 
     def game_loop(self, player, dungeon):
         """
