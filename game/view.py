@@ -55,9 +55,11 @@ class View:
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
-    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: "]
+    enter_go_back = ["", "", "[ENTER] to return."]
 
-    enter_char_name = ["", "Enter character name: "]
+    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: ", "", "", ""]
+
+    enter_char_name = ["", "Enter character name: ", "", "", "", "", "", "Type 'back' to return"]
 
     leave_question = ["You see a staircaise,", "do you want to leave?"]
 

@@ -1,5 +1,3 @@
-Sebbe,knight,0,0
-Pelle,wizard,0,0
-Tester,wizard,0,0
-Mathiastheslayer,knight,0,0
-Mathias,wizard,0,0
+Hej,thief,0,0
+Bajs,thief,0,300
+Asd,thief,0,0
