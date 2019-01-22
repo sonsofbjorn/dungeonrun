@@ -65,6 +65,7 @@ class View:
 
     show_monsters = ["Uhuh! ENEMIES! You see the following foes: "]
 
+    player_is_dead = ["", "Character has died and cannot be played!"]
     score_text = ["Your current score is: "]
     loot_text = ["You found loot! The following loot was added to your backback: "]
     player_dead = ["You have been slained by the"]
