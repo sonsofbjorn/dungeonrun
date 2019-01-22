@@ -1,6 +1,0 @@
-Hej,thief,0,0
-Bajs,thief,0,300
-Asd,thief,0,0
-Ijustwannadie,wizard,1,128
-Thischarwilldie,wizard,1,100
-Emil,thief,0,218
