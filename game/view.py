@@ -79,7 +79,7 @@ class View:
     player_crit = [" did a critical hit "]
     shield_block = ["Your shield blocked the attack from  "]
     hit = [" hit "]
-    you_died = ["You have died!", "All your loot this round was lost", "and not added to your highscore"]
+    you_died = ["You have died!", "All your loot this round was lost", "and not added to your highscore", "", "[ENTER] to return"]
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []
