@@ -57,7 +57,13 @@ class View:
 
     enter_go_back = ["", "", "[ENTER] to return."]
 
-    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: ", "", "", ""]
+    stats_count = ["", "---- Killed Monsters ----",
+                   "",
+                   "Giant Spider: ",
+                   "Skeletons: ",
+                   "Orcs: ",
+                   "Troll: ",
+                   "Tresure count: ", "Total Score: ", "", "", ""]
 
     enter_char_name = ["", "Enter character name: ", "", "", "", "", "", "Type 'back' to return"]
 

@@ -313,7 +313,7 @@ class Controller:
     def generate_exit(self, dungeon_size, dungeon, start_room):
         '''
         This will generate an exit
-        It will generate a new exit if the 
+        It will generate a new exit if the
         location is the same as the player
         start_room
         '''
@@ -402,10 +402,10 @@ class Controller:
             if player.current_room.has_exit is True:
                 while True:
                     self.view.print_game(player,
-                                        dungeon,
-                                        View.leave_question,
-                                        View.leave_options,
-                                        leave_q=True)
+                                         dungeon,
+                                         View.leave_question,
+                                         View.leave_options,
+                                         leave_q=True)
                     usrinp = self.view.handle_input()
                     if usrinp == "1":
                         self.statistics(player)
@@ -415,10 +415,10 @@ class Controller:
                         break
                     else:
                         self.view.print_game(player,
-                                            dungeon,
-                                            View.leave_question,
-                                            View.err_choice,
-                                            error=True)
+                                             dungeon,
+                                             View.leave_question,
+                                             View.err_choice,
+                                             error=True)
                     time.sleep(2)
             while len(player.current_room.monsters) > 0:
                 self.view.print_game(player,
@@ -439,33 +439,64 @@ class Controller:
     def statistics(self, player):
         results = []
         results = View.stats_count.copy()
+        monsters_killed = self.monster_kill_count()
 
         # RESULTS [1] KILLED
         # RESULTS [2] TREASURES
         # RESULT [3] TOTAL SCORE
         if self.check_player_highscore(player):
             self.update_player_score(player)
-            results[1] += str(len(self.killed_monsters))
-            results[2] += str(len(self.looted_items))
-            results[3] += str(player.score)
-            results[4] = "You scored a new highscore!"
-            results[6] = View.enter_go_back[2]
+            results[2] += str(monsters_killed["giant spider"])
+            results[3] += str(monsters_killed["skeleton"])
+            results[4] += str(monsters_killed["orc"])
+            results[5] += str(monsters_killed["troll"])
+            results[6] += str(len(self.looted_items))
+            results[7] += str(player.score)
+            results[8] = "You scored a new highscore!"
+            results[9] = View.enter_go_back[2]
 
             self.view.print_main_menu(View.good_bye,
-                                      results,
-                                      end=True)
+                                    results,
+                                    end=True)
         else:
-            results[1] += str(len(self.killed_monsters))
-            results[2] += str(len(self.looted_items))
-            results[3] += str(player.score)
-            results[4] = "You didnt score a new highscore!"
-            results[6] = View.enter_go_back[2]
+            results[2] += str(monsters_killed["giant spider"])
+            results[3] += str(monsters_killed["skeleton"])
+            results[4] += str(monsters_killed["orc"])
+            results[5] += str(monsters_killed["troll"])
+            results[6] += str(len(self.looted_items))
+            results[7] += str(player.score)
+            results[8] = "You didnt score a new highscore!"
+            results[9] = View.enter_go_back[2]
 
             self.view.print_main_menu(View.good_bye,
                                       results,
                                       end=True)
         usr_input = self.view.handle_input()
         self.main_menu()
+
+    def monster_kill_count(self):
+        """
+        Takes no input
+        Counts all killed monster types
+        and returns dict of killed monsters
+        """
+        killed_gs = 0
+        killed_sk = 0
+        killed_or = 0
+        killed_tr = 0
+
+        for monster in self.killed_monsters:
+            if monster.unit_type == "giant spider":
+                killed_gs += 1
+            if monster.unit_type == "skeleton":
+                killed_sk += 1
+            if monster.unit_type == "orc":
+                killed_or += 1
+            if monster.unit_type == "troll":
+                killed_tr += 1
+
+        return {"giant spider": killed_gs, "skeleton": killed_sk,
+                "orc": killed_or, "troll": killed_tr}
 
     def loot(self, player, dungeon):
         """
