@@ -21,13 +21,12 @@ class Map:
                             for x in range(size))
                             for y in range(size))
         self.generate_doors()
+
         # monsterlist is a list of generated monster objects in the dungeon
         # Monsters know where they are (they have a room object as position)
-        self.monsterlist = list(self.generate_monsters(
-            Monster.available_monsters))
-
-        self.treasurelist = list(self.generate_treasure(
-            Treasure.available_items.keys()))
+        # same goes for treasures
+        self.monsterlist = list(self.fill_room(Monster.available))
+        self.treasurelist = list(self.fill_room(Treasure.available))
 
         self.corner = {
             'NW': self.get_room(0, 0),
@@ -66,31 +65,25 @@ class Map:
     def get_room(self, x, y):
         return self.matrix[y][x]
 
-    def generate_monsters(self, foes):
-        """ This function puts monsters in all rooms if they are common enough.
-        At most one of each monster in foes gets created in the room.
+    def fill_room(self, things):
+        """
+        Takes a list of things (treasures or monsters)
+        This function puts things in all rooms if they are common enough.
+        At most one of each thing in things gets created in the room.
         """
         for row in self:
             for room in row:
-                mlist = list(foes)
-                while mlist:
-                    newmonster = Monster(mlist.pop(), room)
-                    if newmonster.rarity >= random.randint(0, 100):
-                        room.monsters.append(newmonster)
-                        yield newmonster
-
-    def generate_treasure(self, gold=("Loose change", "Money pouch",
-                                      "Gold jewelry", "Gemstone", "Small treasure chest")):
-        """ CASH CASH BABY
-        """
-        for row in self:
-            for room in row:
-                tlist = list(gold)
-                while(tlist):
-                    newtreasure = Treasure(tlist.pop(), room)
-                    if newtreasure.rarity >= random.randint(0, 100):
-                        room.treasures.append(newtreasure)
-                        yield newtreasure
+                for thing in things:
+                    if thing in Monster.available:
+                        thing = Monster(thing, room)
+                    elif thing in Treasure.available:
+                        thing = Treasure(thing, room)
+                    else: raise Exception("Can't put unknown items in room.")
+                    if thing.rarity >= random.randint(0,100):
+                        if isinstance(thing, Monster):
+                            room.monsters.append(thing)
+                        else: room.treasures.append(thing)
+                        yield thing
 
     def print_monsters(self):
         """ This is a debug function """
@@ -101,9 +94,9 @@ class Map:
 
 
 class Room:
-    def __init__(self, x, y, isDark=True, hasExit=False,
+    def __init__(self, x, y, is_dark=True, has_exit=False,
                  monsters=[], treasures=[]):
-        self.dark, self.hasExit = isDark, hasExit
+        self.is_dark, self.has_exit = is_dark, has_exit
         self.monsters = []  # Why doesn't the kwarg above suffice?
         self.treasures = []
 
@@ -115,10 +108,20 @@ class Room:
         # Position X,Y tuple
         self.position = (x, y)
 
+    def get_room_monsters(self):
+        """
+        Returns a list of monster types.
+        Each elemement is a string!
+        """
+        room_monsters = list()
+        for monster in self.monsters:
+            room_monsters.append(monster.unit_type)
+        return room_monsters
+
 
 class Monster:
 
-    available_monsters = ("giant spider", "skeleton", "orc", "troll")
+    available = ("giant spider", "skeleton", "orc", "troll")
 
     def __init__(self, unit_type, room):
 
@@ -150,58 +153,29 @@ class Monster:
             self.dexterity = 2
             self.rarity = 5
 
-    def roll_dice(self, dice_type):
-        if dice_type == "attack":
-            dice_type = self.attack
-        elif dice_type == "dexterity":
-            dice_type = self.dexterity
-        elif dice_type == "initiative":
-            dice_type = self.initiative
-        value = 0
-        for x in range(0, dice_type):
-            value += random.randrange(0, dice_type)
-        return value
-
-    def attack_function(self, player):
-        attacker_roll = self.roll_dice("attack")
-        player_roll = player.roll_dice("dexterity")
-        if attacker_roll > player_roll:
-            if player.hero_class == "knight":
-                if player.block is True:
-                    print("You have been hit by", str(self.unit_type) + ", but blocked it with your shield!")
-                    player.block = False
-                else:
-                    print(player.name, "is hit by the", str(self.unit_type) + "!")
-                    player.hp -= 1
-                    print("You have", player.hp, "hp remaining!")
-
-            else:
-                print(player.name, "is hit by the", str(self.unit_type) + "!")
-                player.hp -= 1
-                print("You have", player.hp, "hp remaining!")
-        else:
-            print("The", self.unit_type, "attacks", player.name + ", but misses!")
+        self.max_hp = self.hp
 
 
 class Treasure:
-    available_items = {}
+    available = ("loose change","money pouch",
+    "gold jewelry","gemstone","small treasurechest")
 
     def __init__(self, item_type, room):
         self.item_type = item_type
         self.room = room
 
-        if self.item_type.lower() == "loose change":
+        if self.item_type  == "loose change":
             self.value = 2
             self.rarity = 40
-        elif self.item_type.lower() == "money pouch":
+        elif self.item_type  == "money pouch":
             self.value = 6
             self.rarity = 20
-        elif self.item_type.lower() == "gold jewelry":
+        elif self.item_type  == "gold jewelry":
             self.value = 10
             self.rarity = 15
-        elif self.item_type.lower() == "gemstone":
+        elif self.item_type  == "gemstone":
             self.value = 14
             self.rarity = 10
-        elif self.item_type.lower() == "small treasurechest":
+        elif self.item_type  == "small treasurechest":
             self.value = 20
             self.rarity = 5

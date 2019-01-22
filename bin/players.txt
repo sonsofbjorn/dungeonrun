@@ -2,3 +2,5 @@ Micke,wizard,0,0
 Mathias,knight,0,0
 Sebbe,thief,0,0
 Test,knight,0,0
+Micke1337,knight,0,0
+Fuckoff,thief,0,0
