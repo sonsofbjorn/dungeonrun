@@ -207,7 +207,7 @@ class Controller:
                                           error=True)
 
         # all done!
-        self.save_player(player_name, player_role, 0, 0)
+        self.save_new_player(player_name, player_role, 0, 0)
         return player_name, player_role
 
     def player_exists(self, uname):
@@ -224,7 +224,7 @@ class Controller:
                     return True, uname
         return False
 
-    def save_player(self, uname, role, score, highscore):
+    def save_new_player(self, uname, role, score, highscore):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()
                     + ","+role+","+str(score)+","+str(highscore)+"\n")
@@ -456,8 +456,8 @@ class Controller:
             results[9] = View.enter_go_back[2]
 
             self.view.print_main_menu(View.good_bye,
-                                    results,
-                                    end=True)
+                                      results,
+                                      end=True)
         else:
             results[2] += str(monsters_killed["giant spider"])
             results[3] += str(monsters_killed["skeleton"])
