@@ -224,6 +224,30 @@ class Controller:
                     return True, uname
         return False
 
+    def player_killed(self, player):
+        with open("players.txt", "r") as f:
+            lines = f.readlines()
+        count = 0
+        pow = 0
+        for row in lines:
+            if row.startswith(player.name):
+                (username, role, dead, highscore) = row.split(sep=",")
+                pos = count
+            count += 1
+        lines[pos] = player.name+","+player.hero_class+","+"1"+","+highscore
+        with open("players.txt", "w") as f:
+            f.writelines(lines)
+
+    def is_player_dead(self, player):
+        with open("players.txt", "r") as f:
+            file = f.readlines()
+            for line in file:
+                (username, role, dead, highscore) = line.split(sep=",")
+                if username == player.name.capitalize():
+                    if dead == 1:
+                        return True
+        return False
+
     def save_player(self, uname, role, score, highscore):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()
@@ -242,17 +266,6 @@ class Controller:
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
 
-    def check_player_highscore(self, player):
-        with open("players.txt", "r") as f:
-            file = f.readlines()
-
-            for line in file:
-                (username, role, score, highscore) = line.split(sep=",")
-                if username == player.name.capitalize() and player.score > int(highscore):
-                    return True
-            return False
-
-
     def update_player_score(self, player):
         with open("players.txt", "r") as f:
             lines = f.readlines()
@@ -260,13 +273,13 @@ class Controller:
         pow = 0
         for row in lines:
             if row.startswith(player.name):
+                (username, role, dead, highscore) = row.split(sep=",")
                 pos = count
             count += 1
-
-        lines[pos] = player.name+","+player.hero_class+","+"0"+","+str(player.score)+"\n"
+        newscore = player.score+int(highscore)
+        lines[pos] = player.name+","+player.hero_class+","+"0"+","+str(newscore)+"\n"
         with open("players.txt", "w") as f:
             f.writelines(lines)
-
 
     def get_top_highschores(self):
         """
@@ -431,7 +444,8 @@ class Controller:
                     self.combat(player, dungeon)
 
             if player.hp < 1:
-                break
+                self.player_killed(player)
+                self.statistics(player)
 
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
@@ -443,7 +457,7 @@ class Controller:
         # RESULTS [1] KILLED
         # RESULTS [2] TREASURES
         # RESULT [3] TOTAL SCORE
-        if self.check_player_highscore(player):
+        if not self.is_player_dead(player):
             self.update_player_score(player)
             results[1] += str(len(self.killed_monsters))
             results[2] += str(len(self.looted_items))
@@ -455,14 +469,8 @@ class Controller:
                                       results,
                                       end=True)
         else:
-            results[1] += str(len(self.killed_monsters))
-            results[2] += str(len(self.looted_items))
-            results[3] += str(player.score)
-            results[4] = "You didnt score a new highscore!"
-            results[6] = View.enter_go_back[2]
-
             self.view.print_main_menu(View.good_bye,
-                                      results,
+                                      View.you_died,
                                       end=True)
         usr_input = self.view.handle_input()
         self.main_menu()
