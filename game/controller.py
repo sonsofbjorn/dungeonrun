@@ -253,10 +253,10 @@ class Controller:
                         return True
         return False
 
-    def save_new_player(self, uname, role, score, highscore):
+    def save_new_player(self, uname, role, dead, highscore):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()
-                    + ","+role+","+str(score)+","+str(highscore)+"\n")
+                    + ","+role+","+str(dead)+","+str(highscore)+"\n")
 
     def load_player(self, uname):
         """
@@ -296,7 +296,10 @@ class Controller:
         with open(filename, mode="r") as f:
             for line in f:
                 x = line.split(',')
-                scores.append("{:006d}{:>20s}".format(int(x[-1]), x[0]))
+                if x[2] == "1":
+                    scores.append("{:006d}{s}{:>20s}".format(int(x[-1]), x[0], s="  DEAD"))
+                else:
+                    scores.append("{:006d}{:>26s}".format(int(x[-1]), x[0]))
             scores.sort()
             scores.append('~ H I G H S C O R E ~')
             scores.reverse()
