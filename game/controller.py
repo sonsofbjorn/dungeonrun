@@ -228,13 +228,14 @@ class Controller:
         with open("players.txt", "r") as f:
             lines = f.readlines()
         count = 0
-        pow = 0
+        pos = 0
         for row in lines:
             if row.startswith(player.name):
                 (username, role, dead, highscore) = row.split(sep=",")
                 pos = count
             count += 1
         lines[pos] = player.name+","+player.hero_class+","+"1"+","+highscore
+        print(lines)
         with open("players.txt", "w") as f:
             f.writelines(lines)
 
@@ -244,7 +245,7 @@ class Controller:
             for line in file:
                 (username, role, dead, highscore) = line.split(sep=",")
                 if username == player.name.capitalize():
-                    if dead == 1:
+                    if dead == "1":
                         return True
         return False
 

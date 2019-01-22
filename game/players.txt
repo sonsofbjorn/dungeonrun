@@ -4,3 +4,4 @@ Asd,thief,0,0
 Emil,thief,0,76
 Ijustwannadie,wizard,0,100
 Thischarwilldie,wizard,0,100
+Asdf,wizard,1,0
