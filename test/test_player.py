@@ -1,7 +1,7 @@
 import unittest
 
-from dungeonrun.player import Player
-from dungeonrun.dungeon import Map
+from game.player import Player
+from game.dungeon import Map
 
 
 class testPlayer(unittest.TestCase):

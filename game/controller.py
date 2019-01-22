@@ -8,6 +8,8 @@ import random
 class Controller:
     def __init__(self):
         self.view = View()
+        self.killed_monsters = []
+        self.looted_items = []
 
     def main_menu(self):
         """
@@ -35,8 +37,8 @@ class Controller:
                 break
 
             elif usr_choice == "2":
+                self.view.print_main_menu(View.enter_char_name)
                 while True:
-                    self.view.print_main_menu(View.enter_char_name)
                     player_name = self.view.handle_input()
                     if self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
@@ -204,6 +206,11 @@ class Controller:
         return player_name, player_role
 
     def player_exists(self, uname):
+        '''
+        This function checks if a player is already in the players.txt.
+        :param uname: Takes a name as an aragument to check versus a file
+        :return: returns True if player exists or False if it doesnt exists
+        '''
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
@@ -272,6 +279,23 @@ class Controller:
                 if username == uname:
                     return username, role
 
+    def generate_exit(self, dungeon_size, dungeon, start_room):
+        '''
+        This will generate an exit
+        It will generate a new exit if the
+        location is the same as the player
+        start_room
+        '''
+        while(True):
+
+            rand_x = random.randint(0, dungeon_size)
+            rand_y = random.randint(0, dungeon_size)
+            exit_room = dungeon.get_room(rand_x, rand_y)
+
+            if exit_room is not start_room:
+                exit_room.has_exit = True
+                break
+
     def init_objects(self, player, role, start_loc,
                      dungeon_size, ai_check=False):
         """
@@ -288,18 +312,20 @@ class Controller:
         # Get start room and set exit
         if start_loc == "NW":
             start_room = dungeon.corner["NW"]
-            dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
+            #dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
         elif start_loc == "NE":
             start_room = dungeon.corner["NE"]
-            dungeon.get_room(0, dungeon.size-1).has_exit = True
+            #dungeon.get_room(0, dungeon.size-1).has_exit = True
         elif start_loc == "SW":
             start_room = dungeon.corner["SW"]
-            dungeon.get_room(dungeon.size-1, 0).has_exit = True
+            #dungeon.get_room(dungeon.size-1, 0).has_exit = True
         elif start_loc == "SE":
             start_room = dungeon.corner["SE"]
-            dungeon.get_room(0, 0).has_exit = True
+            #dungeon.get_room(0, 0).has_exit = True
+
 
         player = Player(player, role, start_room)
+        self.generate_exit(dungeon_size, dungeon, start_room)
 
         if ai_check is True:
             player.ai = True
@@ -457,6 +483,7 @@ class Controller:
         Main game loop, takes in player and dungeon and let the player
         play in the dungeon! :)
         """
+
         while True:
             self.view.print_game(player, dungeon, View.direction_option)
 
@@ -485,23 +512,25 @@ class Controller:
                                      View.direction_option)
 
             if player.current_room.has_exit is True:
-                # LOGIC FOR EXITING GAME NOT WORKING!
-                self.view.print_game(player,
-                                     dungeon,
-                                     View.leave_question,
-                                     View.leave_options,
-                                     leave_q=True)
-                usrinp = input(">>")
-                if usrinp == "1":
-                    self.exit_game()
-                    break
-                if usrinp == "2":
-                    pass
-                else:
-                    self.view.print_game(View.leave_question,
-                                         View.err_choice,
-                                         error=True)
-                if player.ai is False:
+                while True:
+                    self.view.print_game(player,
+                                        dungeon,
+                                        View.leave_question,
+                                        View.leave_options,
+                                        leave_q=True)
+                    usrinp = self.view.handle_input()
+                    if usrinp == "1":
+                        self.statistics(player)
+                        time.sleep(3)
+                        quit()
+                    if usrinp == "2":
+                        break
+                    else:
+                        self.view.print_game(player,
+                                            dungeon,
+                                            View.leave_question,
+                                            View.err_choice,
+                                            error=True)
                     time.sleep(2)
             while len(player.current_room.monsters) > 0:
                 self.view.print_game(player,
@@ -520,12 +549,20 @@ class Controller:
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
 
-    def exit_game(self):
-        self.print_statistics
-        quit()
+    def statistics(self, player):
+        results = []
+        results = View.stats_count.copy()
 
-    def print_statistics(self):
-        print("end screen")
+        # RESULTS [1] KILLED
+        # RESULTS [2] TREASURES
+        # RESULT [3] TOTAL SCORE
+        results[1] += str(len(self.killed_monsters))
+        results[2] += str(len(self.looted_items))
+        results[3] += str(player.score)
+
+        self.view.print_main_menu(View.good_bye,
+                                  results,
+                                  end=True)
 
     def loot(self, player, dungeon):
         """
@@ -535,7 +572,7 @@ class Controller:
         for loot in player.current_room.treasures:
             player.score = int(player.score)
             player.score += loot.value
-            player.current_room.treasures.pop(0)
+            self.looted_items.append(player.current_room.treasures.pop(0))
             looted.append(loot.item_type)
             self.view.print_game(player,
                                  dungeon,
@@ -588,7 +625,9 @@ class Controller:
                     if player.ai is False:
                         time.sleep(3)
                     initiative_list = []
-                    player.current_room.monsters.pop(0)
+                    self.killed_monsters.append(player.current_room.monsters.pop(0))
+                    if player.special_ability == "block":
+                        player.block = True
                     break
                 elif isinstance(actor, Player):
                     while True:

@@ -70,7 +70,7 @@ class Player:
 
     def escape_combat(self):
         if self.special_ability == "light":
-            escape_chance = 20  # 20-100: you gucci
+            escape_chance = 80  # 20-100: you gucci
         else:
             escape_chance = self.dexterity*10
         escape = random.randrange(0, 100)

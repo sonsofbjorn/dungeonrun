@@ -1,7 +1,3 @@
-AI Knight,knight,0,0
-AI Wizard,wizard,0,0
-AI Thief,thief,0,0
-
 
 I am saving this function here. It is outdated and not utilized, but may come in handy for reference
 once alternative paths for the AI must be developed.

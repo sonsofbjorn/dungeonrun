@@ -153,6 +153,8 @@ class Monster:
             self.dexterity = 2
             self.rarity = 5
 
+        self.max_hp = self.hp
+
 
 class Treasure:
     available = ("loose change","money pouch",

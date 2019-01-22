@@ -55,6 +55,8 @@ class View:
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
+    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: "]
+
     enter_char_name = ["", "Enter character name: "]
 
     leave_question = ["You see a staircaise,", "do you want to leave?"]
@@ -63,15 +65,15 @@ class View:
 
     score_text = ["Your current score is: "]
     loot_text = ["You found loot! The following loot was added to your backback: "]
-    player_dead = ["You have been slained by: "]
-    player_killed = ["You have slain the: "]
+    player_dead = ["You have been slained by the"]
+    player_killed = ["You have slain the "]
     player_escaped = ["You have escaped!"]
     player_failed_escape = ["You have failed to escape!"]
-    player_hit = ["You hit"]
-    monster_hit = ["You have been hit by "]
+    player_hit = ["You hit the"]
+    monster_hit = ["You have been hit by the"]
     for_one_dmg = ["for 1 damage"]
     player_miss = ["You missed"]
-    monster_miss = ["Missed you!"]
+    monster_miss = ["Missed!"]
     player_crit = [" did a critical hit "]
     shield_block = ["Your shield blocked the attack from  "]
     hit = [" hit "]
@@ -85,6 +87,13 @@ class View:
     err_player_not_exist = ["", "Player does not exist"]
     err_load_error = ["", "Load error, ask Micke"]
     """ END OF ERROR MESSAGES"""
+
+    """ COLOR DICTIONARY BELOW"""
+    colors = {
+        "red": "\033[31m",
+        "green": "\033[32m",
+        "yellow": "\033[33m"
+    }
 
     def clear_console(self):
         if platform.system() == "Linux":
@@ -181,47 +190,141 @@ class View:
         """
 
         self.clear_console()
-        nameprint = ("    ║ ╳ = your location"+"".center(42)+""+"║ ║"+player.name.center(18)+"║  ")
-        print("______                                                              ".center(os.get_terminal_size().columns))
+        print("{red} ______                                                              ".format(red=self.colors.get("red")).center(os.get_terminal_size().columns+5))
         print("|  _  \                                                             ".center(os.get_terminal_size().columns))
         print("| | | | _   _  _ __    __ _   ___   ___   _ __   _ __  _   _  _ __  ".center(os.get_terminal_size().columns))
         print("| | | || | | || '_ \  / _` | / _ \ / _ \ | '_ \ | '__|| | | || '_ \ ".center(os.get_terminal_size().columns))
         print("| |/ / | |_| || | | || (_| ||  __/| (_) || | | || |   | |_| || | | |".center(os.get_terminal_size().columns))
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
-        print("   ╔══════════════════ __/ | ═══════════════════════════════════╗ ╔══════════════════╗  ".center(os.get_terminal_size().columns+20), end="")
-        print("   ║                  |___/     MAP                             ║ ║       NAME:      ║  ".center(os.get_terminal_size().columns-20))
-        print(nameprint.center(os.get_terminal_size().columns+20), end="")
-        print("   ║                                                            ║ ╚══════════════════╝  ".center(os.get_terminal_size().columns-20))
-        sidebox = self.print_hp_score_list(player)
-        a = 0
+        print("{green}   ╔══════════════════{red} __/ | {green}═══════════════════════════════════╗   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+16), end="")
+        print("   ║                  {red}|___/{green}                                     ║   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+8))
+        print("   ║                            MAP                             ║   ".center(os.get_terminal_size().columns))
+        print("   ║       ╳ = YOUR LOCATION                                    ║   ".center(os.get_terminal_size().columns))
+        playerbox = self.print_hp_score_list(player)
+        monsterbox = self.print_monster_hp(player)
+        playerbox_cursor = 0
+        monsterbox_cursor = 0
         dungeonmap = self.draw_map(player, dungeon)
         if len(dungeonmap) < 13:
             for x in range(6):
-                hehe1 = ("║" + " " * 60 + "║")
-                print(hehe1.center(os.get_terminal_size().columns))
+                if len(player.current_room.monsters) > 0:
+                    formated_output = (monsterbox[monsterbox_cursor]+"║" + " " * 60 + "║"+playerbox[playerbox_cursor])
+                    if playerbox_cursor % 2 == 0:
+                        print(formated_output.center(os.get_terminal_size().columns), end="")
+                        playerbox_cursor += 1
+                        monsterbox_cursor += 1
+                    else:
+                        print(formated_output.center(os.get_terminal_size().columns))
+                        playerbox_cursor += 1
+                        monsterbox_cursor += 1
+                else:
+                    formated_output = ("║" + " " * 60 + "║" + playerbox[playerbox_cursor])
+                    if playerbox_cursor % 2 == 0:
+                        print(formated_output.center(os.get_terminal_size().columns+22), end="")
+                        playerbox_cursor += 1
+                        monsterbox_cursor += 1
+                    else:
+                        print(formated_output.center(os.get_terminal_size().columns-22))
+                        playerbox_cursor += 1
+                        monsterbox_cursor += 1
+            for row in dungeonmap:
+                if playerbox_cursor < 16 and monsterbox_cursor < 8 and len(player.current_room.monsters) > 0:
+                    row = (monsterbox[monsterbox_cursor] + "║" + row.center(60) + "║" + playerbox[playerbox_cursor])
+                    if playerbox_cursor == 6:
+                        print(row.center(os.get_terminal_size().columns+20), end="")
+                    elif playerbox_cursor % 2 == 0:
+                        print(row.center(os.get_terminal_size().columns), end="")
+                    else:
+                        print(row.center(os.get_terminal_size().columns))
+                elif playerbox_cursor < 16:
+                    row = ("║" + row.center(60) + "║" + playerbox[playerbox_cursor])
+                    if playerbox_cursor == 6:
+                        print(row.center(os.get_terminal_size().columns+32), end="")
+                    elif playerbox_cursor % 2 == 0:
+                        print(row.center(os.get_terminal_size().columns + 22), end="")
+                    else:
+                        print(row.center(os.get_terminal_size().columns - 22))
+                else:
+                    row = ("║" + row.center(60) + "║")
+                    print(row.center(os.get_terminal_size().columns))
+                monsterbox_cursor += 1
+                playerbox_cursor += 1
         elif len(dungeonmap) < 16:
             for x in range(4):
-                hehe1 = ("║" + " " * 60 + "║")
-                print(hehe1.center(os.get_terminal_size().columns))
-        for row in dungeonmap:
-            if a < 12:
-                row = ("║"+row.center(60)+"║"+sidebox[a])
-                if a % 2 == 0:
-                    print(row.center(os.get_terminal_size().columns+22), end="")
+                if len(player.current_room.monsters) > 0:
+                    formated_output = (monsterbox[monsterbox_cursor]+"║" + " " * 60 + "║"+playerbox[playerbox_cursor])
+                    if playerbox_cursor % 2 == 0:
+                        print(formated_output.center(os.get_terminal_size().columns), end="")
+                        playerbox_cursor += 1
+                        monsterbox_cursor += 1
+                    else:
+                        print(formated_output.center(os.get_terminal_size().columns))
+                        monsterbox_cursor += 1
+                        playerbox_cursor += 1
                 else:
-                    print(row.center(os.get_terminal_size().columns-22))
-            else:
-                row = ("║" + row.center(60) + "║")
-                print(row.center(os.get_terminal_size().columns))
-            a += 1
+                    formated_output = ("║" + " " * 60 + "║" + playerbox[playerbox_cursor])
+                    if playerbox_cursor % 2 == 0:
+                        print(formated_output.center(os.get_terminal_size().columns + 22), end="")
+                        playerbox_cursor += 1
+                        monsterbox_cursor += 1
+                    else:
+                        print(formated_output.center(os.get_terminal_size().columns - 22))
+                        monsterbox_cursor += 1
+                        playerbox_cursor += 1
+            for row in dungeonmap:
+                if playerbox_cursor < 16 and monsterbox_cursor < 8 and len(player.current_room.monsters) > 0:
+                    row = (monsterbox[monsterbox_cursor]+"║"+row.center(60)+"║"+playerbox[playerbox_cursor])
+                    if playerbox_cursor == 6:
+                        print(row.center(os.get_terminal_size().columns+20), end="")
+                    elif playerbox_cursor % 2 == 0:
+                        print(row.center(os.get_terminal_size().columns), end="")
+                    else:
+                        print(row.center(os.get_terminal_size().columns))
+                elif playerbox_cursor < 16:
+                    row = ("║" + row.center(60) + "║" + playerbox[playerbox_cursor])
+                    if playerbox_cursor == 6:
+                        print(row.center(os.get_terminal_size().columns+32), end="")
+                    elif playerbox_cursor % 2 == 0:
+                        print(row.center(os.get_terminal_size().columns + 22), end="")
+                    else:
+                        print(row.center(os.get_terminal_size().columns - 22))
+                else:
+                    row = ("║" + row.center(60) + "║")
+                    print(row.center(os.get_terminal_size().columns))
+                monsterbox_cursor += 1
+                playerbox_cursor += 1
+
+        elif len(dungeonmap) > 16:
+            for row in dungeonmap:
+                if playerbox_cursor < 16 and monsterbox_cursor < 8 and len(player.current_room.monsters) > 0:
+                    row = (monsterbox[monsterbox_cursor]+"║"+row.center(60)+"║"+playerbox[playerbox_cursor])
+                    if playerbox_cursor == 6:
+                        print(row.center(os.get_terminal_size().columns+20), end="")
+                    elif playerbox_cursor % 2 == 0:
+                        print(row.center(os.get_terminal_size().columns), end="")
+                    else:
+                        print(row.center(os.get_terminal_size().columns))
+                elif playerbox_cursor < 16:
+                    row = ("║" + row.center(60) + "║" + playerbox[playerbox_cursor])
+                    if playerbox_cursor == 6:
+                        print(row.center(os.get_terminal_size().columns+32), end="")
+                    elif playerbox_cursor % 2 == 0:
+                        print(row.center(os.get_terminal_size().columns + 22), end="")
+                    else:
+                        print(row.center(os.get_terminal_size().columns - 22))
+                else:
+                    row = ("║" + row.center(60) + "║")
+                    print(row.center(os.get_terminal_size().columns))
+                monsterbox_cursor += 1
+                playerbox_cursor += 1
         if len(dungeonmap) < 13:
             for x in range(6):
-                hehe1 = ("║" + " " * 60 + "║")
-                print(hehe1.center(os.get_terminal_size().columns))
+                formated_output = ("║" + " " * 60 + "║")
+                print(formated_output.center(os.get_terminal_size().columns))
         elif len(dungeonmap) < 16:
             for x in range(5):
-                hehe1 = ("║" + " " * 60 + "║")
-                print(hehe1.center(os.get_terminal_size().columns))
+                formated_output = ("║" + " " * 60 + "║")
+                print(formated_output.center(os.get_terminal_size().columns))
         print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
         print("   ║                                                            ║   ".center(os.get_terminal_size().columns))
         print("╚════════════════════════════════════════════════════════════╝".center(os.get_terminal_size().columns))
@@ -252,10 +355,14 @@ class View:
 
     def print_hp_score_list(self, player):
         losthp = player.max_hp - int(player.hp)
-        hpbar = "▒"*int(losthp)+"▓"*int(player.hp)
+        hpbar = "{red}".format(red=self.colors.get("red"))+("▒"*int(losthp))+"{green}".format(green=self.colors.get("green"))+("▓"*int(player.hp))
         hp_score_list = (" ╔══════════════════╗",
+                         " ║       NAME:      ║",
+                         " ║"+player.name.center(18)+"║",
+                         " ╚══════════════════╝",
+                         " ╔══════════════════╗",
                          " ║        HP:       ║",
-                         " ║"+hpbar.center(18)+"║",
+                         " ║"+hpbar.center(28)+"║",
                          " ╚══════════════════╝",
                          " ╔══════════════════╗",
                          " ║      CLASS:      ║",
@@ -268,8 +375,28 @@ class View:
                          )
         return hp_score_list
 
+    def print_monster_hp(self, player):
+        if len(player.current_room.monsters) > 0:
+            monster_hp = player.current_room.monsters[0].hp
+            monster_max_hp = player.current_room.monsters[0].max_hp
+            losthp = int(monster_max_hp) - int(monster_hp)
+            hpbar = "{red}".format(red=self.colors.get("red"))+("▒" * int(losthp))+"{green}".format(green=self.colors.get("green")) + ("▓" * int(monster_hp))
+            hp_score_list = (" ╔══════════════════╗ ",
+                             " ║     MONSTER:     ║ ",
+                             " ║" + player.current_room.monsters[0].unit_type.center(18) + "║ ",
+                             " ╚══════════════════╝ ",
+                             " ╔══════════════════╗ ",
+                             " ║    MONSTER HP:   ║ ",
+                             " ║" + hpbar.center(28) + "║ ",
+                             " ╚══════════════════╝ "
+                             )
+        else:
+            hp_score_list = ()
+        return hp_score_list
+
+
     def center_text(self, text):
         print(text.center(os.get_terminal_size().columns))
 
     def handle_input(self):
-        return input()
+        return input("Choice: ".rjust(os.get_terminal_size().columns//2))

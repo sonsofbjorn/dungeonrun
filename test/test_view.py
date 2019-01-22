@@ -1,8 +1,8 @@
 import unittest
 
-from dungeonrun import view
-from dungeonrun import player
-from dungeonrun.dungeon import Map
+from game import view
+from game import player
+from game.dungeon import Map
 
 class testView(unittest.TestCase):
 
