@@ -460,31 +460,18 @@ class Controller:
         # RESULT [3] TOTAL SCORE
         if not self.is_player_dead(player):
             self.update_player_score(player)
-            results[2] += str(monsters_killed["giant spider"])
-            results[3] += str(monsters_killed["skeleton"])
-            results[4] += str(monsters_killed["orc"])
-            results[5] += str(monsters_killed["troll"])
-            results[6] += str(len(self.looted_items))
-            results[7] += str(player.score)
+            results[3] += str(monsters_killed["giant spider"])
+            results[4] += str(monsters_killed["skeleton"])
+            results[5] += str(monsters_killed["orc"])
+            results[6] += str(monsters_killed["troll"])
+            results[7] += str(len(self.looted_items))
+            results[8] += str(player.score)
             results[8] = "You scored a new highscore!"
             results[9] = View.enter_go_back[2]
 
-            self.view.print_main_menu(View.good_bye,
-                                      results,
-                                      end=True)
+            self.view.print_main_menu(results)
         else:
-            results[2] += str(monsters_killed["giant spider"])
-            results[3] += str(monsters_killed["skeleton"])
-            results[4] += str(monsters_killed["orc"])
-            results[5] += str(monsters_killed["troll"])
-            results[6] += str(len(self.looted_items))
-            results[7] += str(player.score)
-            results[8] = "You didnt score a new highscore!"
-            results[9] = View.enter_go_back[2]
-
-            self.view.print_main_menu(View.good_bye,
-                                      View.you_died,
-                                      end=True)
+            self.view.print_main_menu(View.you_died)
         usr_input = self.view.handle_input()
         self.main_menu()
 
