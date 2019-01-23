@@ -4,6 +4,11 @@ DEFAULT_HP = 10
 
 class Player:
     def __init__(self, name, hero_class, start_room, score=0):
+        """
+        Makes a player object. Takes name, class, start room and score
+        Name is a string, class is one of the classes below and start room
+        is a room object.
+        """
         self.name = name.capitalize()
         self.hero_class = hero_class
         self.current_room = start_room
@@ -42,6 +47,9 @@ class Player:
         return self.current_room.position
 
     def move_character(self, direction, dungeon_map):
+        """
+        Takes a direction strong (WNES) and returns a room objekt
+        """
         x = self.current_room.position[0]
         y = self.current_room.position[1]
 
@@ -69,6 +77,7 @@ class Player:
         return new_room
 
     def escape_combat(self):
+        """ Flee function """
         if self.special_ability == "light":
             escape_chance = 80  # 20-100: you gucci
         else:
