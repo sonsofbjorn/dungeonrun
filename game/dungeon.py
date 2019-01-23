@@ -14,6 +14,8 @@ MAP EXAMPLE: SMALL 4x4
 
 class Map:
     def __init__(self, size):
+        """ Makes a dungeon of room objects and fills it with
+        doors, monsters and treasures """
         if size not in [4, 5, 8]:
             raise Exception("Wrong size")
         self.size = size

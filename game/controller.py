@@ -583,7 +583,7 @@ class Controller:
                                                  dungeon,
                                                  *result,
                                                  show_result=True)
-                            time.sleep(2)
+                            time.sleep(3)
                             break
                         elif choice == "2":
                             escape = player.escape_combat()
@@ -607,7 +607,7 @@ class Controller:
                                          dungeon,
                                          *result,
                                          show_result=True)
-                    time.sleep(2)
+                    time.sleep(3)
         return True
 
     def move_player(self, player, direction, dungeon_map):
@@ -656,13 +656,16 @@ class Controller:
                     if critical_hit >= 75:
                         if defender.hp == 1:
                             defender.hp -= 1
-                            return View.player_hit, defender.unit_type, View.player_crit
+                            result = [View.player_crit[0], defender.unit_type]
+                            return result
                         else:
                             defender.hp -= 2
-                            return View.player_hit, defender.unit_type, View.player_crit
+                            result = [View.player_hit[0], defender.unit_type]
+                            return result
                     else:
                         defender.hp -= 1
-                        return View.player_hit, defender.unit_type, View.for_one_dmg
+                        result = [View.player_hit[0], defender.unit_type]
+                        return View.player_hit, defender.unit_type, View.player_crit
                 else:
                     defender.hp -= 1
                     return View.player_hit, defender.unit_type, View.for_one_dmg
