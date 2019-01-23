@@ -463,19 +463,16 @@ class Controller:
         results = View.stats_count.copy()
         monsters_killed = self.monster_kill_count()
 
-        # RESULTS [1] KILLED
-        # RESULTS [2] TREASURES
-        # RESULT [3] TOTAL SCORE
         if not self.is_player_dead(player.name):
             self.update_player_score(player)
-            results[3] += str(monsters_killed["giant spider"])
-            results[4] += str(monsters_killed["skeleton"])
-            results[5] += str(monsters_killed["orc"])
-            results[6] += str(monsters_killed["troll"])
+            results[2] += str(monsters_killed["giant spider"])
+            results[3] += str(monsters_killed["skeleton"])
+            results[4] += str(monsters_killed["orc"])
+            results[5] += str(monsters_killed["troll"])
             results[7] += str(len(self.looted_items))
             results[8] += str(player.score)
-            results[8] = "You scored a new highscore!"
-            results[9] = View.enter_go_back[2]
+            results[10] = "You scored a new highscore!"
+            results[11] = View.enter_go_back[2]
 
             self.view.print_main_menu(results)
         else:
