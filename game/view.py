@@ -83,7 +83,7 @@ class View:
     for_one_dmg = ["for 1 damage"]
     player_miss = ["You missed"]
     monster_miss = ["Missed!"]
-    player_crit = ["with a critical hit "]
+    player_crit = [" You did a critical hit to "]
     shield_block = ["Your shield blocked the attack from  "]
     hit = [" hit "]
     you_died = ["You have died!", "All your loot this round was lost", "and not added to your highscore", "", "[ENTER] to return"]
