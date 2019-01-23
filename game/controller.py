@@ -879,7 +879,6 @@ class Controller:
                 if attacker.hero_class == "thief":
                     critical_hit = random.randrange(0, 100)
                     if critical_hit >= 75:
-<<<<<<< HEAD
                         if defender.hp == 1:
                             defender.hp -= 1
                             result = [View.player_crit[0], defender.unit_type]
@@ -888,13 +887,10 @@ class Controller:
                             defender.hp -= 2
                             result = [View.player_crit[0], defender.unit_type]
                             return result
-=======
                         defender.hp -= 2
-                        return attacker.name, View.player_crit, defender.unit_type
->>>>>>> 0c2a4cc4a5373c71086ffc63be5860de239674e2
                     else:
                         defender.hp -= 1
-                        return attacker.name, View.player_hit, defender.unit_type
+                        return View.player_hit, defender.unit_type
                 else:
                     defender.hp -= 1
                     return View.player_hit, defender.unit_type, View.for_one_dmg
