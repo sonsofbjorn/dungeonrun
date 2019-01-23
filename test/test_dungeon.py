@@ -1,6 +1,6 @@
 import unittest
 
-from dungeonrun import dungeon
+from game import dungeon
 from collections import Iterable
 
 

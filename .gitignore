@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+game/__pycache__/
+test/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -106,5 +108,11 @@ venv.bak/
 *.iml
 
 # ignore players.txt
-dungeonrun/players.txt
+game/players.txt
 bin/build1.02.54 - 18012019.exe - Shortcut.lnk
+*.xml
+*.xml
+*.txt
+game/Compiler.bat
+.vscode/settings.json
+game/players.txt
