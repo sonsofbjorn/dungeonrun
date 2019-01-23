@@ -714,7 +714,7 @@ class Controller:
         # RESULTS [2] TREASURES
         # RESULT [3] TOTAL SCORE
         if not self.is_player_dead(player.name):
-            self.update_player_score(player.name)
+            self.update_player_score(player)
             results[2] += str(monsters_killed["giant spider"])
             results[3] += str(monsters_killed["skeleton"])
             results[4] += str(monsters_killed["orc"])
