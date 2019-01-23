@@ -1,0 +1,15 @@
+Sebbe,knight,0,0
+Pelle,wizard,0,0
+Tester,wizard,0,0
+AI Knight,knight,0,0
+AI Wizard,wizard,0,0
+AI Thief,thief,0,0
+Mork,wizard,0,0
+Mathiastheslayer,knight,0,0
+Sebbe1,wizard,0,0
+Mathias,wizard,0,0
+Mkafkda,wizard,0,0
+Mfmdamkf,knight,0,0
+Sakdksla,wizard,0,0
+Kdfkds,knight,0,0
+Bla,knight,0,2
