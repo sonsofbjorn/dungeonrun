@@ -87,6 +87,7 @@ class View:
     shield_block = ["Your shield blocked the attack from  "]
     hit = [" hit "]
     you_died = ["You have died!", "All your loot this round was lost", "and not added to your highscore", "", "[ENTER] to return"]
+    exit_score = ["The score has been added to your highscore!"]
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []
@@ -124,13 +125,28 @@ class View:
             for n in range(3):
                 for room in row:
                     if room.position == player.show_location:
-                        if n == 1:
+                        if n == 0 and len(room.get_room_monsters()) > 1:
+                            out = "░M░░░░"
+                        elif n == 0 and len(room.get_room_monsters()) == 1:
+                            out = "░m░░░░"
+                        elif n == 1:
                             out = "░░╳░░░"
                         else:
                             out = "░░░░░░"
                     elif room.has_exit and room.is_dark is False:
+                        if n == 0 and len(room.get_room_monsters()) > 1:
+                            out = "░M░░░░"
+                        elif n == 0 and len(room.get_room_monsters()) == 1:
+                            out = "░m░░░░"
                         if n == 1:
                             out = "░EXIT░"
+                        else:
+                            out = "░░░░░░"
+                    elif not room.is_dark and len(room.get_room_monsters()) > 0:
+                        if n == 0 and len(room.get_room_monsters()) > 1:
+                            out = "░M░░░░"
+                        elif n == 0 and len(room.get_room_monsters()) == 1:
+                            out = "░m░░░░"
                         else:
                             out = "░░░░░░"
                     elif room.is_dark:
@@ -208,8 +224,8 @@ class View:
         print("|___/   \__,_||_| |_| \__, | \___| \___/ |_| |_||_|    \__,_||_| |_|".center(os.get_terminal_size().columns))
         print("{green}   ╔══════════════════{red} __/ | {green}═══════════════════════════════════╗   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+16), end="")
         print("   ║                  {red}|___/{green}                                     ║   ".format(red=self.colors.get("red"), green=self.colors.get("green")).center(os.get_terminal_size().columns+8))
-        print("   ║                            MAP                             ║   ".center(os.get_terminal_size().columns))
-        print("   ║       ╳ = YOUR LOCATION                                    ║   ".center(os.get_terminal_size().columns))
+        print("   ║                            MAP   m = One monster           ║   ".center(os.get_terminal_size().columns))
+        print("   ║       ╳ = YOUR LOCATION          M = More than one monster ║   ".center(os.get_terminal_size().columns))
         playerbox = self.print_hp_score_list(player)
         monsterbox = self.print_monster_hp(player)
         playerbox_cursor = 0

@@ -471,7 +471,7 @@ class Controller:
             results[5] += str(monsters_killed["troll"])
             results[7] += str(len(self.looted_items))
             results[8] += str(player.score)
-            results[10] = "You scored a new highscore!"
+            results[10] = View.exit_score
             results[11] = View.enter_go_back[2]
 
             self.view.print_main_menu(results)
