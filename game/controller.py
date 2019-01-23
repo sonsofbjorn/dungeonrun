@@ -131,27 +131,10 @@ class Controller:
         return start_loc
 
     def map_size_AI(self):
-        map_size = 0
-        map_choice = random.randrange(0, 100)
-        if map_choice <= 25:
-            map_size = 4
-        elif map_choice >= 75:
-            map_size = 8
-        else:
-            map_size = 5
-        return map_size
+        return random.choice([4, 5, 8])
 
     def start_loc_AI(self):
-        corner_choice = random.randrange(0, 4)
-        if corner_choice == 0:
-            start_loc = "NW"
-        elif corner_choice == 1:
-            start_loc = "NE"
-        elif corner_choice == 2:
-            start_loc = "SW"
-        else:
-            start_loc = "SE"
-        return start_loc
+        return random.choice(["NW", "NE", "SW", "SE"])
 
     def new_player_menu(self):
         """
@@ -420,10 +403,8 @@ class Controller:
             direction = "s"
         elif player.current_room.position == player.destination.position:
             print("found destination")
-            temp = player.start_room
-            player.start_room = player.destination
-            player.destination = temp
-            direction = "i don't know"
+            time.sleep(0.2)
+            direction = "find new target"
         else:
             print("ended in Else for simple move - bug")
             direction = 0
@@ -550,6 +531,13 @@ class Controller:
             print("bug in snake move")
             direction = 0
             quit()
+
+        if player.current_room.position == player.destination.position:
+            print("found destination")
+            temp = player.start_room
+            player.start_room = player.destination
+            player.destination = temp
+            direction = "idk"
         return direction
 
     def set_ai_profile(self, player, dungeon):
@@ -591,7 +579,7 @@ class Controller:
                     self.ai_find_exit(player, dungeon)
                     direction = self.ai_simple_move(player)
                     print("Fleeing:", direction, "towards", player.destination.position)
-                    time.sleep(1.25)
+                    time.sleep(1)
                 else:
                     count = 0
                     for row in dungeon:
@@ -613,6 +601,10 @@ class Controller:
                         direction = self.ai_simple_move(player)
                         print("Finding New Target.")
                         print("New Direction:", direction, "towards", player.destination.position)
+                        temp = player.start_room
+                        player.start_room = player.destination
+                        player.destination = temp
+                        direction = "i don't know"
                         time.sleep(2)
             else:
                 direction = self.view.handle_input()
