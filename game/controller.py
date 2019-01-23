@@ -289,13 +289,13 @@ class Controller:
         while True:
             uclass = input(">>")
             if uclass == "1":
-                uname = "AI Knight"
+                uname = "Ai knight"
                 break
             elif uclass == "2":
-                uname = "AI Wizard"
+                uname = "Ai wizard"
                 break
             elif uclass == "3":
-                uname = "AI Thief"
+                uname = "Ai thief"
                 break
             else:
                 print("Incorrect input")
@@ -681,10 +681,10 @@ class Controller:
         # RESULT [3] TOTAL SCORE
         if not self.is_player_dead(player):
             self.update_player_score(player)
-            results[3] += str(monsters_killed["giant spider"])
-            results[4] += str(monsters_killed["skeleton"])
-            results[5] += str(monsters_killed["orc"])
-            results[6] += str(monsters_killed["troll"])
+            results[2] += str(monsters_killed["giant spider"])
+            results[3] += str(monsters_killed["skeleton"])
+            results[4] += str(monsters_killed["orc"])
+            results[5] += str(monsters_killed["troll"])
             results[7] += str(len(self.looted_items))
             results[8] += str(player.score)
             results[10] = View.exit_score[0]
@@ -879,7 +879,6 @@ class Controller:
                 if attacker.hero_class == "thief":
                     critical_hit = random.randrange(0, 100)
                     if critical_hit >= 75:
-<<<<<<< HEAD
                         if defender.hp == 1:
                             defender.hp -= 1
                             result = [View.player_crit[0], defender.unit_type]
@@ -888,10 +887,6 @@ class Controller:
                             defender.hp -= 2
                             result = [View.player_crit[0], defender.unit_type]
                             return result
-=======
-                        defender.hp -= 2
-                        return attacker.name, View.player_crit, defender.unit_type
->>>>>>> 0c2a4cc4a5373c71086ffc63be5860de239674e2
                     else:
                         defender.hp -= 1
                         return attacker.name, View.player_hit, defender.unit_type
