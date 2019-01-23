@@ -74,7 +74,7 @@ class Player:
         else:
             escape_chance = self.dexterity*10
         escape = random.randrange(0, 100)
-        if escape >= escape_chance:
+        if escape <= escape_chance:
             escape = True
         else:
             escape = False

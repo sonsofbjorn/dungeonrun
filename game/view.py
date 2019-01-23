@@ -55,9 +55,17 @@ class View:
 
     good_bye = ["Thanks for playing!", "", "/Sonsofbjorn"]
 
-    stats_count = ["", "Kill count: ", "Tresure count: ", "Total Score: "]
+    enter_go_back = ["", "", "[ENTER] to return."]
 
-    enter_char_name = ["", "Enter character name: "]
+    stats_count = ["", "---- Killed Monsters ----",
+                   "",
+                   "Giant Spider: ",
+                   "Skeletons: ",
+                   "Orcs: ",
+                   "Troll: ",
+                   "Tresure count: ", "Total Score: ", "", "", ""]
+
+    enter_char_name = ["", "Enter character name: ", "", "", "", "", "", "Type 'back' to return"]
 
     leave_question = ["You see a staircaise,", "do you want to leave?"]
 
@@ -77,6 +85,7 @@ class View:
     player_crit = [" did a critical hit "]
     shield_block = ["Your shield blocked the attack from  "]
     hit = [" hit "]
+    you_died = ["You have died!", "All your loot this round was lost", "and not added to your highscore", "", "[ENTER] to return"]
 
     """ ERROR MESESAGES BELLOW """
     error_msg = []

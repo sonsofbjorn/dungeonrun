@@ -40,7 +40,9 @@ class Controller:
                 self.view.print_main_menu(View.enter_char_name)
                 while True:
                     player_name = self.view.handle_input()
-                    if self.player_exists(player_name):
+                    if player_name == "back":
+                        self.main_menu()
+                    elif self.player_exists(player_name):
                         player_tuple = self.load_player(player_name)
                         dungeon_size = self.map_size_menu()
                         start_loc = self.start_loc_menu()
@@ -59,9 +61,9 @@ class Controller:
             # Highscore
 
             elif usr_choice == "4":
-                self.view.print_main_menu(self.get_top_highschores())
+                self.view.print_main_menu(self.get_top_highschores(), View.enter_go_back, error=True)
                 self.view.handle_input()  # ENTER TO CONTINUE
-                break
+                self.main_menu()
 
             # Quit
             elif usr_choice == "5":
@@ -163,7 +165,10 @@ class Controller:
         while True:
             usr_choice = self.view.handle_input()
 
-            if len(usr_choice) >= 18:
+            if usr_choice == "back":
+                self.main_menu()
+
+            elif len(usr_choice) >= 18:
                 self.view.print_main_menu(View.enter_char_name,
                                           View.err_long_name,
                                           error=True)
@@ -202,7 +207,7 @@ class Controller:
                                           error=True)
 
         # all done!
-        self.save_player(player_name, player_role, 0, 0)
+        self.save_new_player(player_name, player_role, 0, 0)
         return player_name, player_role
 
     def player_exists(self, uname):
@@ -219,7 +224,31 @@ class Controller:
                     return True, uname
         return False
 
-    def save_player(self, uname, role, score, highscore):
+    def player_killed(self, player):
+        with open("players.txt", "r") as f:
+            lines = f.readlines()
+        count = 0
+        pos = 0
+        for row in lines:
+            if row.startswith(player.name):
+                (username, role, dead, highscore) = row.split(sep=",")
+                pos = count
+            count += 1
+        lines[pos] = player.name+","+player.hero_class+","+"1"+","+highscore
+        with open("players.txt", "w") as f:
+            f.writelines(lines)
+
+    def is_player_dead(self, player):
+        with open("players.txt", "r") as f:
+            file = f.readlines()
+            for line in file:
+                (username, role, dead, highscore) = line.split(sep=",")
+                if username == player.name:
+                    if dead == "1":
+                        return True
+        return False
+
+    def save_new_player(self, uname, role, score, highscore):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()
                     + ","+role+","+str(score)+","+str(highscore)+"\n")
@@ -236,6 +265,21 @@ class Controller:
                 if username == uname.capitalize():
                     return username, role
         raise Exception("Something went wrong. What? No idea... Ask Sebbe")
+
+    def update_player_score(self, player):
+        with open("players.txt", "r") as f:
+            lines = f.readlines()
+        count = 0
+        pow = 0
+        for row in lines:
+            if row.startswith(player.name):
+                (username, role, dead, highscore) = row.split(sep=",")
+                pos = count
+            count += 1
+        newscore = player.score+int(highscore)
+        lines[pos] = player.name+","+player.hero_class+","+"0"+","+str(newscore)+"\n"
+        with open("players.txt", "w") as f:
+            f.writelines(lines)
 
     def get_top_highschores(self):
         """
@@ -311,16 +355,12 @@ class Controller:
         # Get start room and set exit
         if start_loc == "NW":
             start_room = dungeon.corner["NW"]
-            #dungeon.get_room(dungeon.size-1, dungeon.size-1).has_exit = True
         elif start_loc == "NE":
             start_room = dungeon.corner["NE"]
-            #dungeon.get_room(0, dungeon.size-1).has_exit = True
         elif start_loc == "SW":
             start_room = dungeon.corner["SW"]
-            #dungeon.get_room(dungeon.size-1, 0).has_exit = True
         elif start_loc == "SE":
             start_room = dungeon.corner["SE"]
-            #dungeon.get_room(0, 0).has_exit = True
 
         player = Player(player, role, start_room)
         self.generate_exit(dungeon_size, dungeon, start_room)
@@ -595,10 +635,10 @@ class Controller:
             if player.current_room.has_exit is True:
                 while True:
                     self.view.print_game(player,
-                                        dungeon,
-                                        View.leave_question,
-                                        View.leave_options,
-                                        leave_q=True)
+                                         dungeon,
+                                         View.leave_question,
+                                         View.leave_options,
+                                         leave_q=True)
                     if player.ai is True:
                         if player.profile == "coward":
                             usrinp = "1"
@@ -632,7 +672,8 @@ class Controller:
                     self.combat(player, dungeon)
 
             if player.hp < 1:
-                break
+                self.player_killed(player)
+                self.statistics(player)
 
             while len(player.current_room.treasures) > 0:
                 self.loot(player, dungeon)
@@ -640,17 +681,52 @@ class Controller:
     def statistics(self, player):
         results = []
         results = View.stats_count.copy()
+        monsters_killed = self.monster_kill_count()
 
         # RESULTS [1] KILLED
         # RESULTS [2] TREASURES
         # RESULT [3] TOTAL SCORE
-        results[1] += str(len(self.killed_monsters))
-        results[2] += str(len(self.looted_items))
-        results[3] += str(player.score)
+        if not self.is_player_dead(player):
+            self.update_player_score(player)
+            results[3] += str(monsters_killed["giant spider"])
+            results[4] += str(monsters_killed["skeleton"])
+            results[5] += str(monsters_killed["orc"])
+            results[6] += str(monsters_killed["troll"])
+            results[7] += str(len(self.looted_items))
+            results[8] += str(player.score)
+            results[8] = "You scored a new highscore!"
+            results[9] = View.enter_go_back[2]
 
-        self.view.print_main_menu(View.good_bye,
-                                  results,
-                                  end=True)
+            self.view.print_main_menu(results)
+        else:
+            self.view.print_main_menu(View.you_died)
+        usr_input = self.view.handle_input()
+        self.main_menu()
+
+    def monster_kill_count(self):
+        """
+        Takes no input
+        Counts all killed monster types
+        and returns dict of killed monsters
+        """
+        killed_gs = 0
+        killed_sk = 0
+        killed_or = 0
+        killed_tr = 0
+
+        for monster in self.killed_monsters:
+            if monster.unit_type == "giant spider":
+                killed_gs += 1
+            if monster.unit_type == "skeleton":
+                killed_sk += 1
+            if monster.unit_type == "orc":
+                killed_or += 1
+            if monster.unit_type == "troll":
+                killed_tr += 1
+
+        return {"giant spider": killed_gs, "skeleton": killed_sk,
+                "orc": killed_or, "troll": killed_tr}
+
     def loot(self, player, dungeon):
         """
         Returns a list of looted items to be displayed for the user

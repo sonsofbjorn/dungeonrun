@@ -12,3 +12,4 @@ Mkafkda,wizard,0,0
 Mfmdamkf,knight,0,0
 Sakdksla,wizard,0,0
 Kdfkds,knight,0,0
+Bla,knight,0,2
