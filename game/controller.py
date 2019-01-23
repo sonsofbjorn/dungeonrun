@@ -43,10 +43,15 @@ class Controller:
                     if player_name == "back":
                         self.main_menu()
                     elif self.player_exists(player_name):
-                        player_tuple = self.load_player(player_name)
-                        dungeon_size = self.map_size_menu()
-                        start_loc = self.start_loc_menu()
-                        break
+                        if not self.is_player_dead(player_name.capitalize()):
+                            player_tuple = self.load_player(player_name)
+                            dungeon_size = self.map_size_menu()
+                            start_loc = self.start_loc_menu()
+                            break
+                        else:
+                            self.view.print_main_menu(View.enter_char_name,
+                                                      View.player_is_dead,
+                                                      error=True)
                     else:
                         self.view.print_main_menu(View.enter_char_name,
                                                   View.err_player_not_exist,
@@ -221,20 +226,20 @@ class Controller:
         with open("players.txt", "w") as f:
             f.writelines(lines)
 
-    def is_player_dead(self, player):
+    def is_player_dead(self, uname):
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
                 (username, role, dead, highscore) = line.split(sep=",")
-                if username == player.name:
+                if username == uname:
                     if dead == "1":
                         return True
         return False
 
-    def save_new_player(self, uname, role, score, highscore):
+    def save_new_player(self, uname, role, dead, highscore):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()
-                    + ","+role+","+str(score)+","+str(highscore)+"\n")
+                    + ","+role+","+str(dead)+","+str(highscore)+"\n")
 
     def load_player(self, uname):
         """
@@ -274,7 +279,10 @@ class Controller:
         with open(filename, mode="r") as f:
             for line in f:
                 x = line.split(',')
-                scores.append("{:006d}{:>20s}".format(int(x[-1]), x[0]))
+                if x[2] == "1":
+                    scores.append("{:006d}{s}{:>20s}".format(int(x[-1]), x[0], s="  DEAD"))
+                else:
+                    scores.append("{:006d}{:>26s}".format(int(x[-1]), x[0]))
             scores.sort()
             scores.append('~ H I G H S C O R E ~')
             scores.reverse()
@@ -705,8 +713,8 @@ class Controller:
         # RESULTS [1] KILLED
         # RESULTS [2] TREASURES
         # RESULT [3] TOTAL SCORE
-        if not self.is_player_dead(player):
-            self.update_player_score(player)
+        if not self.is_player_dead(player.name):
+            self.update_player_score(player.name)
             results[2] += str(monsters_killed["giant spider"])
             results[3] += str(monsters_killed["skeleton"])
             results[4] += str(monsters_killed["orc"])
