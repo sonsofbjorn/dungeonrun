@@ -428,12 +428,19 @@ class Controller:
 
         # start in NW
         if player.start_room == dungeon.get_room(0, 0):
+            print(player.destination.position)
             if room_y == dest_y:
                 # AI has reached final row
-                if dungeon.get_room(room_x-1, dungeon.size-1).is_dark is True:
-                    direction = "w"
+                if dungeon.size == 5:
+                    if dungeon.get_room(room_x+1, dungeon.size - 1).is_dark is True:
+                        direction = "e"
+                    else:
+                        return "find new target"
                 else:
-                    return "find new target"
+                    if dungeon.get_room(room_x-1, dungeon.size-1).is_dark is True:
+                        direction = "w"
+                    else:
+                        return "find new target"
             if room_y % 2 == 0:
                 if room_x == dest_x:
                     direction = "s"
@@ -447,13 +454,21 @@ class Controller:
 
         # start in NE
         elif player.start_room == dungeon.get_room(dungeon.size-1, 0):
+            print(player.destination.position)
             if room_y == dest_y:
                 # AI has reached final row
-                try:
-                    if dungeon.get_room(room_x+1, dungeon.size-1).is_dark is True:
-                        direction = "e"
-                except IndexError:
-                    return "find new target"
+                if dungeon.size == 5:
+                    try:
+                        if dungeon.get_room(room_x-1, dungeon.size - 1).is_dark is True:
+                            direction = "w"
+                    except IndexError:
+                        return "find new target"
+                else:
+                    try:
+                        if dungeon.get_room(room_x+1, dungeon.size-1).is_dark is True:
+                            direction = "e"
+                    except IndexError:
+                        return "find new target"
             if room_y % 2 == 0:
                 if room_x == dest_x:
                     direction = "s"
@@ -467,13 +482,21 @@ class Controller:
 
         # start in SW
         elif player.start_room == dungeon.get_room(0, dungeon.size-1):
+            print(player.destination.position)
             if room_y == dest_y:
                 # AI has reached final row
-                if dungeon.get_room(room_x-1, 0).is_dark is True:
-                    direction = "w"
+                if dungeon.size == 5:
+                    if dungeon.get_room(room_x+1, 0).is_dark is True:
+                        direction = "e"
 
+                    else:
+                        return "find new target"
                 else:
-                    return "find new target"
+                    if dungeon.get_room(room_x-1, 0).is_dark is True:
+                        direction = "w"
+
+                    else:
+                        return "find new target"
             if dungeon.size % 2 != 0:
                 if room_y % 2 == 0:
                     if room_x == dest_x:
@@ -500,12 +523,20 @@ class Controller:
         # start in SE
         elif player.start_room == dungeon.get_room(dungeon.size-1, dungeon.size-1):
             if room_y == dest_y:
+                print(player.destination.position)
                 # AI has reached final row
-                try:
-                    if dungeon.get_room(room_x+1, 0).is_dark is True:
-                        direction = "w"
-                except IndexError:
-                    return "find new target"
+                if dungeon.size == 5:
+                    try:
+                        if dungeon.get_room(room_x-1, 0).is_dark is True:
+                            direction = "w"
+                    except IndexError:
+                        return "find new target"
+                else:
+                    try:
+                        if dungeon.get_room(room_x+1, 0).is_dark is True:
+                            direction = "e"
+                    except IndexError:
+                        return "find new target"
             if dungeon.size % 2 != 0:
                 if room_y % 2 == 0:
                     if room_x == dest_x:
@@ -528,17 +559,19 @@ class Controller:
                         direction = "n"
                     else:
                         direction = "e"
-        else:
-            print("bug in snake move")
-            direction = 0
-            quit()
 
-        if player.current_room.position == player.destination.position:
+        elif player.current_room.position == player.destination.position:
             print("found destination")
             temp = player.start_room
             player.start_room = player.destination
             player.destination = temp
             direction = "idk"
+
+        else:
+            print("bug in snake move")
+            direction = 0
+            quit()
+
         return direction
 
     def set_ai_profile(self, player, dungeon):
@@ -548,7 +581,7 @@ class Controller:
         """
         if player.score == 0:
             profile = "brave"
-        elif player.hp == 1:
+        elif player.hp == 1 and self.ai_find_exit(player, dungeon).has_exit:
             profile = "coward"
         else:  # IF you have 2+ hp AND you have coin:
             count = 0
@@ -598,15 +631,8 @@ class Controller:
                         time.sleep(0.3)
                     if direction == "find new target":
                         self.ai_find_exit(player, dungeon)
-                        player.profile = "coward"
-                        direction = self.ai_simple_move(player)
-                        print("Finding New Target.")
-                        print("New Direction:", direction, "towards", player.destination.position)
-                        temp = player.start_room
-                        player.start_room = player.destination
-                        player.destination = temp
-                        direction = "i don't know"
-                        time.sleep(2)
+                        direction = self.ai_snake_move(player, dungeon)
+                        time.sleep(0.2)
             else:
                 direction = self.view.handle_input()
 
@@ -889,7 +915,7 @@ class Controller:
                             return result
                     else:
                         defender.hp -= 1
-                        return attacker.name, View.player_hit, defender.unit_type
+                        return View.player_hit, defender.unit_type
                 else:
                     defender.hp -= 1
                     return View.player_hit, defender.unit_type, View.for_one_dmg

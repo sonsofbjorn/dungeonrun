@@ -4,3 +4,6 @@ Sebbe,thief,0,0
 Test,knight,0,0
 Micke1337,knight,0,0
 Fuckoff,thief,0,0
+Ai knight,knight,0,0
+Ai wizard,wizard,0,74
+Ai thief,thief,0,0
