@@ -45,6 +45,7 @@ class Controller:
                     elif self.player_exists(player_name):
                         if not self.is_player_dead(player_name.capitalize()):
                             player_tuple = self.load_player(player_name)
+                            self.print_load_stats(*player_tuple)
                             dungeon_size = self.map_size_menu()
                             start_loc = self.start_loc_menu()
                             break
@@ -340,6 +341,7 @@ class Controller:
                                           error=True)
 
         player_tuple = self.load_players_file(uname)
+        self.print_load_stats(*player_tuple)
         return player_tuple[0], player_tuple[1]
 
     def generate_exit(self, dungeon_size, dungeon, start_room):
@@ -757,6 +759,18 @@ class Controller:
             self.view.print_main_menu(View.you_died)
         usr_input = self.view.handle_input()
         self.main_menu()
+    
+    def print_load_stats(self, name, role, d, runs, spider, skeleton, orc, troll, t, hs):
+        results = View.player_load_stats.copy()
+        results[1] += runs
+        results[4] += spider
+        results[5] +=skeleton
+        results[6] += orc 
+        results[7] += troll
+        results[9] += t
+        results[10] += hs.strip('\n') 
+        self.view.print_main_menu(results)
+        self.view.handle_input()
 
     def monster_kill_count(self):
         """

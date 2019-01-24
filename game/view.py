@@ -47,7 +47,9 @@ class View:
                          "Trolls: ",                           # 8
                          "",                                   # 9
                          "Treasures collected: ",                # 1
-                         "Accumulated score: "]             # 10
+                         "Accumulated score: ",             # 10
+                         "",    #11
+                         "Enter to start game"] #12
 
     choose_corner = ["Choose your starting location:",
                      "[1] North-West",
