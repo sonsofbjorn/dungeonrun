@@ -195,7 +195,7 @@ class Controller:
                                           error=True)
 
         # all done!
-        self.save_new_player(player_name, player_role, 0, 0)
+        self.save_new_player(player_name, player_role)
         return player_name, player_role
 
     def player_exists(self, uname):
@@ -204,68 +204,98 @@ class Controller:
         :param uname: Takes a name as an aragument to check versus a file
         :return: returns True if player exists or False if it doesnt exists
         '''
-        with open("players.txt", "r") as f:
-            file = f.readlines()
-            for line in file:
-                (username, role, score, highscore) = line.split(sep=",")
-                if username == uname.capitalize():
-                    return True, uname
-        return False
+        player_tuple = self.load_players_file(uname)
+        if player_tuple is False:
+            return False
+        else:
+            return True, player_tuple[0]
 
     def player_killed(self, player):
+        '''
+        Sets player to dead in text file
+        :param uname: The argument is a player object
+        :return: nothing
+        '''
         with open("players.txt", "r") as f:
             lines = f.readlines()
         count = 0
         pos = 0
         for row in lines:
             if row.startswith(player.name):
-                (username, role, dead, highscore) = row.split(sep=",")
+                splits = row.split(sep=",")
                 pos = count
             count += 1
-        lines[pos] = player.name+","+player.hero_class+","+"1"+","+highscore
+        splits[2] = "1"
+        lines[pos] = ",".join(splits)
         with open("players.txt", "w") as f:
             f.writelines(lines)
 
     def is_player_dead(self, uname):
-        with open("players.txt", "r") as f:
-            file = f.readlines()
-            for line in file:
-                (username, role, dead, highscore) = line.split(sep=",")
-                if username == uname:
-                    if dead == "1":
-                        return True
-        return False
+        is_dead = self.load_players_file(uname)[2]
+        if is_dead == "1":
+            return True
+        else:
+            return False
 
-    def save_new_player(self, uname, role, dead, highscore):
+    def save_new_player(self, uname, role):
         with open("players.txt", "a+") as f:
             f.write(uname.capitalize()
-                    + ","+role+","+str(dead)+","+str(highscore)+"\n")
+                    + ","+role+","+"0,0,0,0,0,0,0,0"+"\n")
 
     def load_player(self, uname):
         """
         This loads a player from players.txt
         Returns a tuple with name and role which will be used in init_objects
         """
+        player_tuple = self.load_players_file(uname)
+        return player_tuple
+
+    def load_players_file(self, uname):
         with open("players.txt", "r") as f:
             file = f.readlines()
             for line in file:
-                (username, role, score, highscore) = line.split(sep=",")
+                (username, role, dead, runs,
+                 gs_killed, sk_killed, or_killed, tr_killed,
+                 tres_collected, highscore) = line.split(sep=",")
+
                 if username == uname.capitalize():
-                    return username, role
-        raise Exception("Something went wrong. What? No idea... Ask Sebbe")
+                    return (username, role, dead, runs,
+                            gs_killed, sk_killed, or_killed, tr_killed,
+                            tres_collected, highscore)
+                else:
+                    return False
 
     def update_player_score(self, player):
+        """
+        This gets all lines from file, finds a player line position in file
+        and rewrites the whole file with updated score of the players
+        """
+
+        monsters_killed = self.monster_kill_count()
         with open("players.txt", "r") as f:
             lines = f.readlines()
         count = 0
-        pow = 0
+        pos = 0
         for row in lines:
             if row.startswith(player.name):
-                (username, role, dead, highscore) = row.split(sep=",")
+                (username, role, dead, runs,
+                 gs_killed, sk_killed, or_killed, tr_killed,
+                 tres_collected, highscore) = row.split(sep=",")
                 pos = count
             count += 1
-        newscore = player.score+int(highscore)
-        lines[pos] = player.name+","+player.hero_class+","+"0"+","+str(newscore)+"\n"
+
+        new_r = int(runs) + 1
+        new_g_kill = int(gs_killed) + monsters_killed["giant spider"]
+        new_s_kill = int(sk_killed) + monsters_killed["skeleton"]
+        new_o_kill = int(or_killed) + monsters_killed["orc"]
+        new_t_kill = int(tr_killed) + monsters_killed["troll"]
+        t = int(tres_collected) + len(self.looted_items)
+        s = player.score+int(highscore)
+
+        lines[pos] = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(
+                      player.name, player.hero_class, "0", new_r,
+                      new_g_kill, new_s_kill, new_o_kill, new_t_kill,
+                      t, s)
         with open("players.txt", "w") as f:
             f.writelines(lines)
 
@@ -295,7 +325,7 @@ class Controller:
         '''
         self.view.print_main_menu(View.choose_AI)
         while True:
-            uclass = input(">>")
+            uclass = self.view.handle_input()
             if uclass == "1":
                 uname = "Ai knight"
                 break
@@ -306,13 +336,12 @@ class Controller:
                 uname = "Ai thief"
                 break
             else:
-                print("Incorrect input")
-        with open("players.txt", "r") as f:
-            file = f.readlines()
-            for line in file:
-                (username, role, score, highscore) = line.split(sep=",")
-                if username == uname:
-                    return username, role
+                self.view.print_main_menu(View.choose_AI,
+                                          View.err_choice,
+                                          error=True)
+
+        player_tuple = self.load_players_file(uname)
+        return player_tuple[0], player_tuple[1]
 
     def generate_exit(self, dungeon_size, dungeon, start_room):
         """

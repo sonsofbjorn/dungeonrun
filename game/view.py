@@ -37,6 +37,18 @@ class View:
                  "number 2 is you",
                  "number 3 is some other dude"]
 
+    player_load_stats = ["---- Stats for loaded player ----",  # 0
+                         "Total runs: ",              # 2
+                         "",                                   # 3
+                         "- Monsters killed -",                # 4
+                         "Giant Spiders: ",                    # 5
+                         "Skeletons: ",                        # 6
+                         "Orcs: ",                             # 7
+                         "Trolls: ",                           # 8
+                         "",                                   # 9
+                         "Treasures collected: ",                # 1
+                         "Accumulated score: "]             # 10
+
     choose_corner = ["Choose your starting location:",
                      "[1] North-West",
                      "[2] North-East",

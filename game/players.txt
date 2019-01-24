@@ -1,16 +1,2 @@
-Sebbe,knight,0,0
-Pelle,wizard,0,0
-Tester,wizard,0,0
-Ai knight,knight,0,0
-Ai wizard,wizard,0,338
-Ai thief,thief,0,1846
-Mork,wizard,0,0
-Mathiastheslayer,knight,0,0
-Sebbe1,wizard,0,0
-Mathias,wizard,0,0
-Mkafkda,wizard,0,0
-Mfmdamkf,knight,0,0
-Sakdksla,wizard,0,0
-Kdfkds,knight,0,0
-Bla,knight,0,2
-Testing,thief,0,0
+Sebbe,knight,0,9,303,10,20,30,40,666
+Micke,wizard,0,82301,505,90,80,70,60,0
