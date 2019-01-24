@@ -3,6 +3,12 @@ import platform
 
 
 class View:
+    """
+    This Class handles every console input/output of the game
+    and passes it to forward to controller.
+    This Class exists to isolate the disorder of long strings and prints
+    from other classes, to keep every other class as clean as possible.
+    """
 
     welcome_menu = ["Welcome to... DUNGEON RUN!",
                     "[1] New Character",
