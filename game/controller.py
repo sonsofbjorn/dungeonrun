@@ -6,6 +6,16 @@ import random
 
 
 class Controller:
+    """
+    This class handles several key features which are:
+    Starting the main game.
+    This class calls other classes to make use of their functions.
+    Handles every aspect of saving and reading to player.txt.
+    Creates a dungeon and a player object depending on user choices.
+    Handles movement for both player and AI.
+    Handles combat and loot.
+    Rolls a dice to decide initiative for players.
+    """
     def __init__(self):
         self.view = View()
         self.killed_monsters = []

@@ -1,6 +1,4 @@
 import random
-DEFAULT_HP = 10
-
 
 class Player:
     def __init__(self, name, hero_class, start_room, score=0):
@@ -44,11 +42,14 @@ class Player:
 
     @property
     def show_location(self):
+        """
+        Return x, y tuple
+        """
         return self.current_room.position
 
     def move_character(self, direction, dungeon_map):
         """
-        Takes a direction strong (WNES) and returns a room objekt
+        Takes a direction strong (WNES) and returns a room object
         """
         x = self.current_room.position[0]
         y = self.current_room.position[1]
@@ -77,14 +78,13 @@ class Player:
         return new_room
 
     def escape_combat(self):
-        """ Flee function """
+        """Flee function. Returns whether you have fled successfully or not"""
         if self.special_ability == "light":
             escape_chance = 80  # 20-100: you gucci
         else:
             escape_chance = self.dexterity*10
         escape = random.randrange(0, 100)
         if escape <= escape_chance:
-            escape = True
+            return True
         else:
-            escape = False
-        return escape
+            return False

@@ -1,21 +1,24 @@
 import random
 
-'''
-X = COL
-Y = ROW
-
-MAP EXAMPLE: SMALL 4x4
-(0, 0)(1, 0)(2, 0)(3, 0)
-(0, 1)(1, 1)(2, 1)(3, 1)
-(0, 2)(1, 2)(2, 2)(3, 2)
-(0, 3)(1, 3)(2, 3)(3, 3)
-'''
+"""
+The Dungeon module handles the map and things on it as well as helper
+functions and debug tools.
+It contains the map class itself and classes that populate it.
+"""
 
 
 class Map:
     def __init__(self, size):
         """ Makes a dungeon of room objects and fills it with
-        doors, monsters and treasures """
+       doors, monsters and treasures.
+            The layout of a small map (4x4) looks like this after generation: 
+            (0, 0)(1, 0)(2, 0)(3, 0)
+            (0, 1)(1, 1)(2, 1)(3, 1)
+            (0, 2)(1, 2)(2, 2)(3, 2)
+            (0, 3)(1, 3)(2, 3)(3, 3)
+            x = columns, y = rows
+
+            """
         if size not in [4, 5, 8]:
             raise Exception("Wrong size")
         self.size = size
@@ -24,11 +27,11 @@ class Map:
                             for y in range(size))
         self.generate_doors()
 
-        # monsterlist is a list of generated monster objects in the dungeon
-        # Monsters know where they are (they have a room object as position)
-        # same goes for treasures
         self.monsterlist = list(self.fill_room(Monster.available))
         self.treasurelist = list(self.fill_room(Treasure.available))
+        # These lists of generated monster and treasure objects in the dungeon
+        # Monsters know where they are (they have a room object as position)
+        # same goes for treasures
 
         self.corner = {
             'NW': self.get_room(0, 0),
@@ -38,6 +41,7 @@ class Map:
             }
 
     def __iter__(self):
+        """ Make map iterable for easy use""" 
         for rooms in self.matrix:
             yield rooms
 
@@ -96,16 +100,18 @@ class Map:
 
 
 class Room:
+    """
+    Every room in on the map initializes as a new object with its own properties.
+    Monster- and treasurelists gets populated by Map according the rarity.
+    """
     def __init__(self, x, y, is_dark=True, has_exit=False,
                  monsters=[], treasures=[]):
         self.is_dark, self.has_exit = is_dark, has_exit
-        self.monsters = []  # Why doesn't the kwarg above suffice?
+        self.monsters = [] 
         self.treasures = []
 
         # DOORS N E S W
         self.doors = {"N": True, "E": True, "S": True, "W": True}
-
-        # self.doors = [True, True, True, True]
 
         # Position X,Y tuple
         self.position = (x, y)
@@ -122,6 +128,9 @@ class Room:
 
 
 class Monster:
+    """
+    Keep all monster objects properties in one place.
+    """
 
     available = ("giant spider", "skeleton", "orc", "troll")
 
@@ -159,6 +168,10 @@ class Monster:
 
 
 class Treasure:
+    """
+    Keeps treasure object properties in one place.
+    """
+
     available = ("loose change","money pouch",
     "gold jewelry","gemstone","small treasurechest")
 
