@@ -80,9 +80,9 @@ class Controller:
                                           View.err_choice,
                                           error=True)
         if usr_choice == "3":
-            self.init_objects(*player_tuple, start_loc, dungeon_size, True)
+            self.init_objects(*player_tuple[0:2], start_loc, dungeon_size, True)
         else:
-            self.init_objects(*player_tuple, start_loc, dungeon_size)
+            self.init_objects(*player_tuple[0:2], start_loc, dungeon_size)
 
     def map_size_menu(self):
         """
@@ -231,8 +231,8 @@ class Controller:
             f.writelines(lines)
 
     def is_player_dead(self, uname):
-        is_dead = self.load_players_file(uname)[2]
-        if is_dead == "1":
+        player_tuple = self.load_players_file(uname)
+        if player_tuple[2] == "1":
             return True
         else:
             return False
@@ -262,8 +262,7 @@ class Controller:
                     return (username, role, dead, runs,
                             gs_killed, sk_killed, or_killed, tr_killed,
                             tres_collected, highscore)
-                else:
-                    return False
+            return False
 
     def update_player_score(self, player):
         """
