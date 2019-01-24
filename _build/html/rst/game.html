@@ -1,0 +1,732 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>game package &#8212; Dungeon run 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="game-package">
+<h1>game package<a class="headerlink" href="#game-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-game.controller">
+<span id="game-controller-module"></span><h2>game.controller module<a class="headerlink" href="#module-game.controller" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="game.controller.Controller">
+<em class="property">class </em><code class="descclassname">game.controller.</code><code class="descname">Controller</code><a class="headerlink" href="#game.controller.Controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class handles several key features which are:
+Starting the main game.
+This class calls other classes to make use of their functions.
+Handles every aspect of saving and reading to player.txt.
+Creates a dungeon and a player object depending on user choices.
+Handles movement for both player and AI.
+Handles combat and loot.
+Rolls a dice to decide initiative for players.</p>
+<dl class="method">
+<dt id="game.controller.Controller.ai_find_exit">
+<code class="descname">ai_find_exit</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.ai_find_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes player + dungeon. If player is in a corner (which happens during start),
+game will tell player to find the opposite corner.
+If the player knows where the exit is (is_dark False + has_exit is True),
+the destination instead becomes the exit.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.ai_simple_move">
+<code class="descname">ai_simple_move</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.ai_simple_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Knowing player.destination, it moves horizontally or vertically towards destination tile.
+Bug: If AI is fleeing to default destination (opposite corner), it is stuck there if it does not know
+where the exit tile is (should probably try to snake towards starting corner in that case).
+Returns direction (w, e, s, n)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.ai_snake_move">
+<code class="descname">ai_snake_move</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.ai_snake_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses ai_find_exit to calc. exit square, then moves in a serpentine direction by checking if it’s position
+alignes with the start room or exit room (if it does, go vertically, otherwise, horizontally)
+Due to the shape of some maps (4 or 8) it cannot find all rooms by snaking.
+However, this is technically within acceptable parameters for AI requirements.
+Function returns direction</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.attack_function">
+<code class="descname">attack_function</code><span class="sig-paren">(</span><em>attacker</em>, <em>defender</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.attack_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.combat">
+<code class="descname">combat</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.combat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in player and dungeon
+Runs combats and returns true or false
+SUGGESTION: RETURNS WON, ESCAPED OR LOST</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.game_loop">
+<code class="descname">game_loop</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.game_loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main game loop, takes in player and dungeon and let the player
+play in the dungeon! :)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.generate_exit">
+<code class="descname">generate_exit</code><span class="sig-paren">(</span><em>dungeon_size</em>, <em>dungeon</em>, <em>start_room</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.generate_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will generate an exit
+It will generate a new exit if the
+location is the same as the player
+start_room</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.get_top_highschores">
+<code class="descname">get_top_highschores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.get_top_highschores" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reads players.txt and returns a list
+of strings for the top 5 players</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.init_objects">
+<code class="descname">init_objects</code><span class="sig-paren">(</span><em>player</em>, <em>role</em>, <em>start_loc</em>, <em>dungeon_size</em>, <em>ai_check=False</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.init_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>this function will init objects
+player, role, start_loc is a string.
+dungeon_size is an int,
+ai_check is a boolean (default False) to see if player is an AI
+This function will generate game objects,
+dungeon, start_room and player</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.is_player_dead">
+<code class="descname">is_player_dead</code><span class="sig-paren">(</span><em>uname</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.is_player_dead" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.load_AI">
+<code class="descname">load_AI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.load_AI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a knight, wiz or thief character from AI.txt
+Returns a tuple with name and role</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.load_player">
+<code class="descname">load_player</code><span class="sig-paren">(</span><em>uname</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.load_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>This loads a player from players.txt
+Returns a tuple with name and role which will be used in init_objects</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.load_players_file">
+<code class="descname">load_players_file</code><span class="sig-paren">(</span><em>uname</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.load_players_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.loot">
+<code class="descname">loot</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.loot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of looted items to be displayed for the user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.main_menu">
+<code class="descname">main_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.main_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logic for main menu. Here we get information from the user.
+player_tuple is a tuple, containing name and role
+start_loc_menu is a string containing, “NW” and so on.
+dungeon_size is an int.</p>
+<p>When we have all the necessary information we run init_objects.
+That function will generate the objects and then pass on into the
+game_loop.
+Returns AI = True if player chose an AI.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.map_size_AI">
+<code class="descname">map_size_AI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.map_size_AI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.map_size_menu">
+<code class="descname">map_size_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.map_size_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Menu for asking what size the player wants to play on.
+Returns an int to be used in init_objects</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.monster_kill_count">
+<code class="descname">monster_kill_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.monster_kill_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes no input
+Counts all killed monster types
+and returns dict of killed monsters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.move_player">
+<code class="descname">move_player</code><span class="sig-paren">(</span><em>player</em>, <em>direction</em>, <em>dungeon_map</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.move_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>This moves a player object on the map
+with directions, N, E, S, W as strings
+It then returns a new room object.
+If the player fails in moving it returns
+a False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.new_player_menu">
+<code class="descname">new_player_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.new_player_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Here we get all the necessary information to create a player object
+later in init_objects.
+Returns a tuple with name and role</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.player_exists">
+<code class="descname">player_exists</code><span class="sig-paren">(</span><em>uname</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.player_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function checks if a player is already in the players.txt.
+:param uname: Takes a name as an aragument to check versus a file
+:return: returns True if player exists or False if it doesnt exists</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.player_killed">
+<code class="descname">player_killed</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.player_killed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets player to dead in text file
+:param uname: The argument is a player object
+:return: nothing</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.print_load_stats">
+<code class="descname">print_load_stats</code><span class="sig-paren">(</span><em>name</em>, <em>role</em>, <em>d</em>, <em>runs</em>, <em>spider</em>, <em>skeleton</em>, <em>orc</em>, <em>troll</em>, <em>t</em>, <em>hs</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.print_load_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.roll_dice">
+<code class="descname">roll_dice</code><span class="sig-paren">(</span><em>user</em>, <em>dice_type</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.roll_dice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.save_new_player">
+<code class="descname">save_new_player</code><span class="sig-paren">(</span><em>uname</em>, <em>role</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.save_new_player" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.set_ai_profile">
+<code class="descname">set_ai_profile</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.set_ai_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs in game_loop, every time player is prompted to move.
+returns profile (player.profile)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.start_loc_AI">
+<code class="descname">start_loc_AI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.start_loc_AI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.start_loc_menu">
+<code class="descname">start_loc_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.start_loc_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asks viwer to show menu for starting location
+returns the choice as a string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.statistics">
+<code class="descname">statistics</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.statistics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.controller.Controller.update_player_score">
+<code class="descname">update_player_score</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#game.controller.Controller.update_player_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>This gets all lines from file, finds a player line position in file
+and rewrites the whole file with updated score of the players</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-game.dungeon">
+<span id="game-dungeon-module"></span><h2>game.dungeon module<a class="headerlink" href="#module-game.dungeon" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="game.dungeon.Map">
+<em class="property">class </em><code class="descclassname">game.dungeon.</code><code class="descname">Map</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="game.dungeon.Map.fill_room">
+<code class="descname">fill_room</code><span class="sig-paren">(</span><em>things</em><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Map.fill_room" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a list of things (treasures or monsters)
+This function puts things in all rooms if they are common enough.
+At most one of each thing in things gets created in the room.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.dungeon.Map.generate_doors">
+<code class="descname">generate_doors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Map.generate_doors" title="Permalink to this definition">¶</a></dt>
+<dd><p>This generate the doors for the rooms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.dungeon.Map.get_room">
+<code class="descname">get_room</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Map.get_room" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.dungeon.Map.print_monsters">
+<code class="descname">print_monsters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Map.print_monsters" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a debug function</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="game.dungeon.Monster">
+<em class="property">class </em><code class="descclassname">game.dungeon.</code><code class="descname">Monster</code><span class="sig-paren">(</span><em>unit_type</em>, <em>room</em><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Monster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Keep all monster objects properties in one place.</p>
+<dl class="attribute">
+<dt id="game.dungeon.Monster.available">
+<code class="descname">available</code><em class="property"> = ('giant spider', 'skeleton', 'orc', 'troll')</em><a class="headerlink" href="#game.dungeon.Monster.available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="game.dungeon.Room">
+<em class="property">class </em><code class="descclassname">game.dungeon.</code><code class="descname">Room</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>is_dark=True</em>, <em>has_exit=False</em>, <em>monsters=[]</em>, <em>treasures=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Room" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Every room in on the map initializes as a new object with its own properties.
+Monster- and treasurelists gets populated by Map according the rarity.</p>
+<dl class="method">
+<dt id="game.dungeon.Room.get_room_monsters">
+<code class="descname">get_room_monsters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Room.get_room_monsters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of monster types.
+Each elemement is a string!</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="game.dungeon.Treasure">
+<em class="property">class </em><code class="descclassname">game.dungeon.</code><code class="descname">Treasure</code><span class="sig-paren">(</span><em>item_type</em>, <em>room</em><span class="sig-paren">)</span><a class="headerlink" href="#game.dungeon.Treasure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Keeps treasure object properties in one place.</p>
+<dl class="attribute">
+<dt id="game.dungeon.Treasure.available">
+<code class="descname">available</code><em class="property"> = ('loose change', 'money pouch', 'gold jewelry', 'gemstone', 'small treasurechest')</em><a class="headerlink" href="#game.dungeon.Treasure.available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-game.main">
+<span id="game-main-module"></span><h2>game.main module<a class="headerlink" href="#module-game.main" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="game.main.main">
+<code class="descclassname">game.main.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.main.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function to follow python standards to initiate the game.
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-game.player">
+<span id="game-player-module"></span><h2>game.player module<a class="headerlink" href="#module-game.player" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="game.player.Player">
+<em class="property">class </em><code class="descclassname">game.player.</code><code class="descname">Player</code><span class="sig-paren">(</span><em>name</em>, <em>hero_class</em>, <em>start_room</em>, <em>score=0</em><span class="sig-paren">)</span><a class="headerlink" href="#game.player.Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="game.player.Player.escape_combat">
+<code class="descname">escape_combat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.player.Player.escape_combat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flee function. Returns whether you have fled successfully or not</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.player.Player.move_character">
+<code class="descname">move_character</code><span class="sig-paren">(</span><em>direction</em>, <em>dungeon_map</em><span class="sig-paren">)</span><a class="headerlink" href="#game.player.Player.move_character" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a direction strong (WNES) and returns a room object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="game.player.Player.show_location">
+<code class="descname">show_location</code><a class="headerlink" href="#game.player.Player.show_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return x, y tuple</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-game.view">
+<span id="game-view-module"></span><h2>game.view module<a class="headerlink" href="#module-game.view" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="game.view.View">
+<em class="property">class </em><code class="descclassname">game.view.</code><code class="descname">View</code><a class="headerlink" href="#game.view.View" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This Class handles every console input/output of the game
+and passes it to forward to controller.
+This Class exists to isolate the disorder of long strings and prints
+from other classes, to keep every other class as clean as possible.</p>
+<dl class="attribute">
+<dt id="game.view.View.attack_options">
+<code class="descname">attack_options</code><em class="property"> = ['[1] Attack!', '[2] Flee!']</em><a class="headerlink" href="#game.view.View.attack_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.center_text">
+<code class="descname">center_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.center_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.choose_AI">
+<code class="descname">choose_AI</code><em class="property"> = ['Please choose AI:', '[1] AI Knight', '[2] AI Wizard', '[3] AI Thief']</em><a class="headerlink" href="#game.view.View.choose_AI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.choose_corner">
+<code class="descname">choose_corner</code><em class="property"> = ['Choose your starting location:', '[1] North-West', '[2] North-East', '[3] South-West', '[4] South-East']</em><a class="headerlink" href="#game.view.View.choose_corner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.choose_role">
+<code class="descname">choose_role</code><em class="property"> = ['Please choose your role:', '[1] Knight', '[2] Wizard', '[3] Thief']</em><a class="headerlink" href="#game.view.View.choose_role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.choose_size">
+<code class="descname">choose_size</code><em class="property"> = ['Please choose your mapsize:', '[1] 4x4', '[2] 5x5', '[3] 8x8']</em><a class="headerlink" href="#game.view.View.choose_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.clear_console">
+<code class="descname">clear_console</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.clear_console" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.colors">
+<code class="descname">colors</code><em class="property"> = {'green': '\x1b[32m', 'red': '\x1b[31m', 'yellow': '\x1b[33m'}</em><a class="headerlink" href="#game.view.View.colors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.direction_option">
+<code class="descname">direction_option</code><em class="property"> = ['        [N] North      ', '[W] West          [E] East', '        [S] South      ']</em><a class="headerlink" href="#game.view.View.direction_option" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.draw_map">
+<code class="descname">draw_map</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.draw_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>This takes in player and dungeon object
+Returns a list with the map and player loc</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.enter_char_name">
+<code class="descname">enter_char_name</code><em class="property"> = ['', 'Enter character name: ', '', '', '', '', '', &quot;Type 'back' to return&quot;]</em><a class="headerlink" href="#game.view.View.enter_char_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.enter_go_back">
+<code class="descname">enter_go_back</code><em class="property"> = ['', '', '[ENTER] to return.']</em><a class="headerlink" href="#game.view.View.enter_go_back" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.err_choice">
+<code class="descname">err_choice</code><em class="property"> = ['', 'Invalid choice!']</em><a class="headerlink" href="#game.view.View.err_choice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.err_invalid_char">
+<code class="descname">err_invalid_char</code><em class="property"> = ['', &quot;Invalid character ','&quot;]</em><a class="headerlink" href="#game.view.View.err_invalid_char" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.err_load_error">
+<code class="descname">err_load_error</code><em class="property"> = ['', 'Load error, ask Micke']</em><a class="headerlink" href="#game.view.View.err_load_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>END OF ERROR MESSAGES</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.err_long_name">
+<code class="descname">err_long_name</code><em class="property"> = ['', 'Max 18 characters!']</em><a class="headerlink" href="#game.view.View.err_long_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.err_player_exists">
+<code class="descname">err_player_exists</code><em class="property"> = ['', 'Player name is taken']</em><a class="headerlink" href="#game.view.View.err_player_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.err_player_not_exist">
+<code class="descname">err_player_not_exist</code><em class="property"> = ['', 'Player does not exist']</em><a class="headerlink" href="#game.view.View.err_player_not_exist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.error_msg">
+<code class="descname">error_msg</code><em class="property"> = []</em><a class="headerlink" href="#game.view.View.error_msg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.exit_score">
+<code class="descname">exit_score</code><em class="property"> = ['The score has been added to your highscore!']</em><a class="headerlink" href="#game.view.View.exit_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>ERROR MESESAGES BELLOW</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.for_one_dmg">
+<code class="descname">for_one_dmg</code><em class="property"> = ['for 1 damage']</em><a class="headerlink" href="#game.view.View.for_one_dmg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.good_bye">
+<code class="descname">good_bye</code><em class="property"> = ['Thanks for playing!', '', '/Sonsofbjorn']</em><a class="headerlink" href="#game.view.View.good_bye" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.handle_input">
+<code class="descname">handle_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.handle_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.highscore">
+<code class="descname">highscore</code><em class="property"> = ['Display highscore:', 'number 1 is me', 'number 2 is you', 'number 3 is some other dude']</em><a class="headerlink" href="#game.view.View.highscore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.hit">
+<code class="descname">hit</code><em class="property"> = [' hit ']</em><a class="headerlink" href="#game.view.View.hit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.leave_options">
+<code class="descname">leave_options</code><em class="property"> = ['[1] Yes', '[2] No']</em><a class="headerlink" href="#game.view.View.leave_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.leave_question">
+<code class="descname">leave_question</code><em class="property"> = ['You see a staircaise,', 'do you want to leave?']</em><a class="headerlink" href="#game.view.View.leave_question" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.loot_text">
+<code class="descname">loot_text</code><em class="property"> = ['You found loot! The following loot was added to your backback: ']</em><a class="headerlink" href="#game.view.View.loot_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.monster_hit">
+<code class="descname">monster_hit</code><em class="property"> = ['You have been hit by the']</em><a class="headerlink" href="#game.view.View.monster_hit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.monster_miss">
+<code class="descname">monster_miss</code><em class="property"> = ['Missed!']</em><a class="headerlink" href="#game.view.View.monster_miss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_crit">
+<code class="descname">player_crit</code><em class="property"> = [' You did a critical hit to ']</em><a class="headerlink" href="#game.view.View.player_crit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_dead">
+<code class="descname">player_dead</code><em class="property"> = ['You have been slained by the']</em><a class="headerlink" href="#game.view.View.player_dead" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_escaped">
+<code class="descname">player_escaped</code><em class="property"> = ['You have escaped!']</em><a class="headerlink" href="#game.view.View.player_escaped" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_failed_escape">
+<code class="descname">player_failed_escape</code><em class="property"> = ['You have failed to escape!']</em><a class="headerlink" href="#game.view.View.player_failed_escape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_hit">
+<code class="descname">player_hit</code><em class="property"> = ['You hit the']</em><a class="headerlink" href="#game.view.View.player_hit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_is_dead">
+<code class="descname">player_is_dead</code><em class="property"> = ['', 'Character has died and cannot be played!']</em><a class="headerlink" href="#game.view.View.player_is_dead" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_killed">
+<code class="descname">player_killed</code><em class="property"> = ['You have slain the ']</em><a class="headerlink" href="#game.view.View.player_killed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_load_stats">
+<code class="descname">player_load_stats</code><em class="property"> = ['---- Stats for loaded player ----', 'Total runs: ', '', '- Monsters killed -', 'Giant Spiders: ', 'Skeletons: ', 'Orcs: ', 'Trolls: ', '', 'Treasures collected: ', 'Accumulated score: ', '', 'Enter to start game']</em><a class="headerlink" href="#game.view.View.player_load_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.player_miss">
+<code class="descname">player_miss</code><em class="property"> = ['You missed']</em><a class="headerlink" href="#game.view.View.player_miss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.print_game">
+<code class="descname">print_game</code><span class="sig-paren">(</span><em>player</em>, <em>dungeon</em>, <em>input_menu</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.print_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>This prints all the GFX for the game loop.
+Needs player object, dungeon and a menu list. Use <a href="#id1"><span class="problematic" id="id2">*</span></a>args and <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs
+to display extra information addition to the menu list.</p>
+<p><a href="#id5"><span class="problematic" id="id6">*</span></a>args = an extra list of information we want to display
+<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs = is a keyword boolean and should be true if we want to
+show extra info.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.print_hp_score_list">
+<code class="descname">print_hp_score_list</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.print_hp_score_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.print_main_menu">
+<code class="descname">print_main_menu</code><span class="sig-paren">(</span><em>input_menu</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.print_main_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints main menu, takes in <a href="#id9"><span class="problematic" id="id10">*</span></a>args which can be list, or strings and
+will be printed as the menu.
+<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs is a keyword argument if you want to show extra information,
+you will then send in an extra string/list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="game.view.View.print_monster_hp">
+<code class="descname">print_monster_hp</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#game.view.View.print_monster_hp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.score_text">
+<code class="descname">score_text</code><em class="property"> = ['Your current score is: ']</em><a class="headerlink" href="#game.view.View.score_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.shield_block">
+<code class="descname">shield_block</code><em class="property"> = ['Your shield blocked the attack from  ']</em><a class="headerlink" href="#game.view.View.shield_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.show_monsters">
+<code class="descname">show_monsters</code><em class="property"> = ['Uhuh! ENEMIES! You see the following foes: ']</em><a class="headerlink" href="#game.view.View.show_monsters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.start_location">
+<code class="descname">start_location</code><em class="property"> = ['Choose your starting location:', '[1] North-West', '[2] North-East', '[3] South-West', '[4] South-East']</em><a class="headerlink" href="#game.view.View.start_location" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.stats_count">
+<code class="descname">stats_count</code><em class="property"> = ['', '---- Killed Monsters ----', 'Giant Spider: ', 'Skeletons: ', 'Orcs: ', 'Troll: ', '', 'Tresure count: ', 'Total Score: ', '', '', '']</em><a class="headerlink" href="#game.view.View.stats_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.welcome_menu">
+<code class="descname">welcome_menu</code><em class="property"> = ['Welcome to... DUNGEON RUN!', '[1] New Character', '[2] Load Character', '[3] Load AI Character', '[4] Highest score', '[5] Quit']</em><a class="headerlink" href="#game.view.View.welcome_menu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="game.view.View.you_died">
+<code class="descname">you_died</code><em class="property"> = ['You have died!', 'All your loot this round was lost', 'and not added to your highscore', '', '[ENTER] to return']</em><a class="headerlink" href="#game.view.View.you_died" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-game">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-game" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Dungeon run</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Son's of Bjorn.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/game.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

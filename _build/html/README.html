@@ -1,0 +1,153 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Dungeon Run &#8212; Dungeon run 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dungeon-run">
+<h1>Dungeon Run<a class="headerlink" href="#dungeon-run" title="Permalink to this headline">¶</a></h1>
+<p><strong>Summary</strong></p>
+<p>Dungeon Run is a text-based adventure game for one player.
+It is played by making choices in menus which contains different options.
+You choose what kind of hero you want to play, and then explore one map
+with random content in search of treasures. But watch out
+for monsters! The goal is collecting as much treasures as possible
+and finding your way out with your life intact.</p>
+<p>This is sonsofbjorn’s implementation of the game as described by the assignment.
+The game is written i Python 3.7 and compiled to a windows binary.
+It runs in console and takes text inputs.</p>
+<div class="section" id="game-dungeon-module">
+<h2>game.dungeon module<a class="headerlink" href="#game-dungeon-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>The Dungeon module handles the map and things on it as well as helper
+functions and debug tools.
+It contains the map class itself and classes that populate it.</div></blockquote>
+</div>
+<div class="section" id="game-main-module">
+<h2>game.main module<a class="headerlink" href="#game-main-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Main function to follow python standards to initiate the game.</div></blockquote>
+</div>
+<div class="section" id="game-view-module">
+<h2>game.view module<a class="headerlink" href="#game-view-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>This Class handles every console input/output of the game
+and passes it to forward to controller.
+This Class exists to isolate the disorder of long strings and prints
+from other classes, to keep every other class as clean as possible.</div></blockquote>
+</div>
+<div class="section" id="game-player-module">
+<h2>game.player module<a class="headerlink" href="#game-player-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Makes a player object. Takes name, class, start room and score
+Name is a string, class is one of the classes below and start room
+is a room object.</div></blockquote>
+</div>
+<div class="section" id="game-controller-module">
+<h2>game.controller module<a class="headerlink" href="#game-controller-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>This class handles several key features which are:
+Starting the main game.
+This class calls other classes to make use of their functions.
+Handles every aspect of saving and reading to player.txt.
+Creates a dungeon and a player object depending on user choices.
+Handles movement for both player and AI.
+Handles combat and loot.
+Rolls a dice to decide initiative for players.</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Dungeon run</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Son's of Bjorn.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/README.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
