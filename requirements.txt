@@ -1,1 +1,1 @@
-Django==latest
+Django==2.2.6
