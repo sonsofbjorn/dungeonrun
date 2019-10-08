@@ -93,8 +93,6 @@ class Map:
 
     def print_monsters(self):
         """ This is a debug function """
-        for monster in self.monsterlist:
-            print(monster.room.position, monster.unit_type.uni)
         return ("Map contains {1} monsters in {0} rooms"
                 .format(self.size**2, len(self.monsterlist)))
 
@@ -107,7 +105,7 @@ class Room:
     def __init__(self, x, y, is_dark=True, has_exit=False,
                  monsters=[], treasures=[]):
         self.is_dark, self.has_exit = is_dark, has_exit
-        self.monsters = [] 
+        self.monsters = []
         self.treasures = []
 
         # DOORS N E S W
