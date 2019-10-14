@@ -1,6 +1,8 @@
 from view import View
 from player import Player
 from dungeon import Map
+from webview import WebView
+from flask import Flask
 import time
 import random
 
@@ -16,8 +18,12 @@ class Controller:
     Handles combat and loot.
     Rolls a dice to decide initiative for players.
     """
-    def __init__(self):
-        self.view = View()
+    def __init__(self, web=False):
+        if web is True:
+            self.view = WebView()
+        else:
+            self.view = View()
+
         self.killed_monsters = []
         self.looted_items = []
 
