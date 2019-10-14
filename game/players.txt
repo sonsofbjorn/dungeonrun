@@ -1,6 +1,6 @@
 Sebbe,knight,0,9,303,10,20,30,40,666
 Micke,wizard,0,82301,505,90,80,70,60,0
-Micke1337,knight,0,1,0,1,0,1,5,30
+Micke,wizard,0,2,4,11,2,2,25,162
 Ai knight,knight,0,1,0,1,0,1,5,30
 Ai wizard,wizard,0,1,0,1,0,1,5,30
 Ai thief,thief,0,3,10,12,6,3,51,182
