@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block content %}
+    {{ dungeon.print_monsters() }}
+    <form method="POST" action="">
+        {{ form.mapsize.label }} 
+        {{ form.mapsize }}
+        {{ form.submit }}
+        {% if form.mapsize.errors %}
+            {% for error in form.mapsize.errors %}
+                {{ error }}
+            {% endfor %}
+        {% endif %}
+    </form>
+{% endblock content %}
