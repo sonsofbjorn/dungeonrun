@@ -1,31 +1,27 @@
 import requests
 from dungeon import Map
-from forms import SubmitForm
+from forms import SubmitForm, MainMenu
 from flask import Flask, render_template
 
 class WebView():
     def __init__(self):
         wrapper = FlaskWrapper('game')
-        wrapper.add_endpoint(endpoint='/',endpoint_name='root',
-                             handler=self.hello_world, methods=['GET','POST'])
+        wrapper.add_endpoint(endpoint='/',endpoint_name='menu',
+                             handler=self.print_main_menu, methods=['GET','POST'])
         wrapper.run()
 
     def print_main_menu(self):
-        return 'Hello, world'
+        menu = MainMenu()
+        if menu.is_submitted():
+            return type(menu.maps_radio.data)
 
-    def handle_input(self):
+        return render_template('main_menu.html', menu=menu)
+
+class WebController():
+    def __init__(self):
         pass
 
-    def hello_world(self):
-        form = SubmitForm()
-        if form.mapsize.data:
-            dungeon = Map(form.mapsize.data)
-        else:
-            dungeon = Map(4)
-        return render_template('home.html', dungeon=dungeon, form=form)
-
 class EndpointAction:
-
     def __init__(self, action):
         self.action = action
 

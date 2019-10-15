@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block content %}
+<form method="POST" action="">
+    {% for subfield in menu.class_radio %}
+        <tr>
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label }}</td>
+        </tr>
+    {% endfor %}
+    <br>
+    {% for subfield in menu.maps_radio%}
+        <tr>
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label }}</td>
+        </tr>
+    {% endfor %}
+    <br>
+    {% for subfield in menu.startloc_radio%}
+        <tr>
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label }}</td>
+        </tr>
+    {% endfor %}
+    <br>
+    {{ menu.submit }}
+</form>
+{% endblock content %}

@@ -1,5 +1,6 @@
 import sys
 import argparse
+from webview import WebView
 from controller import Controller
 
 
@@ -18,10 +19,9 @@ def main():
 
     # vars returns a dict from args
     if vars(args)['w'] is True:
-        cntrlr = Controller(web=True)
-        cntrlr.main_menu()
+        cntrlr = WebView()
     else:
-        cntrlr = Controller(web=False)
+        cntrlr = Controller()
         cntrlr.main_menu()
 
 if __name__ == "__main__":
